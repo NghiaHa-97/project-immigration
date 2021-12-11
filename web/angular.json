@@ -15,7 +15,7 @@
               "rxjs-compat",
               "rxjs",
               "hammerjs",
-              "chartist"              
+              "chartist"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
@@ -27,6 +27,7 @@
               "src/favicon.ico"
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "node_modules/chartist/dist/chartist.css",
               "src/styles.css",
               "src/assets/styles/style.scss"
