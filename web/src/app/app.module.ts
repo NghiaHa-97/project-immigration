@@ -2,11 +2,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routing';
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FullComponent } from './layouts/full/full.component';
@@ -24,8 +24,11 @@ import { storeFreeze } from 'ngrx-store-freeze';
 // =====END======
 import {MetaReducer, StoreModule} from "@ngrx/store";
 import { EffectsModule } from '@ngrx/effects';
-import {CustomSerializer, effects, routerReducer} from "./store";
+import {CustomSerializer, routerReducer, reducers, effectsFeatures, effectsRoot} from "./store";
 import {RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import {LoginComponent} from "./auth-component/login/login.component";
+import {RegisterComponent} from "./auth-component/register/register.component";
+import {AppRequestInterceptor} from "./interceptors/app.request.interceptor";
 
 const environment = {
   development: true,
@@ -42,23 +45,34 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
-    AppSidebarComponent
+    AppSidebarComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
     FormsModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
     SharedModule,
     RouterModule.forRoot(AppRoutes),
-    StoreModule.forRoot(routerReducer, { metaReducers }),
-    EffectsModule.forRoot(effects),
+    StoreModule.forRoot(routerReducer, {metaReducers}),
+    StoreModule.forFeature('user', reducers),
+    EffectsModule.forRoot(effectsRoot),
+    EffectsModule.forFeature(effectsFeatures),
     StoreRouterConnectingModule.forRoot(),
     environment.development ? StoreDevtoolsModule.instrument() : [],
   ],
+
   providers: [
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass : AppRequestInterceptor,
+      multi : true
+    },
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
