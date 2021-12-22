@@ -2,10 +2,14 @@ package com.nghiahd.server.config.filter;
 
 import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.config.TokenProvider;
+import com.nghiahd.server.model.UserLogin;
+import com.nghiahd.server.service.SysUserAdminService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,13 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Collections;
 
 @Component
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenProvider tokenProvider;
-
+    @Autowired
+    private SysUserAdminService sysUserAdminService;
     @Autowired
     private ReadEnvironment readEnvironment;
 
@@ -48,8 +54,13 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             jwt = this.tokenProvider.parseJwt(request.getHeader(this.readEnvironment.getHeader()));
         }
         if (Strings.isNotEmpty(jwt)) {
-            Authentication auth = this.tokenProvider.validateAndGetAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            String username = this.tokenProvider.validateAndGetUserName(jwt);
+            UserLogin user = this.sysUserAdminService.getUserByUsername(username);
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(user,
+                    null,
+                    Collections.singletonList(new SimpleGrantedAuthority(user.getRoleName() == null ? "ROLE_0" : user.getRoleName())))
+            );
         }
 
         filterChain.doFilter(request, response);

@@ -1,6 +1,7 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.domain.SysUserAdmin;
+import com.nghiahd.server.model.UserLogin;
 import com.nghiahd.server.repository.SysUserAdminRepository;
 import com.nghiahd.server.service.SysUserAdminService;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class SysUserAdminServiceImpl implements SysUserAdminService {
     }
 
     @Override
-    public Map<String, Object> getUserByUsernameAndPwd(String username) {
-        return sysUserAdminRepository.getUserByUsernameAndPwd(username);
+    public UserLogin getUserByUsername(String username) {
+        return sysUserAdminRepository.getUserByUsername(username);
     }
 
     @Override

@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   hide = true;
   constructor(private fb: FormBuilder,
-              private store: Store<fromStore.UserState> ) {
+              private store: Store<fromStore.RootState> ) {
   }
 
   ngOnInit(): void {

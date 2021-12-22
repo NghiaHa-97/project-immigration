@@ -1,6 +1,7 @@
 package com.nghiahd.server.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "module")
@@ -45,5 +46,25 @@ public class Module {
 
     public void setCode(Integer code) {
         this.code = code;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Module)) {
+            return false;
+        }
+
+        Module m = (Module) o;
+        return (this.id == null && Objects.equals(this.code, m.code))
+                || (Objects.equals(this.id, m.id));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, code);
     }
 }

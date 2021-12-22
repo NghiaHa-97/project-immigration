@@ -24,7 +24,8 @@ import { storeFreeze } from 'ngrx-store-freeze';
 // =====END======
 import {MetaReducer, StoreModule} from "@ngrx/store";
 import { EffectsModule } from '@ngrx/effects';
-import {CustomSerializer, routerReducer, reducers, effectsFeatures, effectsRoot} from "./store";
+import {CustomSerializer, rootReducer,
+  effectsFeatures, effectsRoot} from "./store";
 import {RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import {LoginComponent} from "./auth-component/login/login.component";
 import {RegisterComponent} from "./auth-component/register/register.component";
@@ -59,10 +60,12 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     HttpClientModule,
     SharedModule,
     RouterModule.forRoot(AppRoutes),
-    StoreModule.forRoot(routerReducer, {metaReducers}),
-    StoreModule.forFeature('user', reducers),
+
+    StoreModule.forRoot(rootReducer, {metaReducers}),
+
     EffectsModule.forRoot(effectsRoot),
     EffectsModule.forFeature(effectsFeatures),
+
     StoreRouterConnectingModule.forRoot(),
     environment.development ? StoreDevtoolsModule.instrument() : [],
   ],

@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {ADMIN_API, PUBLIC_API} from '../constans/url-api.const';
-import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +18,16 @@ export class AuthService {
   register(payload: any): Observable<any> {
     return this.http
       .post(ADMIN_API.REGISTER, payload, { observe: 'response', withCredentials: true });
+  }
+
+  logout(): Observable<any> {
+    return this.http
+      .get(ADMIN_API.LOGOUT, { observe: 'response', withCredentials: true });
+  }
+
+  loadUser(): Observable<any> {
+    return this.http
+      .get(ADMIN_API.LOAD_USER, { observe: 'response', withCredentials: true });
   }
 
 }

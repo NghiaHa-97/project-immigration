@@ -7,3 +7,147 @@
     right: 17px;
     top: 57px;
 }
+
+//==================
+//.example-container {
+//  height: 400px;
+//  overflow: auto;
+//  width: 400px;
+//}
+//
+//table {
+//  width: 100%;
+//}
+
+// test============================test
+.example-container {
+  height: 650px;
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-table-sticky {
+  background: whitesmoke;
+  opacity: 1;
+}
+
+//.mat-row .mat-cell{
+//  min-width: 40px;
+//  padding-left: 3px;
+//  box-sizing: border-box;
+//
+//}
+
+//.mat-header-cell{
+//  padding-left: 3px;
+//}
+
+.mat-column-select {
+  width: 60px;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+//.mat-table-sticky-border-elem-top {
+//  border-bottom: 2px solid midnightblue;
+//}
+//
+//.mat-table-sticky-border-elem-right {
+//  border-left: 2px solid midnightblue;
+//}
+//
+//.mat-table-sticky-border-elem-bottom {
+//  border-top: 2px solid midnightblue;
+//}
+//
+//.mat-table-sticky-border-elem-left {
+//  border-right: 2px solid midnightblue;
+//}
+
+
+.mat-row:hover .mat-cell {
+  border-bottom: 1px solid ;
+  border-top: 1px solid ;
+}
+
+//td.mat-column-star {
+//  width: 20px;
+//  padding-right: 8px;
+//}
+//
+//th.mat-column-position, td.mat-column-position {
+//  padding-left: 8px;
+//}
+//
+//.mat-table-sticky-border-elem-right {
+//  border-left: 1px solid #e0e0e0;
+//}
+//
+//.mat-table-sticky-border-elem-left {
+//  border-right: 1px solid #e0e0e0;
+//}
+
+
+
+.example-container-search .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+//
+//.example-container-search .mat-form-field {
+//  width: 220px;
+//}
+//
+//.example-container-search form {
+//  margin-bottom: 20px;
+//}
+//
+//.example-container-search form > * {
+//  margin: 5px 0;
+//}
+//
+//.example-container-search .mat-radio-button {
+//  margin: 0 12px;
+//}
+
+.toolbar{
+  display: flex;
+  justify-content: space-between;
+}
+
+//.content-panel{
+//  flex: 1 1 100%;
+//  align-items: center;
+//}
+//
+.form-search{
+  display: flex;
+  justify-content: left;
+
+  & > * {
+    margin-right: 4px;
+  }
+}
+.edit-table{
+  //display: flex;
+  justify-content: flex-end;
+  & > * {
+    margin-left: 2px;
+  }
+}
+
+
+.mat-header-row .mat-header-cell{
+  padding-left: 10px;
+  min-width: 50px;
+}
+
+.mat-row .mat-cell{
+  padding-left: 10px;
+}

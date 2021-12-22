@@ -1,5 +1,6 @@
 package com.nghiahd.server.config;
 
+import com.nghiahd.server.model.UserLogin;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.SignatureException;
@@ -63,7 +64,9 @@ public class TokenProvider implements InitializingBean {
 
         return "Bearer " + Jwts.builder()
                 .setIssuer("Product")
-                .setSubject(authentication.getName())
+                .setSubject(
+                        ((UserLogin) authentication.getPrincipal())
+                        .getUsername())
 //                .claim(USERNAME, authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(new Date())
@@ -72,7 +75,7 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public Authentication validateAndGetAuthentication(String token) {
+    public String validateAndGetUserName(String token) {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(this.key)
@@ -81,14 +84,15 @@ public class TokenProvider implements InitializingBean {
 
             Collection<? extends GrantedAuthority> authorities = null;
 
-            if(Strings.isNotEmpty(claims.get(AUTHORITIES_KEY).toString())){
-                authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                                .map(SimpleGrantedAuthority::new)
-                                .collect(Collectors.toList());
-            }
+//            if(Strings.isNotEmpty(claims.get(AUTHORITIES_KEY).toString())){
+//                authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+//                                .map(SimpleGrantedAuthority::new)
+//                                .collect(Collectors.toList());
+//            }
 
-            User principal = new User(claims.getSubject(), "", authorities);
-            return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+//            User principal = new User(claims.getSubject(), "", authorities);
+//            return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+            return claims.getSubject();
 
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());

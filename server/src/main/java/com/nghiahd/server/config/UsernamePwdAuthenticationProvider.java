@@ -1,5 +1,6 @@
 package com.nghiahd.server.config;
 
+import com.nghiahd.server.model.UserLogin;
 import com.nghiahd.server.service.SysUserAdminService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,11 +29,13 @@ public class UsernamePwdAuthenticationProvider implements AuthenticationProvider
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String pwd = authentication.getCredentials().toString();
-        Map<String, Object> user = this.sysUserAdminService.getUserByUsernameAndPwd(username);
+        UserLogin user = this.sysUserAdminService.getUserByUsername(username);
 
         if (user != null) {
-            if (passwordEncoder.matches(pwd, (String) user.getOrDefault("password", ""))) {
-                return new UsernamePasswordAuthenticationToken(username, pwd, Arrays.asList(new SimpleGrantedAuthority("ROLE_0")));
+            if (passwordEncoder.matches(pwd, user.getPassword())) {
+                return new UsernamePasswordAuthenticationToken(user,
+                        null,
+                        Collections.singletonList(new SimpleGrantedAuthority(user.getRoleName() == null ? "ROLE_0" : user.getRoleName())));
             } else {
                 throw new BadCredentialsException("Invalid password!");
             }
