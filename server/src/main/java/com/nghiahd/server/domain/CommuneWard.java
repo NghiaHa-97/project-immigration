@@ -1,4 +1,4 @@
-package com.nghiahd.authenticationtest.domain;
+package com.nghiahd.server.domain;
 
 import javax.persistence.*;
 

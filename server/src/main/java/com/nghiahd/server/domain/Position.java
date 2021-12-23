@@ -1,2 +1,38 @@
-package com.nghiahd.server.domain;public class Position {
+package com.nghiahd.server.domain;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "position")
+public class Position {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "name")
+    private String name;
+
+    public Position() {
+    }
+
+    public Position(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

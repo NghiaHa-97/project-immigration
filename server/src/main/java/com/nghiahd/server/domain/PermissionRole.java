@@ -2,6 +2,7 @@ package com.nghiahd.server.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "permissionrole")
@@ -38,5 +39,18 @@ public class PermissionRole implements Serializable {
 
     public void setRoleID(Integer roleID) {
         this.roleID = roleID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PermissionRole that = (PermissionRole) o;
+        return permissionID.equals(that.permissionID) && roleID.equals(that.roleID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(permissionID, roleID);
     }
 }
