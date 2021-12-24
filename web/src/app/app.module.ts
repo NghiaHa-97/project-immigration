@@ -30,6 +30,7 @@ import {RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-
 import {LoginComponent} from "./auth-component/login/login.component";
 import {RegisterComponent} from "./auth-component/register/register.component";
 import {AppRequestInterceptor} from "./interceptors/app.request.interceptor";
+import {QuillModule} from "ngx-quill";
 
 const environment = {
   development: true,
@@ -60,7 +61,7 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     HttpClientModule,
     SharedModule,
     RouterModule.forRoot(AppRoutes),
-
+    // store module
     StoreModule.forRoot(rootReducer, {metaReducers}),
 
     EffectsModule.forRoot(effectsRoot),
@@ -68,6 +69,9 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
 
     StoreRouterConnectingModule.forRoot(),
     environment.development ? StoreDevtoolsModule.instrument() : [],
+
+    // rich text editor
+    QuillModule.forRoot()
   ],
 
   providers: [

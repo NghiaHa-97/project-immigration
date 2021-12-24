@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -16,12 +16,26 @@ export class DashboardComponent {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(false, []);
 
-  // constructor(private fb: FormBuilder) {
-  //   this.options = fb.group({
-  //     hideRequired: [true],
-  //     floatLabel: ['auto'],
-  //   });
-  // }
+
+  richTextForm!: FormGroup;
+  constructor(private fb: FormBuilder) {
+    // this.options = fb.group({
+    //   hideRequired: [true],
+    //   floatLabel: ['auto'],
+    // });
+    this.richTextForm = this.fb.group(
+      {
+        title: ["Hello, I am ", Validators.required],
+        description: [
+          `<h2><u>This is </u>a <span style=\"color: rgb(240, 102, 102);\">RICH</span> <strong>text editor</strong> <em>for</em> - <a href=\"http://jira.trungk18.com/\" rel=\"noopener noreferrer\" target=\"_blank\">http://.com/</a></h2><h3><span style=\"color: rgb(153, 51, 255);\">I hope you </span><strong style=\"color: rgb(153, 51, 255);\">like it!</strong></h3>`
+        ]
+      }
+    )
+  }
+
+  get descriptionRichControl() {
+    return this.richTextForm.controls.description as FormControl;
+  }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;

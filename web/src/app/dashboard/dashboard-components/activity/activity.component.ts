@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import { Activity, activities } from './activity-data';
 
 @Component({
@@ -10,6 +10,8 @@ export class ActivityComponent implements OnInit {
 
   activityData: Activity[];
 
+  @Input()
+  template!: TemplateRef<any>;
   constructor() {
 
     this.activityData = activities;

@@ -140,6 +140,17 @@
                      aria-label="Select page of users"></mat-paginator>
 
     </div>
+
+    <form [formGroup]="richTextForm">
+      <div class="form-group">
+        <label for="Title">Title</label>
+        <input formControlName="title" class="form-control" id="Title" aria-describedby="Title">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <app-rich-text-editor [control]="descriptionRichControl"></app-rich-text-editor>
+      </div>
+    </form>
   </mat-card-content>
 
   <mat-menu #menu4="matMenu">
@@ -162,3 +173,10 @@
   <!--                     aria-label="Select page of users"></mat-paginator>-->
   <!--    </mat-card-actions>-->
 </mat-card>
+<div class="alert alert-info" [innerHTML]="richTextForm.value.description">
+<!--  {{ richTextForm.value | json }}-->
+</div>
+<ng-container>
+  lllllllllllllllllllllll
+  <app-contacts></app-contacts>
+</ng-container>
