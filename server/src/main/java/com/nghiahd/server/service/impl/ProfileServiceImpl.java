@@ -1,8 +1,13 @@
 package com.nghiahd.server.service.impl;
 
+import com.nghiahd.server.common.Constant;
 import com.nghiahd.server.domain.Profile;
+import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.repository.ProfileRepository;
 import com.nghiahd.server.service.ProfileService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,5 +44,12 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public int deleteProfile(UUID id) {
         return profileRepository.deleteByProfileID(id);
+    }
+
+    @Override
+    public Page<ProfileDTO> getListProfile(Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber() - Constant.PAGING_STEP, pageable.getPageSize(), pageable.getSort());
+        Page<ProfileDTO> listProfile = profileRepository.getListProfile(pageable);
+        return listProfile;
     }
 }
