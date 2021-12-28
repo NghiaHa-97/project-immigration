@@ -56,13 +56,13 @@ public class BodyResponseDTO<T> {
         this(new PageImpl<T>(page, pageable, total));
     }
 
-    public BodyResponseDTO(T data, Long totalElements, int totalPage, int pageSize, int pageNumber) {
-        this.list = (List<T>) data;
-        this.totalElements = totalElements;
-        this.pageSize = pageSize;
-        this.pageNumber = pageNumber;
-        this.totalPage = totalPage;
-    }
+//    public BodyResponseDTO(T data, Long totalElements, int totalPage, int pageSize, int pageNumber) {
+//        this.list = (List<T>) data;
+//        this.totalElements = totalElements;
+//        this.pageSize = pageSize;
+//        this.pageNumber = pageNumber;
+//        this.totalPage = totalPage;
+//    }
 
     public BodyResponseDTO(T data) {
         this.list = (List<T>) data;
