@@ -1,15 +1,44 @@
 package com.nghiahd.server.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.nghiahd.server.model.ProfileDTO;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "profile")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "ProfileDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = ProfileDTO.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = UUID.class),
+                                        @ColumnResult(name = "code", type = String.class),
+                                        @ColumnResult(name = "projectMissionID", type = Integer.class),
+                                        @ColumnResult(name = "workUnitID", type = Integer.class),
+                                        @ColumnResult(name = "departmentID", type = Integer.class),
+                                        @ColumnResult(name = "vehicleID", type = Integer.class),
+                                        @ColumnResult(name = "statusProfileID", type = Integer.class),
+                                        @ColumnResult(name = "description", type = String.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "updateDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "expirationDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "expertsCode", type = String.class),
+                                        @ColumnResult(name = "expertsFullName", type = String.class),
+                                        @ColumnResult(name = "projectMissionName", type = String.class),
+                                        @ColumnResult(name = "workUnitName", type = String.class),
+                                        @ColumnResult(name = "departmentName", type = String.class),
+                                        @ColumnResult(name = "vehicleName", type = String.class),
+                                        @ColumnResult(name = "statusProfileName", type = String.class),
+                                }
+                        )
+                }
+        ),
+})
 public class Profile {
 
     @Id
