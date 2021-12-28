@@ -1,23 +1,63 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
+import {SelectionModel} from '@angular/cdk/collections';
+import {Component, AfterViewInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import * as _moment from 'moment';
+import {ColumnAndStyleModel} from "../models/ColumnsAndStyles.model";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit {
+  // public chosenDate = _moment.now();
+  public chosenDate = Date.now();
+
+  @ViewChild('sort') sort!: MatSort;
   // options: FormGroup;
   hide = false;
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol','action'];
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   // displayedColumns: string[] = [ 'position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(false, []);
-
+  // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = ELEMENT_DATA;
+  selection = new SelectionModel<any>(true, []);
+  columnsAndStyles: ColumnAndStyleModel[] = [
+    {
+      columnName: 'position',
+      styleHeader: {width: '400px', minWidth: '200px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'name',
+      styleHeader: {width: '200px', minWidth: '200px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'weight',
+      styleHeader: {width: '400px', minWidth: '200px'},
+      isSort: false,
+      styleBody: {backgroundColor: '#f0f5ff', borderColor: '#adc6ff', color: '#1d39c4'},
+      isStatus: true
+    },
+    {
+      columnName: 'symbol',
+      styleHeader: {width: '200px', minWidth: '200px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    }
+  ]
 
   richTextForm!: FormGroup;
+  form!: FormGroup;
+
   constructor(private fb: FormBuilder) {
     // this.options = fb.group({
     //   hideRequired: [true],
@@ -31,6 +71,16 @@ export class DashboardComponent {
         ]
       }
     )
+    this.form = this.fb.group({
+      selector: ['option2']
+    })
+  }
+
+  get valueSelector() {
+    return {
+      image: 'assets/images/users/1.jpg',
+      value: this.form.get('selector')?.value + 'Lua'
+    };
   }
 
   get descriptionRichControl() {
@@ -39,7 +89,7 @@ export class DashboardComponent {
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.length;
     return numSelected === numRows;
   }
 
@@ -49,13 +99,24 @@ export class DashboardComponent {
       return;
     }
 
-    this.selection.select(...this.dataSource.data);
+    this.selection.select(...this.dataSource);
   }
-  handlerSelectRow(e: Event, row:any){
-    console.log(1,e);
+
+  handlerSelectRow(e: Event, row: any) {
+    console.log(1, e);
     console.log(row);
     this.selection.toggle(row);
 
+  }
+
+  handlerChangePage(event: PageEvent): void {
+    console.log('PageEvent', event);
+  }
+
+  ngAfterViewInit(): void {
+    // this.dataSource.sort = this.sort;
+    console.log(this.sort);
+    this.sort.sortChange.subscribe(x => console.log(x));
   }
 
   // lll(e:Event){
@@ -83,7 +144,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
   {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
   {position: 3333, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryl  {position: 4,   {position: 4, name: \'Be  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\n  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nryllium\', weight: 9.0122, symbol: \'Be\'},\nname: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nlium', weight: 9.0122, symbol: 'Be'},
+  {
+    position: 4,
+    name: 'Beryl  {position: 4,   {position: 4, name: \'Be  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\n  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nryllium\', weight: 9.0122, symbol: \'Be\'},\nname: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nlium',
+    weight: 9.0122,
+    symbol: 'Be'
+  },
   {position: 5, name: 'Boron', weight: "on: 4,   {position: 4,: 9.0122, symbol: \'Be\'", symbol: 'B'},
   {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
   {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
@@ -93,7 +159,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
   {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
   {position: 3333, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryl  {position: 4,   {position: 4, name: \'Be  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\n  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nryllium\', weight: 9.0122, symbol: \'Be\'},\nname: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nlium', weight: 9.0122, symbol: 'Be'},
+  {
+    position: 4,
+    name: 'Beryl  {position: 4,   {position: 4, name: \'Be  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\n  {position: 4, name: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nryllium\', weight: 9.0122, symbol: \'Be\'},\nname: \'Beryllium\', weight: 9.0122, symbol: \'Be\'},\nlium',
+    weight: 9.0122,
+    symbol: 'Be'
+  },
   {position: 5, name: 'Boron', weight: "on: 4,   {position: 4,: 9.0122, symbol: \'Be\'", symbol: 'B'},
   {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
   {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},

@@ -11,8 +11,9 @@ import { VisiterGraphComponent } from './dashboard-components/visiter-graph/visi
 import { StickerComponent } from './dashboard-components/sticker/sticker.component';
 import { ContactsComponent } from './dashboard-components/contacts/contacts.component';
 import { ActivityComponent } from './dashboard-components/activity/activity.component';
-import {RichTextEditorModule} from '../rich-text-editor/rich-text-editor.module';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CommonComponentModule} from '../common-component/common-component.module';
+
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     FlexLayoutModule,
     ChartistModule,
     ReactiveFormsModule,
-    RichTextEditorModule,
+    FormsModule,
+    CommonComponentModule,
     RouterModule.forChild(DashboardRoutes)
   ],
   declarations: [
@@ -31,6 +33,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     StickerComponent,
     ContactsComponent,
     ActivityComponent
-  ]
+  ],
+  providers: []
 })
 export class DashboardModule {}

@@ -1,0 +1,13 @@
+<form [formGroup]="richTextForm">
+  <div class="form-group">
+    <label for="Title">Title</label>
+    <input formControlName="title" class="form-control" id="Title" aria-describedby="Title">
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <quill-editor class="content-editor" [placeholder]="''" [modules]="quillConfiguration"
+                  [styles]="{'min-height': '120px'}" formControlName="description">
+
+    </quill-editor>
+  </div>
+</form>

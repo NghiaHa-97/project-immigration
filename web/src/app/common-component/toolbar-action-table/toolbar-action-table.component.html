@@ -1,0 +1,21 @@
+<div class="toolbar">
+<!--  <div class="form-search" [formGroup]="formSearch">-->
+  <div class="form-search">
+    <form>
+      <div class="row">
+        <div class="col-md-10">
+          <ng-content select="[left]"></ng-content>
+        </div>
+        <div class="col-md-2">
+          <button mat-icon-button color="primary" aria-label="Example icon button with a search icon">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="edit-table">
+    <ng-content select="[right]"></ng-content>
+  </div>
+
+</div>

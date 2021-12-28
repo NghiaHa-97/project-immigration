@@ -1,0 +1,39 @@
+.example-container {
+  height: 600px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+}
+
+.mat-table-sticky {
+  background: whitesmoke;
+  opacity: 1;
+  left: 0;
+}
+
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+
+}
+
+.mat-row:hover .mat-cell {
+  border-bottom: 1px solid ;
+  border-top: 1px solid ;
+
+}
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.span-status{
+  padding: 0 7px;
+  border: 1px solid;
+  border-radius: 2px;
+  box-sizing: border-box;
+  display: inline-block;
+}

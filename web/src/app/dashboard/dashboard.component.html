@@ -42,118 +42,322 @@
 <mat-card class="example-card">
   <mat-card-content>
     <mat-card-title>Table</mat-card-title>
-    <div class="toolbar">
-      <div class="form-search">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Favorite food</mat-label>
-          <input matInput placeholder="Ex. Pizza" value="Sushi">
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Favorite food</mat-label>
-          <input matInput placeholder="Ex. Pizza" value="Sushi">
-        </mat-form-field>
-        <mat-form-field color="accent" appearance="fill">
-          <mat-label>Custom calendar color</mat-label>
-          <input matInput [matDatepicker]="picker2">
-          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-          <mat-datepicker #picker2 color="primary"></mat-datepicker>
-        </mat-form-field>
-        <button mat-icon-button color="primary" aria-label="Example icon button with a search icon">
-          <mat-icon>search</mat-icon>
-        </button>
-      </div>
-      <div class="edit-table">
+    <!--    <div class="toolbar">-->
+    <!--      <div class="form-search">-->
+    <!--        <form>-->
+
+    <!--          <div class="row">-->
+    <!--            <div class="col-md-10">-->
+    <!--              <div class="row">-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Company (disabled)" disabled>-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Username">-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Email address" type="email">-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Email address" type="email">-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--              </div>-->
+    <!--              <div class="row">-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Company (disabled)" disabled>-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Username">-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Email address" type="email">-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--                <div class="col-md-3">-->
+    <!--                  <mat-form-field class="example-full-width">-->
+    <!--                    <input matInput placeholder="Email address" type="email">-->
+    <!--                  </mat-form-field>-->
+    <!--                </div>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-2">-->
+    <!--              <button mat-icon-button color="primary" aria-label="Example icon button with a search icon">-->
+    <!--                <mat-icon>search</mat-icon>-->
+    <!--              </button>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </form>-->
+
+
+    <!--      </div>-->
+    <!--      <div class="edit-table">-->
+    <!--        <button mat-raised-button color="primary">Primary</button>-->
+    <!--        <button mat-raised-button color="accent">Accent</button>-->
+    <!--      </div>-->
+
+    <!--    </div>-->
+
+    <app-toolbar-action-table>
+      <ng-container left>
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Company (disabled)" disabled>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field [formGroup]="form">
+              <mat-label>Choose an option</mat-label>
+              <mat-select formControlName="selector">
+                <mat-select-trigger>
+                  <div class="d-flex flex-row">
+                    <div class="p-2"><img src="{{valueSelector.image}}" alt="user" class="profile-pic"></div>
+                    <div class="p-2">{{valueSelector.value}}</div>
+                  </div>
+                </mat-select-trigger>
+                <mat-option value="option1">Option 1</mat-option>
+                <mat-option value="option2" >
+                  <div class="d-flex flex-row">
+                    <div class="p-2"><img src="assets/images/users/1.jpg" alt="user" class="profile-pic"></div>
+                    <div class="p-2">Flex item 3</div>
+                  </div>
+                </mat-option>
+                <mat-option value="option3">Option 3</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <app-datepicker></app-datepicker>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container right>
         <button mat-raised-button color="primary">Primary</button>
         <button mat-raised-button color="accent">Accent</button>
-      </div>
+      </ng-container>
+    </app-toolbar-action-table>
 
+
+    <!--    <div class=" mat-elevation-z8 " matSort #sort="matSort">-->
+    <!--      <div class="example-container">-->
+
+    <!--        <table mat-table [dataSource]="dataSource">-->
+    <!--          &lt;!&ndash;           Checkbox Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="select" sticky>-->
+
+    <!--            <th mat-header-cell *matHeaderCellDef>-->
+    <!--              <div [style]="{width:'60px', minWidth:'60px'}">-->
+    <!--                <mat-checkbox (change)="$event ? masterToggle() : null"-->
+    <!--                              [checked]="selection.hasValue() && isAllSelected()"-->
+    <!--                              [indeterminate]="selection.hasValue() && !isAllSelected()">-->
+    <!--                </mat-checkbox>-->
+    <!--              </div>-->
+
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let row">-->
+    <!--              <div [style]="{width:'60px', minWidth:'60px'}">-->
+    <!--              <mat-checkbox (click)="$event.stopPropagation()"-->
+    <!--                            (change)="$event ? selection.toggle(row) : null"-->
+    <!--                            [checked]="selection.isSelected(row)">-->
+    <!--              </mat-checkbox>-->
+    <!--              </div>-->
+    <!--            </td>-->
+
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Position Column &ndash;&gt;-->
+    <!--          &lt;!&ndash;          <ng-container *ngFor="let column of displayedColumns" []>&ndash;&gt;-->
+    <!--          &lt;!&ndash;            &ndash;&gt;-->
+    <!--          &lt;!&ndash;          </ng-container>&ndash;&gt;-->
+    <!--          <ng-container matColumnDef="position" >-->
+    <!--            <th mat-header-cell mat-sort-header *matHeaderCellDef>-->
+    <!--              <span [style]="{width:'', minWidth:'200px'}">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.position}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name" >-->
+    <!--            <th mat-header-cell *matHeaderCellDef>-->
+    <!--              <div mat-sort-header start="desc" [style]="{width:'', minWidth:'200px'}">.No</div>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name1">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name2">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name3">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name4">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name5">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name6">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name7">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name8">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span-->
+    <!--              [style]="{width:'300px'}">.No</span></th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="name9">-->
+    <!--            <th mat-header-cell mat-sort-header start="desc" *matHeaderCellDef><span style="width: 400px">.No</span>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Weight Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="weight">-->
+    <!--            <th mat-header-cell mat-sort-header *matHeaderCellDef><span style="width: 400px">.No</span></th>-->
+    <!--            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>-->
+    <!--          </ng-container>-->
+
+    <!--          &lt;!&ndash; Symbol Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="symbol">-->
+    <!--            <th mat-header-cell *matHeaderCellDef>-->
+    <!--              bbbbbbbbbbbbbbbbbbbb-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element">-->
+    <!--              <span class="span-status"-->
+    <!--                    [style]="{backgroundColor: '#f0f5ff', borderColor: '#adc6ff', color: '#1d39c4'}">Đã hủy Đã hủy Đã hủy Đã hủy</span>-->
+    <!--            </td>-->
+    <!--          </ng-container>-->
+
+
+    <!--          &lt;!&ndash; action Column &ndash;&gt;-->
+    <!--          <ng-container matColumnDef="action" stickyEnd>-->
+    <!--            <th mat-header-cell *matHeaderCellDef>-->
+    <!--              <div [style]="{width:'', minWidth:'200px'}">aaaaa</div>-->
+    <!--            </th>-->
+    <!--            <td mat-cell *matCellDef="let element">-->
+    <!--              <button mat-icon-button [matMenuTriggerFor]="menu4" (click)="$event.stopPropagation()">-->
+    <!--                <mat-icon>more_vert</mat-icon>-->
+    <!--              </button>-->
+
+    <!--            </td>-->
+    <!--          </ng-container>-->
+    <!--          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>-->
+    <!--          <tr mat-row *matRowDef="let row; columns: displayedColumns;"-->
+    <!--              class="example-element-row"-->
+    <!--              (click)="handlerSelectRow($event, row)">-->
+    <!--          </tr>-->
+    <!--        </table>-->
+    <!--      </div>-->
+    <!--      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"-->
+    <!--                     showFirstLastButtons-->
+    <!--                     aria-label="Select page of users"></mat-paginator>-->
+
+    <!--    </div>-->
+    <div class=" mat-elevation-z8 " matSort #sort="matSort">
+      <app-table [menuAction]="menu"
+                 [stickyEnd]="true"
+                 [stickyStart]="true"
+                 [isSelection]="true"
+                 [isAction]="true"
+                 [dataSource]="dataSource"
+                 [columnsAndStyles]="columnsAndStyles"
+                 [selection]="selection"
+                 (handlerChangePage)="handlerChangePage($event)"
+                 [totalRecord]="100">
+      </app-table>
     </div>
 
-    <div class=" mat-elevation-z8 ">
-      <div class="example-container">
-
-        <table mat-table [dataSource]="dataSource">
-          <!--           Checkbox Column -->
-          <ng-container matColumnDef="select" sticky>
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()">
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)">
-              </mat-checkbox>
-            </td>
-
-          </ng-container>
-
-          <!-- Position Column -->
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef> No.</th>
-            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-          </ng-container>
-
-          <!-- Name Column -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Name</th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-
-          <!-- Weight Column -->
-          <ng-container matColumnDef="weight">
-            <th mat-header-cell *matHeaderCellDef> Weight</th>
-            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-          </ng-container>
-
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="symbol" sticky>
-            <th mat-header-cell *matHeaderCellDef> Symbol</th>
-            <td mat-cell *matCellDef="let element">
-              <span class="span-status"
-                    style="background-color: #f0f5ff; border-color: #adc6ff; color: #1d39c4">Đã hủyĐã hủyĐã hủyĐã hủy</span>
-            </td>
-          </ng-container>
-
-
-          <!-- action Column -->
-          <ng-container matColumnDef="action" sticky>
-            <th mat-header-cell *matHeaderCellDef>Action</th>
-            <td mat-cell *matCellDef="let element">
-              <button mat-icon-button [matMenuTriggerFor]="menu4" (click)="$event.stopPropagation()">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              class="example-element-row"
-              (click)="handlerSelectRow($event, row)">
-          </tr>
-        </table>
-      </div>
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
-                     showFirstLastButtons
-                     aria-label="Select page of users"></mat-paginator>
-
-    </div>
-
-    <form [formGroup]="richTextForm">
-      <div class="form-group">
-        <label for="Title">Title</label>
-        <input formControlName="title" class="form-control" id="Title" aria-describedby="Title">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <app-rich-text-editor [control]="descriptionRichControl"></app-rich-text-editor>
-      </div>
-    </form>
+    <!--    <form [formGroup]="richTextForm">-->
+    <!--      <div class="form-group">-->
+    <!--        <label for="Title">Title</label>-->
+    <!--        <input formControlName="title" class="form-control" id="Title" aria-describedby="Title">-->
+    <!--      </div>-->
+    <!--      <div class="form-group">-->
+    <!--        <label>Description</label>-->
+    <!--        <app-rich-text-editor [control]="descriptionRichControl"></app-rich-text-editor>-->
+    <!--      </div>-->
+    <!--    </form>-->
+    <app-rich-text-editor [richTextForm]="richTextForm"></app-rich-text-editor>
   </mat-card-content>
 
-  <mat-menu #menu4="matMenu">
+  <mat-menu #menu="matMenu">
     <button mat-menu-item>
       <mat-icon>dialpad</mat-icon>
       <span>Redial</span>
@@ -167,16 +371,14 @@
       <span>Disable alerts</span>
     </button>
   </mat-menu>
-  <!--    <mat-card-actions>-->
-  <!--      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"-->
-  <!--                     showFirstLastButtons-->
-  <!--                     aria-label="Select page of users"></mat-paginator>-->
-  <!--    </mat-card-actions>-->
+
 </mat-card>
-<div class="alert alert-info" [innerHTML]="richTextForm.value.description">
-<!--  {{ richTextForm.value | json }}-->
+<div class="alert alert-info">
+  {{ richTextForm.value | json }}
 </div>
 <ng-container>
   lllllllllllllllllllllll
   <app-contacts></app-contacts>
 </ng-container>
+
+
