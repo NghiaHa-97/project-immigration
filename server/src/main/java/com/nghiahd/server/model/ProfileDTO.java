@@ -1,10 +1,15 @@
 package com.nghiahd.server.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class ProfileDTO {
-
     private UUID id;
     private String code;
     private Integer projectMissionID;

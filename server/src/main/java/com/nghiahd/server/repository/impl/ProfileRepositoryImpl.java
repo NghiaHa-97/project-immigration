@@ -51,7 +51,7 @@ public class ProfileRepositoryImpl implements com.nghiahd.server.repository.Prof
         StringBuilder sqlWhere = new StringBuilder();
         sqlWhere.append(" where 1=1 ");;
 
-        StringBuilder sqlCount = new StringBuilder(" select count(*) ");
+        StringBuilder sqlCount = new StringBuilder(" select count(1) ");
 
         StringBuilder countItemQuery = new StringBuilder().append(sqlCount).append(sqlFrom).append(sqlWhere);
         Query countQuery = entityManager.createNativeQuery(countItemQuery.toString());
@@ -62,7 +62,7 @@ public class ProfileRepositoryImpl implements com.nghiahd.server.repository.Prof
             StringBuilder itemQuery = new StringBuilder().append(sqlSelect).append(sqlFrom).append(sqlWhere)
                     .append(PageUtilsCommon.orderBySort(pageable, nameFieldMapSort(), params));
             Query query = entityManager.createNativeQuery(itemQuery.toString(), "ProfileDTO");
-            PageUtilsCommon.setParamsWithPageable(query, params, pageable, totalQuery);
+            PageUtilsCommon.setParamsWithPageable(query, params, pageable);
             profileDTOList = query.getResultList();
         }
         return new PageImpl<>(profileDTOList, pageable, totalQuery.longValue());

@@ -47,7 +47,7 @@ public class ProfileController {
     public ResponseEntity<BodyResponseDTO<ProfileDTO>> getAllClaims(
             @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
             @SortDefault.SortDefaults({
-                    @SortDefault(sort = "createdate", direction = Sort.Direction.DESC)}) Pageable pageable
+                    @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)}) Pageable pageable
             ) {
         Page<ProfileDTO> claimsDTOS = profileService.getListProfile(pageable);
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils,claimsDTOS);

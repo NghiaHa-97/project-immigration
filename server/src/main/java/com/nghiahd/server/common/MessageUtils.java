@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
+
 @Component
 @RequiredArgsConstructor
 public class MessageUtils {
@@ -13,6 +16,6 @@ public class MessageUtils {
     }
 
     public String populate(String key, String[] params) {
-        return messageSource.getMessage(key, params, LocaleContextHolder.getLocale());
+        return messageSource.getMessage(key, params, new Locale("vi_VN"));
     }
 }

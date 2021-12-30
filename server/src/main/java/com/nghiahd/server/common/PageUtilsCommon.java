@@ -12,22 +12,17 @@ public class PageUtilsCommon {
 
     private static final String DIRECTION_ASC = "ASC";
     private static final String DIRECTION_DESC = "DESC";
-    private static final String NULL = " null ";
+    private static final String SPACE = " ";
     private static final String THEN = " THEN ";
 
-    public static void setParamsWithPageable(Query query, Map<String, Object> params, Pageable pageable, Number total) {
-        if (params != null && !params.isEmpty()) {
-            Set<Map.Entry<String, Object>> set = params.entrySet();
-            for (Map.Entry<String, Object> obj : set) {
-                if (obj.getValue() != null)
-                    query.setParameter(obj.getKey(), obj.getValue());
-            }
-        }
+    public static Query setParamsWithPageable(Query query, Map<String, Object> params, Pageable pageable) {
+        query = setParams(query, params);
         query.setFirstResult((int) pageable.getOffset());
         query.setMaxResults(pageable.getPageSize());
+        return query;
     }
 
-    public static void setParams(Query query, Map<String, Object> params) {
+    public static Query setParams(Query query, Map<String, Object> params) {
         if (params != null && !params.isEmpty()) {
             Set<Map.Entry<String, Object>> set = params.entrySet();
             for (Map.Entry<String, Object> obj : set) {
@@ -35,6 +30,7 @@ public class PageUtilsCommon {
                     query.setParameter(obj.getKey(), obj.getValue());
             }
         }
+        return query;
     }
 
     /**
@@ -79,33 +75,31 @@ public class PageUtilsCommon {
         String nameFieldSort = "";
         Sort sortsSort = pageable.getSort();
         Sort.Order orders = sortsSort.stream().findFirst().orElse(null);
-        if (orders != null && !(orders.getProperty()).isEmpty() && !"null".equals(orders.getProperty())) {
+        if (orders != null && orders.getProperty() != null && !orders.getProperty().isEmpty()) {
             if (!nameColumnMap.containsKey(orders.getProperty())) {
-                return buildSqlOrder(orders, nameFieldSort, params);
+                return new StringBuilder();
             }
-            nameFieldSort = PageUtilsCommon.getKeyForSort(nameColumnMap, orders.getProperty());
+            nameFieldSort = nameColumnMap.get(orders.getProperty());
         }
         return buildSqlOrder(orders, nameFieldSort, params);
     }
 
     public static StringBuilder buildSqlOrder(Sort.Order orders, String nameFieldSort, Map<String, Object> params) {
-        StringBuilder sqlOrderBy = new StringBuilder(" ORDER BY ");
-        if ("".equals(nameFieldSort)) {
-            return sqlOrderBy.append(NULL);
-        }
+        StringBuilder sqlOrderBy = new StringBuilder("");
         String typeDirection = orders.getDirection().name();
-        String casePro = " CASE WHEN :pro = '";
+        if (typeDirection.isEmpty()) {
+            return sqlOrderBy;
+        }
+        sqlOrderBy.append(" ORDER BY ").append(nameFieldSort);
         switch (typeDirection) {
             case DIRECTION_ASC:
-                sqlOrderBy.append(casePro).append(nameFieldSort).append("'").append(THEN).append(nameFieldSort).append(" END ASC ");
-                params.put("pro", orders.getProperty());
+                sqlOrderBy.append(" ASC ");
                 break;
             case DIRECTION_DESC:
-                sqlOrderBy.append(casePro).append(nameFieldSort).append("'").append(THEN).append(nameFieldSort).append(" END DESC ");
-                params.put("pro", orders.getProperty());
+                sqlOrderBy.append(" DESC ");
                 break;
             default:
-                sqlOrderBy.append(NULL);
+                sqlOrderBy.setLength(0);
                 break;
         }
         return sqlOrderBy;
