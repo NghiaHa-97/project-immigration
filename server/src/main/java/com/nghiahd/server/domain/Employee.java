@@ -1,5 +1,8 @@
 package com.nghiahd.server.domain;
 
+import com.nghiahd.server.model.EmployeeDTO;
+import com.nghiahd.server.model.ExpertsDTO;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,6 +10,42 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "employee")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "EmployeeListDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = EmployeeDTO.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = UUID.class),
+                                        @ColumnResult(name = "code", type = String.class),
+                                        @ColumnResult(name = "fullname", type = String.class),
+                                        @ColumnResult(name = "avatar", type = String.class),
+                                        @ColumnResult(name = "gender", type = Boolean.class),
+                                        @ColumnResult(name = "birthDay", type = LocalDate.class),
+                                        @ColumnResult(name = "departmentID", type = Integer.class),
+                                        @ColumnResult(name = "departmentName", type = String.class),
+                                        @ColumnResult(name = "positionID", type = Integer.class),
+                                        @ColumnResult(name = "positionName", type = String.class),
+                                        @ColumnResult(name = "workUnitID", type = Integer.class),
+                                        @ColumnResult(name = "workUnitName", type = String.class),
+                                        @ColumnResult(name = "cityProvinceID", type = Integer.class),
+                                        @ColumnResult(name = "cityProvinceName", type = String.class),
+                                        @ColumnResult(name = "districtID", type = Integer.class),
+                                        @ColumnResult(name = "districtName", type = String.class),
+                                        @ColumnResult(name = "communeWardID", type = Integer.class),
+                                        @ColumnResult(name = "communeWardName", type = String.class),
+                                        @ColumnResult(name = "description", type = String.class),
+                                        @ColumnResult(name = "phoneNumber", type = String.class),
+                                        @ColumnResult(name = "numberIdentityCard", type = String.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "updateDate", type = LocalDateTime.class),
+
+                                }
+                        )
+                }
+        ),
+})
 public class Employee {
     @Id
     private UUID id;
@@ -23,17 +62,17 @@ public class Employee {
     @Column(name = "gender")
     private Boolean gender;
 
-    @Column(name = "birthDay")
+    @Column(name = "birthday")
     private LocalDate birthDay;
 
     @Column(name = "departmentid")
-    private UUID departmentID;
+    private Integer departmentID;
 
     @Column(name = "positionid")
-    private UUID positionID;
+    private Integer positionID;
 
     @Column(name = "workunitid")
-    private UUID workUnitID;
+    private Integer workUnitID;
 
     @Column(name = "cityprovinceid")
     private Integer cityProvinceID;
@@ -62,7 +101,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(UUID id, String code, String fullname, String avatar, Boolean gender, LocalDate birthDay, UUID departmentID, UUID positionID, UUID workUnitID, Integer cityProvinceID, Integer districtID, Integer communeWardID, String description, String phoneNumber, String numberIdentityCard, LocalDateTime createDate, LocalDateTime updateDate) {
+    public Employee(UUID id, String code, String fullname, String avatar, Boolean gender, LocalDate birthDay, Integer departmentID, Integer positionID, Integer workUnitID, Integer cityProvinceID, Integer districtID, Integer communeWardID, String description, String phoneNumber, String numberIdentityCard, LocalDateTime createDate, LocalDateTime updateDate) {
         this.id = id;
         this.code = code;
         this.fullname = fullname;
@@ -130,27 +169,27 @@ public class Employee {
         this.birthDay = birthDay;
     }
 
-    public UUID getDepartmentID() {
+    public Integer getDepartmentID() {
         return departmentID;
     }
 
-    public void setDepartmentID(UUID departmentID) {
+    public void setDepartmentID(Integer departmentID) {
         this.departmentID = departmentID;
     }
 
-    public UUID getPositionID() {
+    public Integer getPositionID() {
         return positionID;
     }
 
-    public void setPositionID(UUID positionID) {
+    public void setPositionID(Integer positionID) {
         this.positionID = positionID;
     }
 
-    public UUID getWorkUnitID() {
+    public Integer getWorkUnitID() {
         return workUnitID;
     }
 
-    public void setWorkUnitID(UUID workUnitID) {
+    public void setWorkUnitID(Integer workUnitID) {
         this.workUnitID = workUnitID;
     }
 

@@ -1,10 +1,16 @@
 package com.nghiahd.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nghiahd.server.model.ProfileDTO;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -12,6 +18,16 @@ import java.util.UUID;
 @SqlResultSetMappings({
         @SqlResultSetMapping(
                 name = "ProfileDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = ProfileDTO.class,
+                                columns = {
+                                }
+                        )
+                }
+        ),
+        @SqlResultSetMapping(
+                name = "ProfileListDTO",
                 classes = {
                         @ConstructorResult(
                                 targetClass = ProfileDTO.class,
@@ -27,8 +43,16 @@ import java.util.UUID;
                                         @ColumnResult(name = "createDate", type = LocalDateTime.class),
                                         @ColumnResult(name = "updateDate", type = LocalDateTime.class),
                                         @ColumnResult(name = "expirationDate", type = LocalDateTime.class),
-                                        @ColumnResult(name = "expertsCode", type = String.class),
-                                        @ColumnResult(name = "expertsFullName", type = String.class),
+
+                                        @ColumnResult(name = "employeeCreateID", type = UUID.class),
+                                        @ColumnResult(name = "employeeCreateName", type = String.class),
+                                        @ColumnResult(name = "approverID", type = UUID.class),
+                                        @ColumnResult(name = "approverName", type = String.class),
+                                        @ColumnResult(name = "unitCreateProfileID", type = Integer.class),
+                                        @ColumnResult(name = "unitCreateProfileName", type = String.class),
+                                        @ColumnResult(name = "quantityEmployee", type = Integer.class),
+                                        @ColumnResult(name = "quantityExperts", type = Integer.class),
+
                                         @ColumnResult(name = "projectMissionName", type = String.class),
                                         @ColumnResult(name = "workUnitName", type = String.class),
                                         @ColumnResult(name = "departmentName", type = String.class),
@@ -39,7 +63,8 @@ import java.util.UUID;
                 }
         ),
 })
-public class Profile {
+public class Profile implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     private UUID id;
@@ -74,10 +99,29 @@ public class Profile {
     @Column(name = "expirationdate")
     private LocalDateTime expirationDate;
 
+    @Column(name = "employeecreateid")
+    private UUID employeeCreateID;
+
+    @Column(name = "approverid")
+    private UUID approverID;
+
+    @Column(name = "unitcreateprofileid")
+    private Integer unitCreateProfileID;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "profileID",
+            cascade = {CascadeType.ALL})
+    private Set<ExpertsInProfile> expertsInProfiles;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "profileID",
+            cascade = {CascadeType.ALL})
+    private Set<EmployeeInProfile> employeeInProfiles;
+
     public Profile() {
     }
 
-    public Profile(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate) {
+    public Profile(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate, UUID employeeCreateID, UUID approverID, Integer unitCreateProfileID) {
         this.id = id;
         this.code = code;
         this.projectMissionID = projectMissionID;
@@ -89,6 +133,9 @@ public class Profile {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.expirationDate = expirationDate;
+        this.employeeCreateID = employeeCreateID;
+        this.approverID = approverID;
+        this.unitCreateProfileID = unitCreateProfileID;
     }
 
     public UUID getId() {
@@ -177,5 +224,45 @@ public class Profile {
 
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public UUID getEmployeeCreateID() {
+        return employeeCreateID;
+    }
+
+    public void setEmployeeCreateID(UUID employeeCreateID) {
+        this.employeeCreateID = employeeCreateID;
+    }
+
+    public UUID getApproverID() {
+        return approverID;
+    }
+
+    public void setApproverID(UUID approverID) {
+        this.approverID = approverID;
+    }
+
+    public Integer getUnitCreateProfileID() {
+        return unitCreateProfileID;
+    }
+
+    public void setUnitCreateProfileID(Integer unitCreateProfileID) {
+        this.unitCreateProfileID = unitCreateProfileID;
+    }
+
+    public Set<ExpertsInProfile> getExpertsInProfiles() {
+        return expertsInProfiles;
+    }
+
+    public void setExpertsInProfiles(Set<ExpertsInProfile> expertsInProfiles) {
+        this.expertsInProfiles = expertsInProfiles;
+    }
+
+    public Set<EmployeeInProfile> getEmployeeInProfiles() {
+        return employeeInProfiles;
+    }
+
+    public void setEmployeeInProfiles(Set<EmployeeInProfile> employeeInProfiles) {
+        this.employeeInProfiles = employeeInProfiles;
     }
 }

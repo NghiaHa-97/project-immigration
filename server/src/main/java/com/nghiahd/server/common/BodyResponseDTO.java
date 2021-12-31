@@ -7,13 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
-public class BodyResponseDTO<T> {
+public class BodyResponseDTO<T>  implements Serializable {
     private String status;
     private String message;
     private Integer totalPage;

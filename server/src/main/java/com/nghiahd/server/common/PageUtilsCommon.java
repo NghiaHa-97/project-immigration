@@ -1,5 +1,6 @@
 package com.nghiahd.server.common;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -14,6 +15,10 @@ public class PageUtilsCommon {
     private static final String DIRECTION_DESC = "DESC";
     private static final String SPACE = " ";
     private static final String THEN = " THEN ";
+
+    public static Pageable createPageable(Pageable pageable){
+        return PageRequest.of(pageable.getPageNumber() - Constant.PAGING_STEP, pageable.getPageSize(), pageable.getSort());
+    }
 
     public static Query setParamsWithPageable(Query query, Map<String, Object> params, Pageable pageable) {
         query = setParams(query, params);

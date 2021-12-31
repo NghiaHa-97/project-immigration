@@ -1,6 +1,8 @@
 package com.nghiahd.server.service.impl;
 
+import com.nghiahd.server.common.ApiResponseCode;
 import com.nghiahd.server.common.Constant;
+import com.nghiahd.server.domain.ExpertsInProfile;
 import com.nghiahd.server.domain.Profile;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.repository.ProfileRepository;
@@ -35,21 +37,33 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile editProfile(Profile profile, UUID id) {
         profile.setUpdateDate(LocalDateTime.now());
         Optional<Profile> pro = profileRepository.findById(id);
-        if (pro.isPresent()){
+        if (pro.isPresent()) {
             return profileRepository.save(profile);
         }
         return null;
     }
 
     @Override
-    public int deleteProfile(UUID id) {
-        return profileRepository.deleteByProfileID(id);
+    public void deleteProfile(UUID id) {
+        profileRepository.deleteById(id);
     }
 
     @Override
     public Page<ProfileDTO> getListProfile(Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber() - Constant.PAGING_STEP, pageable.getPageSize(), pageable.getSort());
         Page<ProfileDTO> listProfile = profileRepository.getListProfile(pageable);
         return listProfile;
+    }
+
+    @Override
+    public Profile getProfileByID(UUID id) {
+
+        Profile op = profileRepository.findById(id).orElse(null);
+//        lazy load
+//        if (op != null) {
+
+//            op.setExpertsInProfiles(null);
+//            op.setEmployeeInProfiles(null);
+//        }
+        return op;
     }
 }

@@ -1,13 +1,49 @@
 package com.nghiahd.server.domain;
 
+import com.nghiahd.server.model.ExpertsDTO;
+import com.nghiahd.server.model.ProfileDTO;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "experts")
-public class Experts {
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "ExpertsListDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = ExpertsDTO.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = UUID.class),
+                                        @ColumnResult(name = "code", type = String.class),
+                                        @ColumnResult(name = "fullname", type = String.class),
+                                        @ColumnResult(name = "gender", type = Boolean.class),
+                                        @ColumnResult(name = "birthDay", type = LocalDate.class),
+                                        @ColumnResult(name = "countryID", type = Integer.class),
+                                        @ColumnResult(name = "countryName", type = String.class),
+                                        @ColumnResult(name = "religion", type = String.class),
+                                        @ColumnResult(name = "occupation", type = String.class),
+                                        @ColumnResult(name = "permanentResidentialAddress", type = String.class),
+                                        @ColumnResult(name = "phoneNumber", type = String.class),
+                                        @ColumnResult(name = "passportNumber", type = String.class),
+                                        @ColumnResult(name = "expiryDate", type = LocalDate.class),
+                                        @ColumnResult(name = "dateOfEntry", type = LocalDate.class),
+                                        @ColumnResult(name = "lengthOfStay", type = Integer.class),
+                                        @ColumnResult(name = "passportImage", type = String.class),
+                                        @ColumnResult(name = "portraitPhotography", type = String.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "updateDate", type = LocalDateTime.class),
+
+                                }
+                        )
+                }
+        ),
+})
+public class Experts implements Serializable {
     @Id
     private UUID id;
 

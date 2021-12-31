@@ -21,8 +21,16 @@ public class ProfileDTO {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private LocalDateTime expirationDate;
-    private String expertsCode;
-    private String expertsFullName;
+
+    private UUID employeeCreateID;
+    private String employeeCreateName;
+    private UUID approverID;
+    private String approverName;
+    private Integer unitCreateProfileID;
+    private String unitCreateProfileName;
+    private Integer quantityEmployee;
+    private Integer quantityExperts;
+
     private String projectMissionName;
     private String workUnitName;
     private String departmentName;
@@ -32,7 +40,7 @@ public class ProfileDTO {
     public ProfileDTO() {
     }
 
-    public ProfileDTO(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate, String expertsCode, String expertsFullName, String projectMissionName, String workUnitName, String departmentName, String vehicleName, String statusProfileName) {
+    public ProfileDTO(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate, UUID employeeCreateID, String employeeCreateName, UUID approverID, String approverName, Integer unitCreateProfileID, String unitCreateProfileName, Integer quantityEmployee, Integer quantityExperts, String projectMissionName, String workUnitName, String departmentName, String vehicleName, String statusProfileName) {
         this.id = id;
         this.code = code;
         this.projectMissionID = projectMissionID;
@@ -44,8 +52,14 @@ public class ProfileDTO {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.expirationDate = expirationDate;
-        this.expertsCode = expertsCode;
-        this.expertsFullName = expertsFullName;
+        this.employeeCreateID = employeeCreateID;
+        this.employeeCreateName = employeeCreateName;
+        this.approverID = approverID;
+        this.approverName = approverName;
+        this.unitCreateProfileID = unitCreateProfileID;
+        this.unitCreateProfileName = unitCreateProfileName;
+        this.quantityEmployee = quantityEmployee;
+        this.quantityExperts = quantityExperts;
         this.projectMissionName = projectMissionName;
         this.workUnitName = workUnitName;
         this.departmentName = departmentName;
