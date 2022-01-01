@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 @Service
-@Transactional
 public class SysUserAdminServiceImpl implements SysUserAdminService {
     private final SysUserAdminRepository sysUserAdminRepository;
 

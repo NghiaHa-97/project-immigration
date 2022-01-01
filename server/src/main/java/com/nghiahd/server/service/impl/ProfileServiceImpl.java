@@ -1,24 +1,17 @@
 package com.nghiahd.server.service.impl;
 
-import com.nghiahd.server.common.ApiResponseCode;
-import com.nghiahd.server.common.Constant;
-import com.nghiahd.server.domain.ExpertsInProfile;
 import com.nghiahd.server.domain.Profile;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.repository.ProfileRepository;
 import com.nghiahd.server.service.ProfileService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
 

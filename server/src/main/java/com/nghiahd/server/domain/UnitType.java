@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class UnitType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name")

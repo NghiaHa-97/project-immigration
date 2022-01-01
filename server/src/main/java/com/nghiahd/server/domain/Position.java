@@ -12,12 +12,16 @@ public class Position {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "departmentid")
+    private Integer departmentID;
+
     public Position() {
     }
 
-    public Position(Integer id, String name) {
+    public Position(Integer id, String name, Integer departmentID) {
         this.id = id;
         this.name = name;
+        this.departmentID = departmentID;
     }
 
     public Integer getId() {
@@ -34,5 +38,13 @@ public class Position {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getDepartmentID() {
+        return departmentID;
+    }
+
+    public void setDepartmentID(Integer departmentID) {
+        this.departmentID = departmentID;
     }
 }

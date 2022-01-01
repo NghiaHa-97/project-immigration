@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class DistrictServiceImpl implements DistrictService {
     private final DistrictRepository districtRepository;
 
