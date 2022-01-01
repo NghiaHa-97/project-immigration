@@ -13,6 +13,7 @@ import {ToolbarActionTableComponent} from './toolbar-action-table/toolbar-action
 import {QuillModule} from 'ngx-quill';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {CustomPaginatorIntl} from './table/custom-paginator-intl';
+import {SafeHtmlPipe} from './safe-html.pipe';
 
 
 @NgModule({
@@ -29,13 +30,15 @@ import {CustomPaginatorIntl} from './table/custom-paginator-intl';
     DatepickerComponent,
     RichTextEditorComponent,
     TableComponent,
-    ToolbarActionTableComponent
+    ToolbarActionTableComponent,
+    SafeHtmlPipe
   ],
   exports: [
     RichTextEditorComponent,
     DatepickerComponent,
     ToolbarActionTableComponent,
-    TableComponent
+    TableComponent,
+    SafeHtmlPipe
   ],
   providers: [
     {

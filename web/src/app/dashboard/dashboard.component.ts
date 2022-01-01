@@ -1,11 +1,12 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, TemplateRef, ElementRef} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import * as _moment from 'moment';
 import {ColumnAndStyleModel} from "../models/ColumnsAndStyles.model";
 import {PageEvent} from "@angular/material/paginator";
+import {STATUS_COLOR_STYLE} from "../constans/status-color-style.const";
 
 @Component({
   selector: 'app-dashboard',
@@ -43,7 +44,7 @@ export class DashboardComponent implements AfterViewInit {
       columnName: 'weight',
       styleHeader: {width: '400px', minWidth: '200px'},
       isSort: false,
-      styleBody: {backgroundColor: '#f0f5ff', borderColor: '#adc6ff', color: '#1d39c4'},
+      styleBody: STATUS_COLOR_STYLE.RED,
       isStatus: true
     },
     {

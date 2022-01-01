@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class CityProvinceServiceImpl implements CityProvinceService {
     private final CityProvinceRepository cityProvinceRepository;
 

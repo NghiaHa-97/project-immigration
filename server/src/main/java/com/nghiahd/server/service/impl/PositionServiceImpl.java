@@ -4,10 +4,12 @@ import com.nghiahd.server.domain.Position;
 import com.nghiahd.server.repository.PositionRepository;
 import com.nghiahd.server.service.PositionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class PositionServiceImpl implements PositionService {
     private final PositionRepository positionRepository;
 

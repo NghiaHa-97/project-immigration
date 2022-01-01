@@ -4,10 +4,12 @@ import com.nghiahd.server.domain.ProjectMission;
 import com.nghiahd.server.repository.ProjectMissionRepository;
 import com.nghiahd.server.service.ProjectMissionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ProjectMissionServiceImpl implements ProjectMissionService {
 
     private final ProjectMissionRepository projectMissionRepository;

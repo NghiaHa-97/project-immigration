@@ -3,11 +3,12 @@ package com.nghiahd.server.service.impl;
 import com.nghiahd.server.repository.WorkUnitRepository;
 import com.nghiahd.server.service.WorkUnitService;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class WorkUnitServiceImpl implements WorkUnitService {
     private final WorkUnitRepository workUnitRepository;
 

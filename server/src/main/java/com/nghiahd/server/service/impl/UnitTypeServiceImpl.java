@@ -5,11 +5,13 @@ import com.nghiahd.server.repository.UnitTypeRepository;
 import com.nghiahd.server.service.UnitTypeService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
 @Service
+@Transactional
 public class UnitTypeServiceImpl implements UnitTypeService {
 
     private final UnitTypeRepository unitTypeRepository;

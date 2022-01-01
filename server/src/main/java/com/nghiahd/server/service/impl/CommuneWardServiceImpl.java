@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class CommuneWardServiceImpl implements CommuneWardService {
     private final CommuneWardRepository communeWardRepository;
 

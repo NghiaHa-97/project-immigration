@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {ColumnAndStyleModel} from '../../models/ColumnsAndStyles.model';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatMenuPanel} from '@angular/material/menu';
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-table',
@@ -47,6 +47,9 @@ export class TableComponent implements OnInit {
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.length;
+    // const numRows = 200;
+    // console.log(numSelected);
+    console.log('numRows', numRows, numSelected === numRows);
     return numSelected === numRows;
   }
 
@@ -60,10 +63,7 @@ export class TableComponent implements OnInit {
   }
 
   handlerSelectRow(e: Event, row: any): void {
-    console.log(1, e);
-    console.log(row);
     this.selection.toggle(row);
-
   }
 
   print(row: any, element: any): void {

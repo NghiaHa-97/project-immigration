@@ -5,10 +5,12 @@ import com.nghiahd.server.repository.CountryRepository;
 import com.nghiahd.server.service.CountryService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class CountryServiceImpl implements CountryService {
     private final CountryRepository countryRepository;
 

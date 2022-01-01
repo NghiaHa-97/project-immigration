@@ -58,7 +58,8 @@ export class CustomDateAdapter extends NativeDateAdapter {
       const year = Number(str[2]);
       const month = Number(str[1]) - 1;
       const date = Number(str[0]);
-      if (month < 1 || month > 12 || date > 31 || date < 1) {
+      console.log(month);
+      if (month < 0 || month > 11 || date > 31 || date < 1) {
         console.log("parse", null);
         return null
       }
