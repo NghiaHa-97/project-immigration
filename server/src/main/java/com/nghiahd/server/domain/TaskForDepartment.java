@@ -1,7 +1,7 @@
 package com.nghiahd.server.domain;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,12 +24,12 @@ public class TaskForDepartment {
     private String result;
 
     @Column(name = "expirationdate")
-    private LocalDate expirationDate;
+    private LocalDateTime expirationDate;
 
     @Column(name = "createdate")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
-    public TaskForDepartment(UUID id, Integer departmentID, UUID profileID, String description, String result, LocalDate expirationDate, LocalDate createDate) {
+    public TaskForDepartment(UUID id, Integer departmentID, UUID profileID, String description, String result, LocalDateTime expirationDate, LocalDateTime createDate) {
         this.id = id;
         this.departmentID = departmentID;
         this.profileID = profileID;
@@ -82,19 +82,19 @@ public class TaskForDepartment {
         this.result = result;
     }
 
-    public LocalDate getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDate expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
-    public LocalDate getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 }
