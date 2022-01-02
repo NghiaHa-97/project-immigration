@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
-import {ColumnAndStyleModel} from '../../models/ColumnsAndStyles.model';
+import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatMenuPanel} from '@angular/material/menu';
 import {PageEvent} from '@angular/material/paginator';

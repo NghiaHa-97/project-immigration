@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import * as _moment from 'moment';
-import {ColumnAndStyleModel} from "../models/ColumnsAndStyles.model";
+import {ColumnAndStyleModel} from "../models/columns-and-styles.model";
 import {PageEvent} from "@angular/material/paginator";
 import {STATUS_COLOR_STYLE} from "../constans/status-color-style.const";
 

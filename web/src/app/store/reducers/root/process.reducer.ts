@@ -1,4 +1,4 @@
-import * as fromProcessAction from '../actions/process.action';
+import * as fromProcessAction from '../../actions/process.action';
 
 export interface ProcessState {
   value: boolean;

@@ -1,4 +1,4 @@
-import * as fromAuthAction from '../actions/auth.action';
+import * as fromAuthAction from '../../actions/auth.action';
 
 export interface AuthState {
   userDetail: any;

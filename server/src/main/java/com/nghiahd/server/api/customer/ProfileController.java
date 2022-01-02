@@ -30,17 +30,17 @@ public class ProfileController {
         this.messageUtils = messageUtil;
     }
 
-    @PostMapping(value = "/create-profile")
+    @PostMapping(value = "/create")
     public ResponseEntity<BodyResponseDTO<Object>> createProfile(@RequestBody Profile profile) {
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, profileService.saveProfile(profile));
     }
 
-    @PutMapping(value = "/edit-profile/{id}")
+    @PutMapping(value = "/edit/{id}")
     public ResponseEntity<BodyResponseDTO<Object>> editProfile(@RequestBody Profile profile, @PathVariable UUID id) {
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, profileService.editProfile(profile, id));
     }
 
-    @DeleteMapping(value = "/delete-profile/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<BodyResponseDTO<Object>> deleteProfile(@PathVariable UUID id) {
         ApiResponseCode apiResponseCode;
         try {
@@ -54,7 +54,7 @@ public class ProfileController {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        return RestResponseWrapper.getResponse(HttpStatus.OK, apiResponseCode, this.messageUtils);
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils);
     }
 
     @GetMapping()

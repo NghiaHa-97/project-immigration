@@ -36,7 +36,7 @@ export class AuthEffect {
     ()=>this.actions$.pipe(
       ofType(authActions.LOGIN_USER_SUCCESS),
       map(() =>
-        new routerActions.Go({path: ["dashboard"]})
+        new routerActions.Go({path: ["ho-so"]})
       )
     )
   );

@@ -8,6 +8,11 @@ export interface Menu {
 }
 
 const MENUITEMS = [
+  { state: 'ho-so', name: 'Hồ sơ', type: 'link', icon: 'av_timer' },
+  { state: 'nhan-vien', name: 'Nhân viên', type: 'link', icon: 'av_timer' },
+  { state: 'chuyen-gia', name: 'Chuyên gia', type: 'link', icon: 'av_timer' },
+
+
   { state: 'dashboard', name: 'Dashboard', type: 'link', icon: 'av_timer' },
   { state: 'button', type: 'link', name: 'Buttons', icon: 'crop_7_5' },
   { state: 'grid', type: 'link', name: 'Grid List', icon: 'view_comfy' },

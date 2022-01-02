@@ -1,0 +1,105 @@
+<mat-card class="example-card">
+  <mat-card-content>
+    <mat-card-title>Table</mat-card-title>
+
+    <app-toolbar-action-table>
+      <ng-container left>
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Company (disabled)" disabled>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field [formGroup]="form">
+              <mat-label>Choose an option</mat-label>
+              <mat-select formControlName="selector">
+                <mat-select-trigger>
+                  <div class="d-flex flex-row">
+                    <div class="p-2"><img src="{{valueSelector.image}}" alt="user" class="profile-pic"></div>
+                    <div class="p-2">{{valueSelector.value}}</div>
+                  </div>
+                </mat-select-trigger>
+                <mat-option value="option1">Option 1</mat-option>
+                <mat-option value="option2">
+                  <div class="d-flex flex-row">
+                    <div class="p-2"><img src="assets/images/users/1.jpg" alt="user" class="profile-pic"></div>
+                    <div class="p-2">Flex item 3</div>
+                  </div>
+                </mat-option>
+                <mat-option value="option3">Option 3</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <app-datepicker></app-datepicker>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container right>
+        <button mat-raised-button color="primary">Primary</button>
+        <button mat-raised-button color="accent">Accent</button>
+      </ng-container>
+    </app-toolbar-action-table>
+
+
+    <div class=" mat-elevation-z8 " matSort #sort="matSort">
+      <app-table [menuAction]="menu"
+                 [stickyEnd]="true"
+                 [stickyStart]="true"
+                 [isSelection]="true"
+                 [isAction]="true"
+                 [dataSource]="dataSource"
+                 [columnsAndStyles]="columnsAndStyles"
+                 [selection]="selection"
+                 (handlerChangePage)="handlerChangePage($event)"
+                 [totalRecord]="100">
+      </app-table>
+    </div>
+
+  </mat-card-content>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>dialpad</mat-icon>
+      <span>Redial</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>voicemail</mat-icon>
+      <span>Check voicemail</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Disable alerts</span>
+    </button>
+  </mat-menu>
+
+</mat-card>

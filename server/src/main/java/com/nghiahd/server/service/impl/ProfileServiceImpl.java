@@ -1,7 +1,9 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.domain.Profile;
+import com.nghiahd.server.domain.custom.ProfileCustom;
 import com.nghiahd.server.model.ProfileDTO;
+import com.nghiahd.server.repository.ProfileCustomRepository;
 import com.nghiahd.server.repository.ProfileRepository;
 import com.nghiahd.server.service.ProfileService;
 import org.springframework.data.domain.Page;
@@ -17,9 +19,12 @@ import java.util.UUID;
 @Transactional
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
+    private final ProfileCustomRepository profileCustomRepository;
 
-    public ProfileServiceImpl(ProfileRepository profileRepository) {
+    public ProfileServiceImpl(ProfileRepository profileRepository,
+                              ProfileCustomRepository profileCustomRepository) {
         this.profileRepository = profileRepository;
+        this.profileCustomRepository = profileCustomRepository;
     }
 
     @Override

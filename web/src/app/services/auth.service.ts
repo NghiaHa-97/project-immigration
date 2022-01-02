@@ -3,9 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ADMIN_API, PUBLIC_API} from '../constans/url-api.const';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   constructor(private http: HttpClient) {
   }
