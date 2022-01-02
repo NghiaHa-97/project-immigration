@@ -1,6 +1,7 @@
 package com.nghiahd.server.domain;
 
 import com.nghiahd.server.model.ProfileDTO;
+import com.nghiahd.server.model.TaskForDepartmentDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,13 +11,13 @@ import java.util.UUID;
 @Table(name = "taskfordepartment")
 @SqlResultSetMappings({
         @SqlResultSetMapping(
-                name = "ProfileListDTO",
+                name = "tfdDTOList",
                 classes = {
                         @ConstructorResult(
-                                targetClass = ProfileDTO.class,
+                                targetClass = TaskForDepartmentDTO.class,
                                 columns = {
                                         @ColumnResult(name = "id", type = UUID.class),
-                                        @ColumnResult(name = "departmentID", type = UUID.class),
+                                        @ColumnResult(name = "departmentID", type = Integer.class),
                                         @ColumnResult(name = "profileID", type = UUID.class),
                                         @ColumnResult(name = "description", type = String.class),
                                         @ColumnResult(name = "result", type = String.class),
@@ -66,6 +67,7 @@ public class TaskForDepartment {
     }
 
     public TaskForDepartment() {
+
     }
 
     public UUID getId() {

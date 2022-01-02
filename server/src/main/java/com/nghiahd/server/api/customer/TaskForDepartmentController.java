@@ -2,10 +2,8 @@ package com.nghiahd.server.api.customer;
 
 import com.nghiahd.server.api.admin.UserController;
 import com.nghiahd.server.common.*;
-import com.nghiahd.server.domain.Profile;
 import com.nghiahd.server.domain.TaskForDepartment;
-import com.nghiahd.server.model.ProfileDTO;
-import com.nghiahd.server.service.ProfileService;
+import com.nghiahd.server.model.TaskForDepartmentDTO;
 import com.nghiahd.server.service.TaskForDepartmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,21 +72,20 @@ public class TaskForDepartmentController {
         return RestResponseWrapper.getResponse(HttpStatus.OK, apiResponseCode, this.messageUtils);
     }
 
-//    @GetMapping()
-//    public ResponseEntity<BodyResponseDTO<List<ProfileDTO>>> getAllTaskForDepartment(
-//            @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
-//            @SortDefault.SortDefaults({
-//                    @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-//            }) Pageable pageable) {
-//
-//        Page<ProfileDTO> claimsDTOS = taskForDepartmentService.getListProfile(PageUtilsCommon.createPageable(pageable));
-//        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, claimsDTOS);
-//    }
-//
-//    @GetMapping(value = "/detail/{id}")
-//    public ResponseEntity<BodyResponseDTO<Profile>> getDetailByTaskForDepartment(@PathVariable UUID id){
-//        Profile profile = taskForDepartmentService.getProfileByID(id);
-//        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, profile);
-//    }
+    @GetMapping()
+    public ResponseEntity<BodyResponseDTO<List<TaskForDepartmentDTO>>> getAllTaskForDepartment(
+            @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+            }) Pageable pageable) {
+
+        Page<TaskForDepartmentDTO> claimsDTOS = taskForDepartmentService.getListTFD(PageUtilsCommon.createPageable(pageable));
+        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, claimsDTOS);
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    public ResponseEntity<BodyResponseDTO<Object>> getDetailByTaskForDepartment(@PathVariable UUID id){
+        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, taskForDepartmentService.getTFDByID(id));
+    }
 
 }

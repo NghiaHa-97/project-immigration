@@ -1,7 +1,9 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.domain.TaskForDepartment;
+import com.nghiahd.server.domain.custom.TaskForDepartmentCus;
 import com.nghiahd.server.model.TaskForDepartmentDTO;
+import com.nghiahd.server.repository.TaskForDepartmentCusRepository;
 import com.nghiahd.server.repository.TaskForDepartmentRepository;
 import com.nghiahd.server.service.TaskForDepartmentService;
 import org.springframework.data.domain.Page;
@@ -17,10 +19,13 @@ import java.util.UUID;
 @Transactional
 public class TaskForDepartmentServiceImpl implements TaskForDepartmentService {
     private final TaskForDepartmentRepository taskForDepartmentRepository;
+    private final TaskForDepartmentCusRepository taskForDepartmentCusRepository;
 
-    public TaskForDepartmentServiceImpl(TaskForDepartmentRepository taskForDepartmentRepository) {
+    public TaskForDepartmentServiceImpl(TaskForDepartmentRepository taskForDepartmentRepository, TaskForDepartmentCusRepository taskForDepartmentCusRepository) {
         this.taskForDepartmentRepository = taskForDepartmentRepository;
+        this.taskForDepartmentCusRepository = taskForDepartmentCusRepository;
     }
+
 
     @Override
     public TaskForDepartment saveTFD(TaskForDepartment req) {
@@ -44,15 +49,13 @@ public class TaskForDepartmentServiceImpl implements TaskForDepartmentService {
 
     @Override
     public Page<TaskForDepartmentDTO> getListTFD(Pageable pageable) {
-        Page<TaskForDepartmentDTO> listTFDs = taskForDepartmentRepository.getListTFD(pageable);
-        return listTFDs;
+        return taskForDepartmentRepository.getListTFD(pageable);
     }
 
     @Override
-    public TaskForDepartment getTFDByID(UUID id) {
-
-        TaskForDepartment tfdDetail = taskForDepartmentRepository.findById(id).orElse(null);
-        return tfdDetail;
+    public TaskForDepartmentCus getTFDByID(UUID id) {
+        Optional<TaskForDepartmentCus> taskForDepartmentCus = taskForDepartmentCusRepository.findById(id);
+        return taskForDepartmentCus.orElse(null);
     }
 
 

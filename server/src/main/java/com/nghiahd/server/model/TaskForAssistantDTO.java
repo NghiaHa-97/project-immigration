@@ -3,32 +3,33 @@ package com.nghiahd.server.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class TaskForDepartmentDTO {
-
+public class TaskForAssistantDTO {
     private UUID id;
-    private Integer departmentID;
+    private UUID employeeID;
     private UUID profileID;
     private String description;
     private String result;
     private LocalDateTime expirationDate;
     private LocalDateTime createDate;
-    private String departmentName;
+    private String employeeCode;
+    private String employeeFullName;
     private String profileCode;
     private UUID statusProfileID;
     private String statusProfileName;
 
-    public TaskForDepartmentDTO() {
+    public TaskForAssistantDTO() {
     }
 
-    public TaskForDepartmentDTO(UUID id, Integer departmentID, UUID profileID, String description, String result, LocalDateTime expirationDate, LocalDateTime createDate, String departmentName, String profileCode, UUID statusProfileID, String statusProfileName) {
+    public TaskForAssistantDTO(UUID id, UUID employeeID, UUID profileID, String description, String result, LocalDateTime expirationDate, LocalDateTime createDate, String employeeCode, String employeeFullName, String profileCode, UUID statusProfileID, String statusProfileName) {
         this.id = id;
-        this.departmentID = departmentID;
+        this.employeeID = employeeID;
         this.profileID = profileID;
         this.description = description;
         this.result = result;
         this.expirationDate = expirationDate;
         this.createDate = createDate;
-        this.departmentName = departmentName;
+        this.employeeCode = employeeCode;
+        this.employeeFullName = employeeFullName;
         this.profileCode = profileCode;
         this.statusProfileID = statusProfileID;
         this.statusProfileName = statusProfileName;
@@ -42,12 +43,12 @@ public class TaskForDepartmentDTO {
         this.id = id;
     }
 
-    public Integer getDepartmentID() {
-        return departmentID;
+    public UUID getEmployeeID() {
+        return employeeID;
     }
 
-    public void setDepartmentID(Integer departmentID) {
-        this.departmentID = departmentID;
+    public void setEmployeeID(UUID employeeID) {
+        this.employeeID = employeeID;
     }
 
     public UUID getProfileID() {
@@ -90,12 +91,20 @@ public class TaskForDepartmentDTO {
         this.createDate = createDate;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public String getEmployeeCode() {
+        return employeeCode;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
+    }
+
+    public String getEmployeeFullName() {
+        return employeeFullName;
+    }
+
+    public void setEmployeeFullName(String employeeFullName) {
+        this.employeeFullName = employeeFullName;
     }
 
     public String getProfileCode() {

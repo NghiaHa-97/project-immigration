@@ -1,6 +1,7 @@
 package com.nghiahd.server.service;
 
 import com.nghiahd.server.domain.TaskForDepartment;
+import com.nghiahd.server.domain.custom.TaskForDepartmentCus;
 import com.nghiahd.server.model.TaskForDepartmentDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,5 +17,5 @@ public interface TaskForDepartmentService {
 
     Page<TaskForDepartmentDTO> getListTFD(Pageable pageable);
 
-    TaskForDepartment getTFDByID(UUID id);
+    TaskForDepartmentCus getTFDByID(UUID id);
 }
