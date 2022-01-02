@@ -1,11 +1,37 @@
 package com.nghiahd.server.domain;
 
+import com.nghiahd.server.model.ProfileDTO;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "taskfordepartment")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "ProfileListDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = ProfileDTO.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = UUID.class),
+                                        @ColumnResult(name = "departmentID", type = UUID.class),
+                                        @ColumnResult(name = "profileID", type = UUID.class),
+                                        @ColumnResult(name = "description", type = String.class),
+                                        @ColumnResult(name = "result", type = String.class),
+                                        @ColumnResult(name = "expirationDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "departmentName", type = String.class),
+                                        @ColumnResult(name = "profileCode", type = String.class),
+                                        @ColumnResult(name = "statusProfileID", type = UUID.class),
+                                        @ColumnResult(name = "statusProfileName", type = String.class),
+
+                                }
+                        )
+                }
+        ),
+})
 public class TaskForDepartment {
 
     @Id
