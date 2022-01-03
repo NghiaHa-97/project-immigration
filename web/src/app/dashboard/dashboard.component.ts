@@ -28,6 +28,7 @@ export class DashboardComponent implements AfterViewInit {
   columnsAndStyles: ColumnAndStyleModel[] = [
     {
       columnName: 'position',
+      columnHeaderName:'',
       styleHeader: {width: '400px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
@@ -35,6 +36,7 @@ export class DashboardComponent implements AfterViewInit {
     },
     {
       columnName: 'name',
+      columnHeaderName:'',
       styleHeader: {width: '200px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
@@ -42,6 +44,7 @@ export class DashboardComponent implements AfterViewInit {
     },
     {
       columnName: 'weight',
+      columnHeaderName:'',
       styleHeader: {width: '400px', minWidth: '200px'},
       isSort: false,
       styleBody: STATUS_COLOR_STYLE.RED,
@@ -49,6 +52,7 @@ export class DashboardComponent implements AfterViewInit {
     },
     {
       columnName: 'symbol',
+      columnHeaderName:'',
       styleHeader: {width: '200px', minWidth: '200px'},
       isSort: true,
       styleBody: null,

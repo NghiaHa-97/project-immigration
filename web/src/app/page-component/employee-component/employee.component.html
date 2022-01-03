@@ -77,7 +77,7 @@
                  [stickyStart]="true"
                  [isSelection]="true"
                  [isAction]="true"
-                 [dataSource]="dataSource"
+                 [dataSource]="employees$ | async"
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
                  (handlerChangePage)="handlerChangePage($event)"

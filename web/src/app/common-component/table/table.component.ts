@@ -49,7 +49,7 @@ export class TableComponent implements OnInit {
     const numRows = this.dataSource.length;
     // const numRows = 200;
     // console.log(numSelected);
-    console.log('numRows', numRows, numSelected === numRows);
+    // console.log('numRows', numRows, numSelected === numRows);
     return numSelected === numRows;
   }
 

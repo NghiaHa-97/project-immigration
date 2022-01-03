@@ -27,29 +27,119 @@ export class ProfileComponent implements OnInit, AfterViewInit{
   selection = new SelectionModel<any>(true, []);
   columnsAndStyles: ColumnAndStyleModel[] = [
     {
-      columnName: 'position',
-      styleHeader: {width: '400px', minWidth: '200px'},
+      columnName: 'code',
+      columnHeaderName: 'Mã',
+      styleHeader: {width: '100px', minWidth: '70px'},
       isSort: true,
       styleBody: null,
       isStatus: false
     },
     {
-      columnName: 'name',
+      columnName: 'fullname',
+      columnHeaderName: 'Họ tên',
       styleHeader: {width: '200px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
       isStatus: false
     },
     {
-      columnName: 'weight',
-      styleHeader: {width: '400px', minWidth: '200px'},
+      columnName: 'avatar',
+      columnHeaderName: 'Ảnh',
+      styleHeader: {width: '60px', minWidth: '60px'},
       isSort: false,
       styleBody: STATUS_COLOR_STYLE.RED,
       isStatus: true
     },
     {
-      columnName: 'symbol',
+      columnName: 'gender',
+      columnHeaderName: 'Giới tính',
+      styleHeader: {width: '50px', minWidth: '50px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'birthDay',
+      columnHeaderName: 'Ngày sinh',
+      styleHeader: {width: '80px', minWidth: '80px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'departmentName',
+      columnHeaderName: 'Phòng ban',
+      styleHeader: {width: '150px', minWidth: '150px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'positionName',
+      columnHeaderName: 'Chức vụ',
+      styleHeader: {width: '150px', minWidth: '150px'},
+      isSort: false,
+      styleBody: STATUS_COLOR_STYLE.RED,
+      isStatus: true
+    },
+    {
+      columnName: 'workUnitName',
+      columnHeaderName: 'Đơn vị',
       styleHeader: {width: '200px', minWidth: '200px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'cityProvinceName',
+      columnHeaderName: 'Quê quán',
+      styleHeader: { minWidth: '60px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    // {
+    //   columnName: 'districtName',
+    //   styleHeader: {width: '200px', minWidth: '200px'},
+    //   isSort: true,
+    //   styleBody: null,
+    //   isStatus: false
+    // },
+    // {
+    //   columnName: 'communeWardName',
+    //   styleHeader: {width: '400px', minWidth: '200px'},
+    //   isSort: false,
+    //   styleBody: STATUS_COLOR_STYLE.RED,
+    //   isStatus: true
+    // },
+    {
+      columnName: 'phoneNumber',
+      columnHeaderName: 'Điện thoại',
+      styleHeader: { minWidth: '70px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'numberIdentityCard',
+      columnHeaderName: 'Căn cước công dân',
+      styleHeader: { minWidth: '80px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'createDate',
+      columnHeaderName: 'Ngày tạo',
+      styleHeader: { minWidth: '80px'},
+      isSort: false,
+      styleBody: null,
+      isStatus: true
+    },
+    {
+      columnName: 'updateDate',
+      columnHeaderName: 'Ngày sửa đổi',
+      styleHeader: { minWidth: '80px'},
       isSort: true,
       styleBody: null,
       isStatus: false

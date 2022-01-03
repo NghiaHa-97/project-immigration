@@ -9,6 +9,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import {FeatureState, getArrayEmployeeState, getEmployeeEntitiesState, LoadEmployee} from '../../store';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-employee',
@@ -16,6 +17,7 @@ import {FeatureState, getArrayEmployeeState, getEmployeeEntitiesState, LoadEmplo
   styleUrls: ['./employee.component.scss']
 })
 export class EmployeeComponent implements OnInit, AfterViewInit {
+  employees$!: Observable<any>
   // public chosenDate = _moment.now();
   public chosenDate = Date.now();
 
@@ -29,29 +31,119 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<any>(true, []);
   columnsAndStyles: ColumnAndStyleModel[] = [
     {
-      columnName: 'position',
-      styleHeader: {width: '400px', minWidth: '200px'},
+      columnName: 'code',
+      columnHeaderName: 'Mã',
+      styleHeader: {width: '100px', minWidth: '100px'},
       isSort: true,
       styleBody: null,
       isStatus: false
     },
     {
-      columnName: 'name',
+      columnName: 'fullname',
+      columnHeaderName: 'Họ tên',
       styleHeader: {width: '200px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
       isStatus: false
     },
     {
-      columnName: 'weight',
-      styleHeader: {width: '400px', minWidth: '200px'},
+      columnName: 'avatar',
+      columnHeaderName: 'Ảnh',
+      styleHeader: {width: '60px', minWidth: '60px'},
       isSort: false,
-      styleBody: STATUS_COLOR_STYLE.RED,
-      isStatus: true
+      styleBody: null,
+      isStatus: false
     },
     {
-      columnName: 'symbol',
+      columnName: 'gender',
+      columnHeaderName: 'Giới tính',
+      styleHeader: {width: '80px', minWidth: '80px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'birthDay',
+      columnHeaderName: 'Ngày sinh',
+      styleHeader: {width: '100px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'departmentName',
+      columnHeaderName: 'Phòng ban',
+      styleHeader: {width: '150px', minWidth: '150px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'positionName',
+      columnHeaderName: 'Chức vụ',
+      styleHeader: {width: '150px', minWidth: '150px'},
+      isSort: false,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'workUnitName',
+      columnHeaderName: 'Đơn vị',
       styleHeader: {width: '200px', minWidth: '200px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'cityProvinceName',
+      columnHeaderName: 'Quê quán',
+      styleHeader: { minWidth: '100px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    // {
+    //   columnName: 'districtName',
+    //   styleHeader: {width: '200px', minWidth: '200px'},
+    //   isSort: true,
+    //   styleBody: null,
+    //   isStatus: false
+    // },
+    // {
+    //   columnName: 'communeWardName',
+    //   styleHeader: {width: '400px', minWidth: '200px'},
+    //   isSort: false,
+    //   styleBody: STATUS_COLOR_STYLE.RED,
+    //   isStatus: true
+    // },
+    {
+      columnName: 'phoneNumber',
+      columnHeaderName: 'Điện thoại',
+      styleHeader: { width: '180px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'numberIdentityCard',
+      columnHeaderName: 'Căn cước công dân',
+      styleHeader: { width: '180px'},
+      isSort: true,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'createDate',
+      columnHeaderName: 'Ngày tạo',
+      styleHeader: { width: '180px'},
+      isSort: false,
+      styleBody: null,
+      isStatus: false
+    },
+    {
+      columnName: 'updateDate',
+      columnHeaderName: 'Ngày sửa đổi',
+      styleHeader: { width: '180px'},
       isSort: true,
       styleBody: null,
       isStatus: false
@@ -76,7 +168,7 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.store.dispatch(new LoadEmployee(null));
-    this.store.select(fromStore.getArrayEmployeeState).subscribe(x => console.log(x));
+    this.employees$ = this.store.select(fromStore.getArrayEmployeeState);
     const l = {
       _5: 1,
       _2: 2,
