@@ -1,6 +1,8 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.common.ApiResponseCode;
+import com.nghiahd.server.common.SaveFileUtils;
+import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.domain.Employee;
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.repository.EmployeeRepository;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -18,9 +21,12 @@ import java.util.UUID;
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final ReadEnvironment readEnvironment;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,
+                               ReadEnvironment readEnvironment) {
         this.employeeRepository = employeeRepository;
+        this.readEnvironment = readEnvironment;
     }
 
     @Override
@@ -34,10 +40,24 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee createEmployee(Employee em) {
+    public Employee createEmployee(Employee em, MultipartFile fileImage) {
         em.setCreateDate(LocalDateTime.now());
         em.setUpdateDate(LocalDateTime.now());
-        return employeeRepository.save(em);
+        em.setId(UUID.randomUUID());
+        if (fileImage != null) {
+            String fileDir = this.readEnvironment.getFolderImages() + "/" + em.getId();
+            String fileName = SaveFileUtils.createNameFile(em.getUpdateDate().toString(), fileImage.getOriginalFilename());
+            boolean isSaved = SaveFileUtils.saveFile(fileDir, fileName, fileImage);
+            if (isSaved) {
+                em.setAvatar(fileDir + "/" + fileName);
+                em = employeeRepository.save(em);
+            } else {
+                em = null;
+            }
+        } else {
+            em = null;
+        }
+        return em;
     }
 
     @Override

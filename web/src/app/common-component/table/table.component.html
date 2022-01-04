@@ -15,7 +15,8 @@
 
       </th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox (click)="$event.stopPropagation()"
+        <mat-checkbox *ngIf="element?.id"
+                      (click)="$event.stopPropagation()"
                       (change)="$event ? selection.toggle(element) : null"
                       [checked]="selection.isSelected(element)">
         </mat-checkbox>
@@ -31,7 +32,10 @@
         <div [style]="{width:'40px'}">Action</div>
       </th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button [matMenuTriggerFor]="menuAction" (click)="$event.stopPropagation()">
+        <button mat-icon-button
+                [matMenuTriggerFor]="menuAction"
+                (click)="handlerAction($event, element.id)"
+                *ngIf="element?.id">
           <mat-icon>more_vert</mat-icon>
         </button>
       </td>
@@ -65,10 +69,17 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-        class="example-element-row"
-        (click)="handlerSelectRow($event, row)">
-    </tr>
+    <!--disable click row-->
+<!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"-->
+<!--        class="example-element-row">-->
+<!--    </tr>-->
+
+<!--    disable click row-->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            class="example-element-row"
+            (click)="handlerSelectRow($event, row)">
+        </tr>
+
   </table>
 </div>
 <mat-paginator [pageSizeOptions]="pageSizeOptions"

@@ -5,6 +5,7 @@ import com.nghiahd.server.domain.Employee;
 import com.nghiahd.server.model.EmployeeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ public interface EmployeeService {
 
     Employee getDetailEmployee(UUID id);
 
-    Employee createEmployee(Employee em);
+    Employee createEmployee(Employee em, MultipartFile fileImage);
 
     Employee editEmployee(Employee employee, UUID id);
 

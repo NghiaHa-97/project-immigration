@@ -4,7 +4,7 @@ import {DemoMaterialModule} from '../demo-material-module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ChartistModule} from 'ng-chartist';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {CustomDateAdapter, MY_FORMATS} from './datepicker/custom-datepicker-format';
 import {DatepickerComponent} from './datepicker/datepicker.component';
 import {RichTextEditorComponent} from './rich-text-editor/rich-text-editor.component';
@@ -14,6 +14,7 @@ import {QuillModule} from 'ngx-quill';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {CustomPaginatorIntl} from './table/custom-paginator-intl';
 import {SafeHtmlPipe} from './safe-html.pipe';
+import {InputImageComponent} from './input-image/input-image.component';
 
 
 @NgModule({
@@ -31,14 +32,16 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     RichTextEditorComponent,
     TableComponent,
     ToolbarActionTableComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    InputImageComponent
   ],
   exports: [
     RichTextEditorComponent,
     DatepickerComponent,
     ToolbarActionTableComponent,
     TableComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    InputImageComponent
   ],
   providers: [
     {
@@ -52,6 +55,10 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     {
       provide: MatPaginatorIntl,
       useClass: CustomPaginatorIntl
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'vi-VN'
     }
   ]
 })

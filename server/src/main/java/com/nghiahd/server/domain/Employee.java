@@ -1,5 +1,11 @@
 package com.nghiahd.server.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.nghiahd.server.common.mapper.LocalDateDeserializer;
+import com.nghiahd.server.common.mapper.LocalDateSerializer;
+import com.nghiahd.server.common.mapper.LocalDateTimeDeserializer;
+import com.nghiahd.server.common.mapper.LocalDateTimeSerializer;
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.model.ExpertsDTO;
 
@@ -62,6 +68,8 @@ public class Employee {
     @Column(name = "gender")
     private Boolean gender;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "birthday")
     private LocalDate birthDay;
 
@@ -92,9 +100,13 @@ public class Employee {
     @Column(name = "numberidentitycard")
     private String numberIdentityCard;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "createdate")
     private LocalDateTime createDate;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "updatedate")
     private LocalDateTime updateDate;
 

@@ -1,16 +1,25 @@
-import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatMenuPanel} from '@angular/material/menu';
+import {MatMenuPanel, MatMenuTrigger} from '@angular/material/menu';
 import {PageEvent} from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, AfterViewInit {
 
+  // @ViewChild(MatTable, {static: true}) table!: MatTable<any>;
   // Table Inputs
   @Input() dataSource!: any;
   @Input() columnsAndStyles!: ColumnAndStyleModel[];
@@ -28,6 +37,8 @@ export class TableComponent implements OnInit {
 
   // MatPaginator output
   @Output() handlerChangePage = new EventEmitter<PageEvent>();
+  // action
+  @Output() selectAction = new EventEmitter<any>();
 
   displayedColumns!: string[];
 
@@ -35,6 +46,7 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.displayedColumns = this.columnsAndStyles.map(val => val.columnName);
     if (this.isSelection) {
       this.displayedColumns.unshift('select-table');
@@ -46,10 +58,9 @@ export class TableComponent implements OnInit {
 
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.length;
+    const numRows = this.dataSource.filter((val: any) => val?.id).length;
     // const numRows = 200;
     // console.log(numSelected);
-    // console.log('numRows', numRows, numSelected === numRows);
     return numSelected === numRows;
   }
 
@@ -58,12 +69,12 @@ export class TableComponent implements OnInit {
       this.selection.clear();
       return;
     }
-
-    this.selection.select(...this.dataSource);
+    this.selection.select(...this.dataSource.filter((val: any) => val?.id));
   }
 
   handlerSelectRow(e: Event, row: any): void {
-    this.selection.toggle(row);
+    // console.log(e);
+    // this.selection.toggle(row);
   }
 
   print(row: any, element: any): void {
@@ -75,4 +86,11 @@ export class TableComponent implements OnInit {
     this.handlerChangePage.emit(event);
   }
 
+  ngAfterViewInit(): void {
+  }
+
+  handlerAction(event: Event, id: any): void {
+    event.stopPropagation();
+    this.selectAction.emit(id);
+  }
 }

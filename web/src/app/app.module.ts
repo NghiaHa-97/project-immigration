@@ -93,10 +93,6 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     {
       provide: RouterStateSerializer,
       useClass: CustomSerializer
-    },
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'vi-VN'
     }
   ],
   bootstrap: [AppComponent]

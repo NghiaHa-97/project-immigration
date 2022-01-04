@@ -1,6 +1,6 @@
 <mat-card class="example-card">
   <mat-card-content>
-    <mat-card-title>Table</mat-card-title>
+    <mat-card-title>Nhân Viên</mat-card-title>
 
     <app-toolbar-action-table>
       <ng-container left>
@@ -65,14 +65,16 @@
       </ng-container>
 
       <ng-container right>
-        <button mat-raised-button color="primary">Primary</button>
-        <button mat-raised-button color="accent">Accent</button>
+        <button mat-raised-button color="primary" (click)="onNewEmployee()">
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>Thêm mới</span>
+        </button>
       </ng-container>
     </app-toolbar-action-table>
 
 
-    <div class=" mat-elevation-z8 " matSort #sort="matSort">
-      <app-table [menuAction]="menu"
+    <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
+      <app-table #appTable [menuAction]="menu"
                  [stickyEnd]="true"
                  [stickyStart]="true"
                  [isSelection]="true"
@@ -86,19 +88,18 @@
     </div>
 
   </mat-card-content>
-
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
-      <mat-icon>dialpad</mat-icon>
-      <span>Redial</span>
+    <button #btnDetail mat-menu-item>
+      <mat-icon>details</mat-icon>
+      <span>Chi Tiết</span>
     </button>
-    <button mat-menu-item disabled>
-      <mat-icon>voicemail</mat-icon>
-      <span>Check voicemail</span>
+    <button #btnUpdate mat-menu-item>
+      <mat-icon>update</mat-icon>
+      <span>Sửa</span>
     </button>
-    <button mat-menu-item>
-      <mat-icon>notifications_off</mat-icon>
-      <span>Disable alerts</span>
+    <button #btnDelete mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Xóa</span>
     </button>
   </mat-menu>
 

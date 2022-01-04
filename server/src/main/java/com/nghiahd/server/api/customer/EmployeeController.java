@@ -1,8 +1,8 @@
 package com.nghiahd.server.api.customer;
 
 import com.nghiahd.server.common.*;
+import com.nghiahd.server.common.mapper.ObjectMapperUtils;
 import com.nghiahd.server.domain.Employee;
-import com.nghiahd.server.domain.Experts;
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.service.EmployeeService;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,10 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.jws.Oneway;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,9 +48,28 @@ public class EmployeeController {
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, employee);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<BodyResponseDTO<Employee>> createEmployee(@RequestBody Employee em) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, employeeService.createEmployee(em));
+//    @PostMapping(value = "/create")
+//    public ResponseEntity<BodyResponseDTO<Employee>> createEmployee(@RequestBody Employee em) {
+//        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, employeeService.createEmployee(em));
+//    }
+
+    @PostMapping(value = "/create",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<BodyResponseDTO<Employee>> createEmployee(@RequestPart("employee") String em,
+                                                                    @RequestPart(value = "file", required = false) MultipartFile file) {
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        Employee employee = ObjectMapperUtils.convertJsonToObject(em, Employee.class);
+        Employee employeeSaved = null;
+        if(employee != null){
+            employeeSaved = this.employeeService.createEmployee(employee, file);
+        }else{
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+
+        if (employeeSaved == null){
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, employee);
     }
 
     @PutMapping(value = "/edit/{id}")
