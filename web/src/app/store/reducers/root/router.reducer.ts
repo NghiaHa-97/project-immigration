@@ -27,3 +27,7 @@ export class CustomSerializer implements fromRouter.RouterStateSerializer<Router
     return {url, queryParams, params};
   }
 }
+
+export const getRouterUrl = (router: fromRouter.RouterReducerState<RouterStateUrl>) => router.state.url;
+export const getRouterQueryParams = (router: fromRouter.RouterReducerState<RouterStateUrl>) => router.state.queryParams;
+export const getRouterParams = (router: fromRouter.RouterReducerState<RouterStateUrl>) => router.state.params;

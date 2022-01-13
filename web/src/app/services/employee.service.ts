@@ -36,7 +36,7 @@ export class EmployeeService {
   edit(payload: any): Observable<any> {
     return this.http
       .put(`${PUBLIC_API.EMPLOYEE.EDIT_EMPLOYEE}${payload.id}`,
-        payload,
+        payload.form,
         {observe: 'response', withCredentials: true});
   }
 

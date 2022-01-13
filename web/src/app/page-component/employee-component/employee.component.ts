@@ -11,6 +11,7 @@ import {fromEvent, Observable} from 'rxjs';
 import {map, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {TableComponent} from '../../common-component/table/table.component';
+import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
 
 
 @Component({
@@ -77,8 +78,9 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
       map(dataArray => dataArray.map(element => {
         return {
           ...element,
-          createDate: moment(element.createDate).format('DD/MM/YYYY, h:mm:ss a'),
-          updateDate: element.updateDate ? moment(element.updateDate).format('DD/MM/YYYY, h:mm:ss a') : null
+          createDate: moment(element.createDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE),
+          updateDate: element.updateDate ? moment(element.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE) : null,
+          birthDay: element.birthDay ? moment(element.birthDay).format(PATTERN_FORMAT_DATE.DATE_RESPONSE) : null
         };
       })),
       // map(x => {
@@ -119,8 +121,11 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
 
     this.eventClickUpdate$.pipe(
       withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
-    ).subscribe(x => console.log(x));
+      map(([data1, data2]) => data2)
+    ).subscribe(x => {
+      this.onDetailEmployee(x);
+      console.log(x);
+    });
 
     this.eventClickDelete$.pipe(
       withLatestFrom(this.appTable.selectAction),
@@ -130,6 +135,11 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
 
   onNewEmployee(): void {
     this.store.dispatch(new Go({path: ['nhan-vien', 'them-moi']}));
+  }
+
+  onDetailEmployee(id: string): void {
+    console.log('onDetailEmployee', id);
+    this.store.dispatch(new Go({path: ['nhan-vien', 'chi-tiet', id]}));
   }
 }
 

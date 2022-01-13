@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/district")
+@RequestMapping(value = "/public/district")
 public class DistrictController {
     private final DistrictService districtService;
     private final MessageUtils messageUtils;
@@ -26,7 +26,7 @@ public class DistrictController {
         this.messageUtils = messageUtils;
     }
 
-    @GetMapping("/{cityProvinceID}")
+    @GetMapping("/city-province/{cityProvinceID}")
     public ResponseEntity<BodyResponseDTO<List<District>>> getAllDistrict(@PathVariable() int cityProvinceID) {
         return RestResponseWrapper.getResponse(HttpStatus.OK,
                 ApiResponseCode.SUCCESS,

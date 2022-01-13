@@ -56,7 +56,7 @@
 
       <ng-container *ngIf="column.isStatus; else content">
         <td mat-cell *matCellDef="let element">
-          <span class="span-status" [style]="column.styleBody">
+          <span class="span-status" [style]="getStyleBodyStatus(element[column.styleBody])">
             {{element[column.columnName]}}
           </span>
         </td>

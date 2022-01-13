@@ -11,6 +11,7 @@ const MENUITEMS = [
   { state: 'ho-so', name: 'Hồ sơ', type: 'link', icon: 'av_timer' },
   { state: 'nhan-vien', name: 'Nhân viên', type: 'link', icon: 'av_timer' },
   { state: 'chuyen-gia', name: 'Chuyên gia', type: 'link', icon: 'av_timer' },
+  { state: 'map', name: 'Map', type: 'link', icon: 'av_timer' },
 
 
   { state: 'dashboard', name: 'Dashboard', type: 'link', icon: 'av_timer' },

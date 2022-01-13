@@ -23,12 +23,13 @@ export function reducer(
         (result: { [id: string]: any }, item: any) => {
           return {
             ...result,
-            [getPrefixID(item.id)]: item,
+            [getPrefixID(item.id)]: {...item, isDetail: false},
           };
         },
-        {
-          ...state.entities,
-        }
+        {}
+        // {
+        //   ...state.entities,
+        // }
       );
 
       return {
@@ -38,13 +39,14 @@ export function reducer(
       };
     }
 
+    case fromEmployeeAction.LOAD_DETAIL_EMPLOYEE_SUCCESS:
     case fromEmployeeAction.UPDATE_EMPLOYEE_SUCCESS:
     case fromEmployeeAction.CREATE_EMPLOYEE_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
-      const employee = action.payload.data;
+      const employee = action.payload?.data;
       const entities = {
         ...state.entities,
-        [getPrefixID(employee.id)]: employee,
+        [getPrefixID(employee.id)]: {...employee, isDetail: true},
       };
 
       return {
@@ -56,7 +58,7 @@ export function reducer(
 
     case fromEmployeeAction.REMOVE_EMPLOYEE_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
-      const employeeID = action.payload.data;
+      const employeeID = action.payload?.data;
       const {[getPrefixID(employeeID)]: removed, ...entities} = state.entities;
 
       return {

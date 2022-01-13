@@ -73,8 +73,22 @@ public class EmployeeController {
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<BodyResponseDTO<Employee>> editEmployee(@RequestBody Employee employee, @PathVariable UUID id) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, employeeService.editEmployee(employee, id));
+    public ResponseEntity<BodyResponseDTO<Employee>> editEmployee(@RequestPart("employee") String em,
+                                                                  @RequestPart(value = "file", required = false) MultipartFile file,
+                                                                  @PathVariable UUID id) {
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        Employee employee = ObjectMapperUtils.convertJsonToObject(em, Employee.class);
+        Employee employeeSaved = null;
+        if(employee != null){
+            employeeSaved = this.employeeService.editEmployee(employee, file, id);
+        }else{
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+
+        if (employeeSaved == null){
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(),apiResponseCode, this.messageUtils, employeeSaved);
     }
 
     @DeleteMapping(value = "/delete/{id}")

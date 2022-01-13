@@ -16,7 +16,7 @@ public interface EmployeeService {
 
     Employee createEmployee(Employee em, MultipartFile fileImage);
 
-    Employee editEmployee(Employee employee, UUID id);
+    Employee editEmployee(Employee employee, MultipartFile file, UUID id);
 
     ApiResponseCode deleteEmployee(UUID id);
 }

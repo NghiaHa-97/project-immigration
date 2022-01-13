@@ -16,8 +16,10 @@ import {ProfileUpdateComponent} from './profile-component/profile-update.compone
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {effectsFeatures} from '../store';
-import {featuresReducers} from '../store/reducers/feature.reducer';
+import {featuresReducers} from '../store';
 import {pageComponentService} from '../services';
+import {canActives} from './can-activate';
+import {MapComponent} from './map-component/map.component';
 
 
 @NgModule({
@@ -39,10 +41,12 @@ import {pageComponentService} from '../services';
     ExpertsComponent,
     ExpertsUpdateComponent,
     ProfileComponent,
-    ProfileUpdateComponent
+    ProfileUpdateComponent,
+    MapComponent
   ],
   providers: [
-    ...pageComponentService
+    ...pageComponentService,
+    ...canActives
   ]
 })
 export class PageComponentModule {

@@ -4,6 +4,9 @@ import {EmployeeComponent} from './employee-component/employee.component';
 import {ExpertsComponent} from './experts-component/experts.component';
 import {ProfileUpdateComponent} from './profile-component/profile-update.component';
 import {EmployeeUpdateComponent} from './employee-component/employee-update.component';
+import {EmployeeExistDetailActivate} from './can-activate';
+import {ExpertsUpdateComponent} from './experts-component/experts-update.component';
+import {MapComponent} from './map-component/map.component';
 
 
 export const PageRoutes: Routes = [
@@ -33,7 +36,8 @@ export const PageRoutes: Routes = [
       },
       {
         path: 'chi-tiet/:id',
-        component: EmployeeUpdateComponent
+        component: EmployeeUpdateComponent,
+        canActivate: [EmployeeExistDetailActivate]
       },
       {
         path: 'them-moi',
@@ -43,6 +47,24 @@ export const PageRoutes: Routes = [
   },
   {
     path: 'chuyen-gia',
-    component: ExpertsComponent
+    children: [
+      {
+        path: '',
+        component: ExpertsComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        component: ExpertsUpdateComponent,
+        // canActivate: [EmployeeExistDetailActivate]
+      },
+      {
+        path: 'them-moi',
+        component: ExpertsUpdateComponent
+      }
+    ]
+  },
+  {
+    path: 'map',
+    component: MapComponent
   },
 ];

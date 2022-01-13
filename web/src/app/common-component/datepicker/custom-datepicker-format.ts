@@ -71,16 +71,25 @@ export class CustomDateAdapter extends NativeDateAdapter {
   }
 
   // retirar quando for feito o merge da data por mmalerba
+  // format(date: Date, displayFormat: Object): string {
+  //
+  //   date = new Date(Date.UTC(
+  //     date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(),
+  //     date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
+  //   displayFormat = Object.assign({}, displayFormat, {timeZone: 'utc'});
+  //
+  //   const dtf = new Intl.DateTimeFormat(this.locale, displayFormat);
+  //   // console.log("====",dtf.format(date).replace(/[\u200e\u200f]/g, ''))
+  //   return dtf.format(date).replace(/[\u200e\u200f]/g, '');
+  //   // return moment(date).format("DD/MM/YYYY");
+  // }
+
+
   format(date: Date, displayFormat: Object): string {
 
-    date = new Date(Date.UTC(
-      date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(),
-      date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-    displayFormat = Object.assign({}, displayFormat, {timeZone: 'utc'});
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(),
+      date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
-    // const dtf = new Intl.DateTimeFormat(this.locale, displayFormat);
-    // console.log("====",dtf.format(date).replace(/[\u200e\u200f]/g, ''))
-    // return dtf.format(date).replace(/[\u200e\u200f]/g, '');
     return moment(date).format("DD/MM/YYYY");
   }
 

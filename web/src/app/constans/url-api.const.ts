@@ -25,7 +25,30 @@ export const PUBLIC_API = {
     DELETE_EMPLOYEE: `${DOMAIN_SERVER}/public/employee/delete/`,    //    /delete/{id}
     GET_DETAIL_EMPLOYEE: `${DOMAIN_SERVER}/public/employee/detail/`,    //     /detail/{id}
   },
+
+  CITY_PROVINCE: {
+    GET_CITY_PROVINCE: `${DOMAIN_SERVER}/public/city-province`,
+  },
+  DISTRICT: {
+    GET_DISTRICT_BY_CITY_PROVINCE: `${DOMAIN_SERVER}/public/district/city-province/`,      //  city-province/{cityProvinceID}
+  },
+  COMMUNE_WARD: {
+    GET_COMMUNE_WARD_BY_DISTRICT: `${DOMAIN_SERVER}/public/commune-ward/district/`,   //   district/{districtID}
+  },
+  DEPARTMENT: {
+    GET_DEPARTMENT_BY_WORK_UNIT: `${DOMAIN_SERVER}/public/department/work-unit/`,          //   work-unit/{id}
+  },
+  POSITION: {
+    GET_POSITION_BY_DEPARTMENT: `${DOMAIN_SERVER}/public/position/department/`,     //    department/{id}
+  },
+  UNIT_TYPE: {
+    GET_UNIT_TYPE: `${DOMAIN_SERVER}/public/unit-type`,
+  },
+  WORK_UNIT: {
+    GET_WORK_UNIT_BY_UNIT_TYPE: `${DOMAIN_SERVER}/public/work-unit/unit-type/`,       //  unit-type/{id}
+  }
 };
+
 
 // api url admin
 export const ADMIN_API = {

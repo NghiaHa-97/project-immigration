@@ -5,6 +5,9 @@ import {getEmployeeEntities, getEmployeeResponseStatus} from '../reducers/featur
 export const getEmployeeState = createSelector(getFeaturesState, getEmployee);
 export const getEmployeeEntitiesState = createSelector(getEmployeeState, getEmployeeEntities);
 export const getArrayEmployeeState = createSelector(getEmployeeEntitiesState, (entities) => {
+  if (!entities) {
+    return [];
+  }
   return Object.keys(entities).map(id => entities[id]);
 });
 export const getEmployeeResponseStatusState = createSelector(getEmployeeState, getEmployeeResponseStatus);

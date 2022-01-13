@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
+import {DOMAIN_SERVER} from '../../constans/url-api.const';
 
 @Component({
   selector: 'app-input-image',
@@ -16,6 +17,9 @@ export class InputImageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.imagePath){
+      this.imagePath = `${DOMAIN_SERVER}/${this.imagePath}`;
+    }
   }
 
   changeFileInput(event: any): void {

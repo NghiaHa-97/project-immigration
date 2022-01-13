@@ -6,7 +6,6 @@ import com.nghiahd.server.common.MessageUtils;
 import com.nghiahd.server.common.RestResponseWrapper;
 import com.nghiahd.server.domain.CityProvince;
 import com.nghiahd.server.service.CityProvinceService;
-import com.nghiahd.server.service.UnitTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/cityprovince")
+@RequestMapping(value = "/public/city-province")
 public class CityProvinceController {
     private final CityProvinceService cityProvinceService;
     private final MessageUtils messageUtils;

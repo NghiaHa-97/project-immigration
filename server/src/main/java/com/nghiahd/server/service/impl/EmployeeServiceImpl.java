@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         em.setId(UUID.randomUUID());
         if (fileImage != null) {
             String fileDir = this.readEnvironment.getFolderImages() + "/" + em.getId();
-            String fileName = SaveFileUtils.createNameFile(em.getUpdateDate().toString(), fileImage.getOriginalFilename());
+            String fileName = SaveFileUtils.createNameFile(em.getUpdateDate().toString(), Objects.requireNonNull(fileImage.getOriginalFilename()));
             boolean isSaved = SaveFileUtils.saveFile(fileDir, fileName, fileImage);
             if (isSaved) {
                 em.setAvatar(fileDir + "/" + fileName);
@@ -61,10 +62,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee editEmployee(Employee employee, UUID id) {
+    public Employee editEmployee(Employee employee, MultipartFile fileImage, UUID id) {
         employee.setUpdateDate(LocalDateTime.now());
         Optional<Employee> pro = employeeRepository.findById(id);
         if (pro.isPresent()) {
+            if (fileImage != null) {
+                String fileDir = this.readEnvironment.getFolderImages() + "/" + employee.getId();
+                String fileName = SaveFileUtils.createNameFile(employee.getUpdateDate().toString(), Objects.requireNonNull(fileImage.getOriginalFilename()));
+                boolean isSaved = SaveFileUtils.saveFile(fileDir, fileName, fileImage);
+                if (isSaved) {
+                    employee.setAvatar(fileDir + "/" + fileName);
+                } else {
+                    return null;
+                }
+            }
             return employeeRepository.save(employee);
         }
         return null;

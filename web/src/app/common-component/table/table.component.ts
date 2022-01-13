@@ -10,6 +10,7 @@ import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatMenuPanel, MatMenuTrigger} from '@angular/material/menu';
 import {PageEvent} from '@angular/material/paginator';
+import {getStyleBody} from '../../constans/status-color-style.const';
 
 
 @Component({
@@ -92,5 +93,9 @@ export class TableComponent implements OnInit, AfterViewInit {
   handlerAction(event: Event, id: any): void {
     event.stopPropagation();
     this.selectAction.emit(id);
+  }
+
+  getStyleBodyStatus(id: number): any{
+    return getStyleBody(id);
   }
 }

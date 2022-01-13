@@ -1,0 +1,87 @@
+<mat-card class="example-card">
+  <mat-card-content>
+    <mat-card-title>Map</mat-card-title>
+
+    <div id='map' style='height: 1000px'>
+
+      <div class="leaflet-control-container" (click)="$event.stopPropagation()">
+        <div class="leaflet-top leaflet-left">
+            <div class="leaflet-control opacity">
+              <div class="card-content" style="max-height: 900px">
+                <div class="card border-success mb-3">
+                  <div class="card-header bg-transparent border-success">
+                    <form [formGroup]="formSearch">
+
+                      <div class="form-group">
+                        <input id="search" class="form-control" formControlName="search" type="text"
+                               placeholder="Nhập địa chỉ cần tìm ...">
+                      </div>
+                      <button id="submitSearch"
+                              type="submit"
+                              (click)="handlerSearch($event)"
+                              class="btn btn-primary">
+                        Tìm kiếm
+                      </button>
+                    </form>
+                  </div>
+                  <div class="card-body text-success">
+                    <div class="list-group" style="max-height: 700px; overflow: scroll">
+
+                      <!--                    <a *ngfor=" let item of locationSearch;let i = index"-->
+                      <!--                       (click)="viewMap(item.latitude,item.longitude)"-->
+                      <!--                       class="list-group-item list-group-item-action flex-column align-items-start">-->
+                      <!--                      <div class="d-flex w-100 justify-content-between">-->
+                      <!--                        <h5 class="mb-1">{{item.name}}</h5>-->
+                      <!--                        <small>{{i * page + 1}}</small>-->
+                      <!--                      </div>-->
+                      <!--                      <p-->
+                      <!--                        class="mb-1">{{(item.communeWardName || "") + "  " + (item.districtName || "") + "  " + (item.cityProvinceName || "")}}</p>-->
+                      <!--                      <small>{{item.description || ""}}</small>-->
+                      <!--                    </a>-->
+                      <!--                      <button *ngFor=' let item of locationSearch' type="button" class="list-group-item list-group-item-action ">-->
+                      <!--                        <span>{{item.name}}</span>-->
+                      <!--                        <br>-->
+                      <!--                        <span>{{item.locationSearch}}-{{item.locationSearch}}-{{item.locationSearch}}</span>-->
+                      <!--                        <br>-->
+                      <!--                        <span>{{item.Description}}</span>-->
+                      <!--                      </button>-->
+
+                    </div>
+                  </div>
+                  <div class="card-footer bg-transparent border-success">
+                    <!--                  <nz-pagination [nzpageindex]="page" [nztotal]="totalItems" (onpageindexchange)="onChangPage($event)"-->
+                    <!--                                 nzsize="small"></nz-pagination>-->
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+        </div>
+        <div class="leaflet-top leaflet-right">
+
+        </div>
+        <div class="leaflet-bottom leaflet-left"></div>
+        <div class="leaflet-bottom leaflet-right">
+          <div class="leaflet-control-attribution">
+            <span style="color: #061c06">LEAFLETJS.COM</span>
+          </div>
+        </div>
+      </div>
+      <!--      <div class="leaflet-control-container">-->
+      <!--        <div class="leaflet-control-zoom leaflet-bar leaflet-control">-->
+      <!--          <button type='button' class="btn btn-primary leaflet-control">btnTestTemplate</button>-->
+
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<ng-template #btnTest>
+  <div>
+    <button type='button' (click)="btnClick($event)" class="btn btn-primary">btnClick</button>
+    <button type='button' class="btn btn-primary">btnTestTemplate</button>
+  </div>
+</ng-template>

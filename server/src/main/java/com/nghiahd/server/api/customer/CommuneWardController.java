@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/commune-ward")
+@RequestMapping(value = "/public/commune-ward")
 public class CommuneWardController {
     private final CommuneWardService communeWardService;
     private final MessageUtils messageUtils;
@@ -27,7 +27,7 @@ public class CommuneWardController {
         this.messageUtils = messageUtils;
     }
 
-    @GetMapping("/{districtID}")
+    @GetMapping("/district/{districtID}")
     public ResponseEntity<BodyResponseDTO<List<CommuneWard>>> getAllCommuneWard(@PathVariable() int districtID) {
         return RestResponseWrapper.getResponse(HttpStatus.OK,
                 ApiResponseCode.SUCCESS,

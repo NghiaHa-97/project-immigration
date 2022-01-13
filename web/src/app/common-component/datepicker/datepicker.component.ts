@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from "@angular/core";
-import {FormControl} from "@angular/forms";
+import {Component, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 
 
 @Component({
@@ -9,6 +9,7 @@ import {FormControl} from "@angular/forms";
 })
 export class DatepickerComponent implements OnInit {
   @Input() control!: FormControl;
+  @Input() name!: string;
 
   ngOnInit(): void {
     this.control = this.control ?? new FormControl();

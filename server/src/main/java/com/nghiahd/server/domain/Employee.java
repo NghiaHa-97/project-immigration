@@ -8,6 +8,10 @@ import com.nghiahd.server.common.mapper.LocalDateTimeDeserializer;
 import com.nghiahd.server.common.mapper.LocalDateTimeSerializer;
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.model.ExpertsDTO;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,6 +20,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "employee")
+@Getter
+@Setter
 @SqlResultSetMappings({
         @SqlResultSetMapping(
                 name = "EmployeeListDTO",
@@ -82,6 +88,9 @@ public class Employee {
     @Column(name = "workunitid")
     private Integer workUnitID;
 
+    @Column(name = "unittypeid")
+    private Integer unitTypeID;
+
     @Column(name = "cityprovinceid")
     private Integer cityProvinceID;
 
@@ -113,7 +122,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(UUID id, String code, String fullname, String avatar, Boolean gender, LocalDate birthDay, Integer departmentID, Integer positionID, Integer workUnitID, Integer cityProvinceID, Integer districtID, Integer communeWardID, String description, String phoneNumber, String numberIdentityCard, LocalDateTime createDate, LocalDateTime updateDate) {
+    public Employee(UUID id, String code, String fullname, String avatar, Boolean gender, LocalDate birthDay, Integer departmentID, Integer positionID, Integer workUnitID, Integer unitTypeID, Integer cityProvinceID, Integer districtID, Integer communeWardID, String description, String phoneNumber, String numberIdentityCard, LocalDateTime createDate, LocalDateTime updateDate) {
         this.id = id;
         this.code = code;
         this.fullname = fullname;
@@ -123,6 +132,7 @@ public class Employee {
         this.departmentID = departmentID;
         this.positionID = positionID;
         this.workUnitID = workUnitID;
+        this.unitTypeID = unitTypeID;
         this.cityProvinceID = cityProvinceID;
         this.districtID = districtID;
         this.communeWardID = communeWardID;
@@ -130,142 +140,6 @@ public class Employee {
         this.phoneNumber = phoneNumber;
         this.numberIdentityCard = numberIdentityCard;
         this.createDate = createDate;
-        this.updateDate = updateDate;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(LocalDate birthDay) {
-        this.birthDay = birthDay;
-    }
-
-    public Integer getDepartmentID() {
-        return departmentID;
-    }
-
-    public void setDepartmentID(Integer departmentID) {
-        this.departmentID = departmentID;
-    }
-
-    public Integer getPositionID() {
-        return positionID;
-    }
-
-    public void setPositionID(Integer positionID) {
-        this.positionID = positionID;
-    }
-
-    public Integer getWorkUnitID() {
-        return workUnitID;
-    }
-
-    public void setWorkUnitID(Integer workUnitID) {
-        this.workUnitID = workUnitID;
-    }
-
-    public Integer getCityProvinceID() {
-        return cityProvinceID;
-    }
-
-    public void setCityProvinceID(Integer cityProvinceID) {
-        this.cityProvinceID = cityProvinceID;
-    }
-
-    public Integer getDistrictID() {
-        return districtID;
-    }
-
-    public void setDistrictID(Integer districtID) {
-        this.districtID = districtID;
-    }
-
-    public Integer getCommuneWardID() {
-        return communeWardID;
-    }
-
-    public void setCommuneWardID(Integer communeWardID) {
-        this.communeWardID = communeWardID;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getNumberIdentityCard() {
-        return numberIdentityCard;
-    }
-
-    public void setNumberIdentityCard(String numberIdentityCard) {
-        this.numberIdentityCard = numberIdentityCard;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
 }
