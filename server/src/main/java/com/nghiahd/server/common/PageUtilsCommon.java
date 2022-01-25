@@ -1,13 +1,10 @@
 package com.nghiahd.server.common;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PageUtilsCommon {
 
@@ -16,7 +13,7 @@ public class PageUtilsCommon {
     private static final String SPACE = " ";
     private static final String THEN = " THEN ";
 
-    public static Pageable createPageable(Pageable pageable){
+    public static Pageable createPageable(Pageable pageable) {
         return PageRequest.of(pageable.getPageNumber() - Constant.PAGING_STEP, pageable.getPageSize(), pageable.getSort());
     }
 
@@ -110,5 +107,43 @@ public class PageUtilsCommon {
         return sqlOrderBy;
     }
 
+    public static <T> Page<T> getPage(String sqlSelect,
+                                      String sqlFrom,
+                                      String sqlWhere,
+                                      Map<String, String> nameFieldsSort,
+                                      Map<String, Object> params,
+                                      Pageable pageable,
+                                      EntityManager entityManager,
+                                      Object nameClassDTO) throws Exception {
+        List<T> listDto = new ArrayList<>();
 
+        Query countQuery = entityManager.createNativeQuery(" select count(1) " + sqlFrom + " " + sqlWhere);
+        PageUtilsCommon.setParams(countQuery, params);
+        Number totalQuery = (Number) countQuery.getSingleResult();
+
+        if (totalQuery.longValue() > 0) {
+            String itemQuery = sqlSelect
+                    + " "
+                    + sqlFrom
+                    + " "
+                    + sqlWhere
+                    + " "
+                    + PageUtilsCommon.orderBySort(pageable, nameFieldsSort, params);
+            Query query = null;
+            switch (nameClassDTO.getClass().getSimpleName()){
+                case "Class":
+                    query = entityManager.createNativeQuery(itemQuery, (Class)nameClassDTO);
+                    break;
+                case "String":
+                    query = entityManager.createNativeQuery(itemQuery, (String)nameClassDTO);
+                    break;
+            }
+            if(query == null){
+                throw new Exception("variable nameClassDTO in getPage() invalid.");
+            }
+            PageUtilsCommon.setParamsWithPageable(query, params, pageable);
+            listDto = query.getResultList();
+        }
+        return new PageImpl<>(listDto, pageable, totalQuery.longValue());
+    }
 }

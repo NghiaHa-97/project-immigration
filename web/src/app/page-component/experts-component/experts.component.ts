@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
@@ -16,7 +16,8 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
 @Component({
   selector: 'app-experts',
   templateUrl: './experts.component.html',
-  styleUrls: ['./experts.component.scss']
+  styleUrls: ['./experts.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertsComponent implements OnInit, AfterViewInit{
   experts$!: Observable<any[]>;

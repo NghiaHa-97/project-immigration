@@ -9,6 +9,10 @@ import {DistrictService} from './district.service';
 import {UnitTypeService} from './unit-type.service';
 import {WorkUnitService} from './work-unit.service';
 import {PositionService} from './position.service';
+import {ModuleService} from './module.service';
+import {VehicleService} from './vehicle.service';
+import {RoleService} from './role.service';
+import {ManageUserService} from './manage-user.service';
 
 export * from './auth.service';
 export * from './profile.service';
@@ -22,6 +26,11 @@ export * from './district.service';
 export * from './position.service';
 export * from './unit-type.service';
 export * from './work-unit.service';
+export * from './vehicle.service';
+export * from './role.service';
+export * from './module.service';
+
+export * from './manage-user.service';
 
 export const pageComponentService = [
   EmployeeService,
@@ -33,6 +42,10 @@ export const pageComponentService = [
   DistrictService,
   PositionService,
   UnitTypeService,
-  WorkUnitService
+  WorkUnitService,
+  ModuleService,
+  VehicleService,
+  RoleService,
+  ManageUserService
 ];
 export const appComponentService = [AuthService];

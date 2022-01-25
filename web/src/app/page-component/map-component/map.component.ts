@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import 'leaflet';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
@@ -7,7 +7,8 @@ declare let L: any;
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements OnInit, AfterViewInit {
   map: any;
@@ -51,7 +52,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     command.onAdd = () => {
       const divContainer = L.DomUtil.create('div', 'leaflet-control leaflet-bar');
       divContainer.innerHTML = ` <a type="button" title="Vị trí của bạn">
-                                <img src="./assets/images/icon/gps_1.png" class="center">
+                                    <img src="./assets/images/icon/gps_1.png" class="center">
                                 </a>`;
       return divContainer;
     };

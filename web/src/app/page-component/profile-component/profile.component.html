@@ -1,6 +1,6 @@
 <mat-card class="example-card">
   <mat-card-content>
-    <mat-card-title>Hồ sơ</mat-card-title>
+    <mat-card-title *appHasPermission="15">Hồ sơ</mat-card-title>
 
     <app-toolbar-action-table>
       <ng-container left>
@@ -75,6 +75,7 @@
 
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
+                 [hiddenCheckBoxCheckAll]="true"
                  [stickyEnd]="true"
                  [stickyStart]="true"
                  [isSelection]="true"

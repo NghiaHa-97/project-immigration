@@ -29,6 +29,11 @@ public class Permission {
         this.moduleID = moduleID;
     }
 
+    public Permission( Integer code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }

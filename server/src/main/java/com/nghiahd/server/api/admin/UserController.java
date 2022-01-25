@@ -1,14 +1,10 @@
 package com.nghiahd.server.api.admin;
 
-import com.nghiahd.server.common.Base64Common;
-import com.nghiahd.server.common.CookieCommon;
+import com.nghiahd.server.common.*;
 import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.config.TokenProvider;
 import com.nghiahd.server.domain.SysUserAdmin;
 import com.nghiahd.server.model.RequestLogin;
-import com.nghiahd.server.model.ResponseLogin;
-import com.nghiahd.server.model.ResponseMessage;
-import com.nghiahd.server.model.UserLogin;
 import com.nghiahd.server.service.SysUserAdminService;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -31,7 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 
 @RestController
-@RequestMapping(value = "/admin/user")
+@RequestMapping(value = "api/admin/user")
 public class UserController {
 
     Logger log = LoggerFactory.getLogger(UserController.class);
@@ -41,28 +37,35 @@ public class UserController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final ReadEnvironment readEnvironment;
+    private final MessageUtils messageUtils;
 
     public UserController(SysUserAdminService sysUserAdminService,
                           PasswordEncoder passwordEncoder,
                           AuthenticationManagerBuilder authenticationManagerBuilder,
                           TokenProvider tokenProvider,
-                          ReadEnvironment readEnvironment) {
+                          ReadEnvironment readEnvironment,
+                          MessageUtils messageUtils) {
         this.sysUserAdminService = sysUserAdminService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.tokenProvider = tokenProvider;
         this.readEnvironment = readEnvironment;
+        this.messageUtils = messageUtils;
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity login(@RequestBody RequestLogin requestLogin, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<BodyResponseDTO<Authentication>> login(@RequestBody RequestLogin requestLogin,
+                                                                 HttpServletRequest request,
+                                                                 HttpServletResponse response) {
         String uri = request.getRequestURI();
         log.info(uri + " login user admin");
         requestLogin.setUsername(Strings.trimToNull(requestLogin.getUsername()));
         requestLogin.setPassword(Strings.trimToNull(requestLogin.getPassword()));
         if (requestLogin.getUsername() == null || requestLogin.getPassword() == null) {
             log.error(uri + " username or password is empty");
-            return ResponseEntity.badRequest().body(new ResponseMessage("username or password is empty", false));
+            return RestResponseWrapper.getResponse(ApiResponseCode.USERNAME_OR_PASSWORD_EMPTY.getStatus(),
+                    ApiResponseCode.USERNAME_OR_PASSWORD_EMPTY,
+                    this.messageUtils);
         }
         String username = Base64Common.decodeBaseToString(requestLogin.getUsername());
         String pwd = Base64Common.decodeBaseToString(requestLogin.getPassword());
@@ -85,7 +88,11 @@ public class UserController {
             response.addCookie(cookie);
 //            return ResponseEntity.ok().body(new ResponseLogin(username, response.getHeader(this.readEnvironment.getHeader())));
             ((UsernamePasswordAuthenticationToken) authentication).setDetails(jwt);
-            return ResponseEntity.ok().body(authentication);
+//            return ResponseEntity.ok().body(authentication);
+            return RestResponseWrapper.getResponse(ApiResponseCode.LOGIN_SUCCESS.getStatus(),
+                    ApiResponseCode.LOGIN_SUCCESS,
+                    this.messageUtils,
+                    authentication);
         } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
             // delete cookie
@@ -98,19 +105,24 @@ public class UserController {
             if (response.getHeader(this.readEnvironment.getHeader()) != null) {
                 response.setHeader(this.readEnvironment.getHeader(), null);
             }
-            return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage(), false));
+            return RestResponseWrapper.getResponse(ApiResponseCode.LOGIN_FAIL.getStatus(),
+                    ApiResponseCode.LOGIN_FAIL,
+                    this.messageUtils);
         }
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity register(@RequestBody SysUserAdmin userAdmin, HttpServletRequest request) {
+    public ResponseEntity<BodyResponseDTO<SysUserAdmin>> register(@RequestBody SysUserAdmin userAdmin,
+                                                                  HttpServletRequest request) {
         String uri = request.getRequestURI();
         log.info(uri + " register user admin");
         userAdmin.setUsername(Strings.trimToNull(userAdmin.getUsername()));
         userAdmin.setPassword(Strings.trimToNull(userAdmin.getPassword()));
         if (userAdmin.getUsername() == null || userAdmin.getPassword() == null) {
             log.error(uri + " username or password is empty");
-            return ResponseEntity.badRequest().body(new ResponseMessage("username or password is empty", false));
+            return RestResponseWrapper.getResponse(ApiResponseCode.USERNAME_OR_PASSWORD_EMPTY.getStatus(),
+                    ApiResponseCode.USERNAME_OR_PASSWORD_EMPTY,
+                    this.messageUtils);
         }
 
         String username = Base64Common.decodeBaseToString(userAdmin.getUsername());
@@ -118,18 +130,24 @@ public class UserController {
 
         if (sysUserAdminService.checkUsernameIsExist(username)) {
             log.error(uri + " username is exist");
-            return ResponseEntity.badRequest().body(new ResponseMessage("username " + username + " is exist", false));
+            return RestResponseWrapper.getResponse(ApiResponseCode.USERNAME_EXIST.getStatus(),
+                    ApiResponseCode.USERNAME_EXIST,
+                    this.messageUtils);
         }
         userAdmin.setUsername(username);
         userAdmin.setPassword(this.passwordEncoder.encode(pwd));
         userAdmin.setCreateDate(LocalDateTime.now());
         userAdmin.setUpdateDate(LocalDateTime.now());
         SysUserAdmin result = this.sysUserAdminService.save(userAdmin);
-        return ResponseEntity.ok().body(result);
+//        return ResponseEntity.ok().body(result);
+        return RestResponseWrapper.getResponse(ApiResponseCode.REGISTER_SUCCESS.getStatus(),
+                ApiResponseCode.REGISTER_SUCCESS,
+                this.messageUtils,
+                result);
     }
 
     @GetMapping(value = "/logout")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<BodyResponseDTO<Object>> logout(HttpServletRequest request, HttpServletResponse response) {
         String uri = request.getRequestURI();
         log.info(uri + " logout user admin");
         // clear context
@@ -145,15 +163,17 @@ public class UserController {
             response.setHeader(this.readEnvironment.getHeader(), null);
         }
 
-        return ResponseEntity.ok().body(new ResponseMessage("Logout success", true));
+        return RestResponseWrapper.getResponse(ApiResponseCode.LOGOUT_SUCCESS.getStatus(),
+                ApiResponseCode.LOGOUT_SUCCESS,
+                this.messageUtils);
     }
 
     @GetMapping(value = "/get-user-refresh-app")
-    public ResponseEntity getUserRefreshApp(){
+    public ResponseEntity<BodyResponseDTO<Authentication>> getUserRefreshApp() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        return ResponseEntity.ok().body(authentication);
+        return RestResponseWrapper.getResponse(ApiResponseCode.SUCCESS.getStatus(),
+                ApiResponseCode.SUCCESS,
+                this.messageUtils,
+                authentication);
     }
-
-
 }

@@ -1,0 +1,110 @@
+<mat-card class="example-card">
+  <mat-card-content>
+    <mat-card-title>Quản lý người dùng</mat-card-title>
+
+    <app-toolbar-action-table (handlerSearch)= "handlerSearch()">
+      <ng-container left [formGroup]="form">
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Company (disabled)" disabled>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email address" type="email">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field>
+              <mat-label>Choose an option</mat-label>
+              <mat-select formControlName="selector">
+                <mat-select-trigger>
+                  <div class="d-flex flex-row">
+                    <div class="p-2"><img src="{{valueSelector.image}}" alt="user" class="profile-pic"></div>
+                    <div class="p-2">{{valueSelector.value}}</div>
+                  </div>
+                </mat-select-trigger>
+                <mat-option value="option1">Option 1</mat-option>
+                <mat-option value="option2">
+                  <div class="d-flex flex-row">
+                    <div class="p-2"><img src="assets/images/users/1.jpg" alt="user" class="profile-pic"></div>
+                    <div class="p-2">Flex item 3</div>
+                  </div>
+                </mat-option>
+                <mat-option value="option3">Option 3</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+              <input formControlName="time"
+                     matInput
+                     placeholder="Giờ - phút"
+                     type="time" id="appt" name="appt" required>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <app-datepicker [control]="formControlDate"
+                            name="Ngày sinh"></app-datepicker>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container right>
+        <button mat-raised-button color="primary" (click)="onNewEmployee()">
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>Thêm mới</span>
+        </button>
+      </ng-container>
+    </app-toolbar-action-table>
+
+
+    <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
+      <app-table #appTable [menuAction]="menu"
+                 [stickyEnd]="true"
+                 [stickyStart]="true"
+                 [isSelection]="true"
+                 [isAction]="true"
+                 [dataSource]="usersCustomer$ | async"
+                 [columnsAndStyles]="columnsAndStyles"
+                 [selection]="selection"
+                 (handlerChangePage)="handlerChangePage($event)"
+                 [totalRecord]="100">
+      </app-table>
+    </div>
+
+  </mat-card-content>
+  <mat-menu #menu="matMenu">
+    <button #btnDetail mat-menu-item>
+      <mat-icon>details</mat-icon>
+      <span>Chi Tiết</span>
+    </button>
+    <button #btnUpdate mat-menu-item>
+      <mat-icon>update</mat-icon>
+      <span>Sửa</span>
+    </button>
+    <button #btnDelete mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Xóa</span>
+    </button>
+  </mat-menu>
+
+</mat-card>

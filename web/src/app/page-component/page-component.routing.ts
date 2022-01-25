@@ -7,6 +7,8 @@ import {EmployeeUpdateComponent} from './employee-component/employee-update.comp
 import {EmployeeExistDetailActivate} from './can-activate';
 import {ExpertsUpdateComponent} from './experts-component/experts-update.component';
 import {MapComponent} from './map-component/map.component';
+import {ManageUserComponent} from './manage-user-component/manage-user.component';
+import {ManageUserUpdateComponent} from './manage-user-component/manage-user-update.component';
 
 
 export const PageRoutes: Routes = [
@@ -66,5 +68,23 @@ export const PageRoutes: Routes = [
   {
     path: 'map',
     component: MapComponent
+  },
+  {
+    path: 'quan-ly-nguoi-dung',
+    children: [
+      {
+        path: '',
+        component: ManageUserComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        component: ManageUserUpdateComponent,
+        // canActivate: [EmployeeExistDetailActivate]
+      },
+      {
+        path: 'them-moi',
+        component: ManageUserUpdateComponent
+      }
+    ]
   },
 ];

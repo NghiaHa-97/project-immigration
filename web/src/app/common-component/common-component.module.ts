@@ -15,6 +15,7 @@ import {MatPaginatorIntl} from '@angular/material/paginator';
 import {CustomPaginatorIntl} from './table/custom-paginator-intl';
 import {SafeHtmlPipe} from './safe-html.pipe';
 import {InputImageComponent} from './input-image/input-image.component';
+import {TreeCheckboxComponent} from './tree-checkbox/tree-checkbox.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {InputImageComponent} from './input-image/input-image.component';
     TableComponent,
     ToolbarActionTableComponent,
     SafeHtmlPipe,
-    InputImageComponent
+    InputImageComponent,
+    TreeCheckboxComponent
   ],
   exports: [
     RichTextEditorComponent,
@@ -41,7 +43,8 @@ import {InputImageComponent} from './input-image/input-image.component';
     ToolbarActionTableComponent,
     TableComponent,
     SafeHtmlPipe,
-    InputImageComponent
+    InputImageComponent,
+    TreeCheckboxComponent
   ],
   providers: [
     {

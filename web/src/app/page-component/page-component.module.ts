@@ -20,6 +20,10 @@ import {featuresReducers} from '../store';
 import {pageComponentService} from '../services';
 import {canActives} from './can-activate';
 import {MapComponent} from './map-component/map.component';
+import {PatternFormat} from '../constans/pattern-format-date.const';
+import {DirectiveCustomModule} from '../directive/directive-custom.module';
+import {ManageUserComponent} from './manage-user-component/manage-user.component';
+import {ManageUserUpdateComponent} from './manage-user-component/manage-user-update.component';
 
 
 @NgModule({
@@ -34,6 +38,7 @@ import {MapComponent} from './map-component/map.component';
     RouterModule.forChild(PageRoutes),
     StoreModule.forFeature('features', featuresReducers),
     EffectsModule.forFeature(effectsFeatures),
+    DirectiveCustomModule
   ],
   declarations: [
     EmployeeComponent,
@@ -42,11 +47,13 @@ import {MapComponent} from './map-component/map.component';
     ExpertsUpdateComponent,
     ProfileComponent,
     ProfileUpdateComponent,
-    MapComponent
+    MapComponent,
+    ManageUserComponent,
+    ManageUserUpdateComponent
   ],
   providers: [
     ...pageComponentService,
-    ...canActives
+    ...canActives, PatternFormat
   ]
 })
 export class PageComponentModule {

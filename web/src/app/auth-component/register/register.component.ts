@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import * as fromStore from '../../store';
 import {Store} from '@ngrx/store';
@@ -6,7 +6,8 @@ import {Store} from '@ngrx/store';
 @Component({
   selector: 'app-login',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;

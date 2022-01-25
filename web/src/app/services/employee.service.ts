@@ -1,6 +1,5 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {PageComponentModule} from '../page-component/page-component.module';
 import {Observable} from 'rxjs';
 import {ADMIN_API, PUBLIC_API} from '../constans/url-api.const';
 import {createRequestParam} from './create-request-param.function';

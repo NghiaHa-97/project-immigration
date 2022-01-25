@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/public/experts")
+@RequestMapping(value = "api/public/experts")
 public class ExpertsController {
 
     private final ExpertsService expertsService;

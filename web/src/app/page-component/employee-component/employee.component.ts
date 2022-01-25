@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PageEvent} from '@angular/material/paginator';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
@@ -11,13 +11,14 @@ import {fromEvent, Observable} from 'rxjs';
 import {map, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {TableComponent} from '../../common-component/table/table.component';
-import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
+import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
 
 
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.scss']
+  styleUrls: ['./employee.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeComponent implements OnInit, AfterViewInit {
   employees$!: Observable<any[]>;
@@ -52,10 +53,16 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
   public data!: any[];
 
   constructor(private fb: FormBuilder,
-              private store: Store<fromStore.FeatureState>) {
+              private store: Store<fromStore.FeatureState>,
+              private patternFormat: PatternFormat) {
     this.form = this.fb.group({
-      selector: ['option2']
+      selector: ['option2'],
+      time: [moment().format('HH:mm')],
+      date: [moment().format()]
     });
+  }
+  get formControlDate(): FormControl {
+    return this.form.get('date') as FormControl;
   }
 
   get valueSelector() {
@@ -140,6 +147,14 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
   onDetailEmployee(id: string): void {
     console.log('onDetailEmployee', id);
     this.store.dispatch(new Go({path: ['nhan-vien', 'chi-tiet', id]}));
+  }
+
+  handlerSearch(): void {
+    // console.log(this.form.value);
+    // console.log(moment(this.form.value.date).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST));
+    // console.log(moment(this.form.value.time, PATTERN_FORMAT_DATE.TIME).format(PATTERN_FORMAT_DATE.TIME_SECONDS));
+    console.log(this.patternFormat.combineDateAndTimeToDateTimeRequest(this.form.value.date, this.form.value.time));
+    console.log(this.patternFormat.splitDateTimeResponseToDateAndTime(this.form.value.date));
   }
 }
 

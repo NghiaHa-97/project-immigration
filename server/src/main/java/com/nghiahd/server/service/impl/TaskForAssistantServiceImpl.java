@@ -1,7 +1,7 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.domain.TaskForAssistant;
-import com.nghiahd.server.domain.custom.TaskForAssistantDomainCustom;
+import com.nghiahd.server.domain.custom.TaskForAssistantQuery;
 import com.nghiahd.server.model.TaskForAssistantDTO;
 import com.nghiahd.server.repository.TaskForAssistantCusRepository;
 import com.nghiahd.server.repository.TaskForAssistantRepository;
@@ -53,8 +53,8 @@ public class TaskForAssistantServiceImpl implements TaskForAssistantService {
     }
 
     @Override
-    public TaskForAssistantDomainCustom getTFAByID(UUID id) {
-        TaskForAssistantDomainCustom taskForDepartmentQuery = taskForAssistantCusRepository.findById(id).get();
+    public TaskForAssistantQuery getTFAByID(UUID id) {
+        TaskForAssistantQuery taskForDepartmentQuery = taskForAssistantCusRepository.findById(id).get();
         return taskForDepartmentQuery;
     }
 

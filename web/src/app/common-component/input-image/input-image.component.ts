@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {DOMAIN_SERVER} from '../../constans/url-api.const';
 
@@ -6,6 +6,7 @@ import {DOMAIN_SERVER} from '../../constans/url-api.const';
   selector: 'app-input-image',
   templateUrl: './input-image.component.html',
   styleUrls: ['./input-image.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputImageComponent implements OnInit {
   @Input() imagePath!: string;

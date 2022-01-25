@@ -1,6 +1,6 @@
 package com.nghiahd.server.domain.custom;
 
-import com.nghiahd.server.domain.Employee;
+import com.nghiahd.server.domain.Department;
 import com.nghiahd.server.domain.Profile;
 import lombok.*;
 import org.hibernate.annotations.NotFound;
@@ -12,25 +12,27 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "taskforassistant")
-public class TaskForAssistantDomainCustom {
+@Table(name = "taskfordepartment")
+public class TaskForDepartmentQuery {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "id")
     private UUID id;
 
     @NotFound(action = NotFoundAction.IGNORE)
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinColumn(name = "employeeid", referencedColumnName = "id")
-    private Employee employeeID;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "departmentid", referencedColumnName = "id")
+    private Department department;
 
     @NotFound(action = NotFoundAction.IGNORE)
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "profileid", referencedColumnName = "id")
-    private Profile profileID;
+    private Profile profile;
 
     @Column(name = "description")
     private String description;
@@ -43,5 +45,4 @@ public class TaskForAssistantDomainCustom {
 
     @Column(name = "createdate")
     private LocalDateTime createDate;
-
 }

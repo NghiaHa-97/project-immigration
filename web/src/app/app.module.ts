@@ -35,8 +35,8 @@ import {QuillModule} from "ngx-quill";
 // Date locale
 import {MAT_DATE_LOCALE} from '@angular/material/core';
 import {appComponentService} from './services';
-import { CustomSerializer } from './store/reducers/root/router.reducer';
-
+import {CustomSerializer} from './store/reducers/root/router.reducer';
+import {NotificationSnackBar} from './notification/notification-snack-bar';
 
 
 const environment = {
@@ -78,7 +78,6 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     // rich text editor
     QuillModule.forRoot()
   ],
-
   providers: [
     ...appComponentService,
     {
@@ -93,7 +92,8 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     {
       provide: RouterStateSerializer,
       useClass: CustomSerializer
-    }
+    },
+    NotificationSnackBar
   ],
   bootstrap: [AppComponent]
 })

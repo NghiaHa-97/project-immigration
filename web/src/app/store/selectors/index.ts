@@ -13,3 +13,10 @@ export * from './district.selector';
 export * from './position.selector';
 export * from './unit-type.selector';
 export * from './work-unit.selector';
+
+export * from './vehicle.selector';
+export * from './role.selector';
+export * from './module.selector';
+
+export * from './manage-user.selector';
+export * from './process.selector';

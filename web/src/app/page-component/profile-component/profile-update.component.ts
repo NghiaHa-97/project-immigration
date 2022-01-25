@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
@@ -29,7 +29,8 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
 @Component({
   selector: 'app-profile-update',
   templateUrl: './profile-update.component.html',
-  styleUrls: ['./profile-update.component.scss']
+  styleUrls: ['./profile-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileUpdateComponent implements OnInit{
   formEmployee: FormGroup;

@@ -40,7 +40,11 @@
 
 <mat-card class="example-card">
   <mat-card-content>
+
     <mat-card-title>Table</mat-card-title>
+    <app-tree-checkbox [checklistSelection]="checklistSelection"
+                       [data]="data$"
+                       [initSelected]="initSelected$"></app-tree-checkbox>
     <!--    <div class="toolbar">-->
     <!--      <div class="form-search">-->
     <!--        <form>-->
@@ -109,7 +113,7 @@
 
     <!--    </div>-->
 
-    <app-toolbar-action-table>
+    <app-toolbar-action-table (handlerSearch)="search()">
       <ng-container left>
         <div class="row">
           <div class="col-md-3">
@@ -145,7 +149,7 @@
                   </div>
                 </mat-select-trigger>
                 <mat-option value="option1">Option 1</mat-option>
-                <mat-option value="option2" >
+                <mat-option value="option2">
                   <div class="d-flex flex-row">
                     <div class="p-2"><img src="assets/images/users/1.jpg" alt="user" class="profile-pic"></div>
                     <div class="p-2">Flex item 3</div>
@@ -160,12 +164,12 @@
               <input matInput placeholder="Username">
             </mat-form-field>
           </div>
-          <div class="col-md-3">
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Email address" type="email">
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
+<!--          <div class="col-md-3">-->
+<!--            <mat-form-field class="example-full-width">-->
+<!--              <input matInput placeholder="Email address" type="email">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+          <div class="col-md-6">
             <app-datepicker></app-datepicker>
           </div>
         </div>
@@ -377,10 +381,26 @@
 </div>
 <div [innerHTML]="richTextForm.value.description | safeHtml"></div>
 
-<ng-container >
-  <div style="color: rgb(240, 102, 102)">  lllllllllllllllllllllll</div>
-
-  <app-contacts></app-contacts>
-</ng-container>
-
+<section class="example-section">
+  <span class="example-list-section">
+    <mat-checkbox class="example-margin"
+                  [checked]="allComplete"
+                  [color]="task.color"
+                  [indeterminate]="someComplete()"
+                  (change)="setAll($event.checked)">
+      {{task.name}}
+    </mat-checkbox>
+  </span>
+  <span class="example-list-section">
+    <ul>
+      <li *ngFor="let subtask of task.subtasks">
+        <mat-checkbox [(ngModel)]="subtask.completed"
+                      [color]="subtask.color"
+                      (ngModelChange)="updateAllComplete()">
+          {{subtask.name}}
+        </mat-checkbox>
+      </li>
+    </ul>
+  </span>
+</section>
 

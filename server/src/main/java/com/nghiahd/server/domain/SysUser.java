@@ -1,11 +1,37 @@
 package com.nghiahd.server.domain;
 
+import com.nghiahd.server.model.EmployeeDTO;
+import com.nghiahd.server.model.SysUserCustomerDTO;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "sysuser")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "SysUserCustomerListDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = SysUserCustomerDTO.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = Integer.class),
+                                        @ColumnResult(name = "username", type = String.class),
+                                        @ColumnResult(name = "isActive", type = Boolean.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "updateDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "roleID", type = Integer.class),
+                                        @ColumnResult(name = "roleName", type = String.class),
+                                        @ColumnResult(name = "employeeID", type = UUID.class),
+                                        @ColumnResult(name = "employeeCode", type = String.class),
+                                        @ColumnResult(name = "employeeFullName", type = String.class),
+                                }
+                        )
+                }
+        ),
+})
 public class SysUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

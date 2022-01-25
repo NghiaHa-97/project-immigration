@@ -2,8 +2,8 @@
   <mat-card-content>
     <mat-card-title>Nhân Viên</mat-card-title>
 
-    <app-toolbar-action-table>
-      <ng-container left>
+    <app-toolbar-action-table (handlerSearch)= "handlerSearch()">
+      <ng-container left [formGroup]="form">
         <div class="row">
           <div class="col-md-3">
             <mat-form-field class="example-full-width">
@@ -28,7 +28,7 @@
         </div>
         <div class="row">
           <div class="col-md-3">
-            <mat-form-field [formGroup]="form">
+            <mat-form-field>
               <mat-label>Choose an option</mat-label>
               <mat-select formControlName="selector">
                 <mat-select-trigger>
@@ -55,11 +55,15 @@
           </div>
           <div class="col-md-3">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Email address" type="email">
+              <input formControlName="time"
+                     matInput
+                     placeholder="Giờ - phút"
+                     type="time" id="appt" name="appt" required>
             </mat-form-field>
           </div>
           <div class="col-md-3">
-            <app-datepicker></app-datepicker>
+            <app-datepicker [control]="formControlDate"
+                            name="Ngày sinh"></app-datepicker>
           </div>
         </div>
       </ng-container>

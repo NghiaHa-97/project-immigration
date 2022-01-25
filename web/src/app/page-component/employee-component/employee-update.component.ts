@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
@@ -29,7 +29,8 @@ import {getPrefixID} from '../../constans/prefix-id.const';
 @Component({
   selector: 'app-employee-update',
   templateUrl: './employee-update.component.html',
-  styleUrls: ['./employee-update.component.scss']
+  styleUrls: ['./employee-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeUpdateComponent implements OnInit {
   formEmployee: FormGroup;

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/public/task-for-department")
+@RequestMapping(value = "api/public/task-for-department")
 public class TaskForDepartmentController {
 
     private final TaskForDepartmentService taskForDepartmentService;

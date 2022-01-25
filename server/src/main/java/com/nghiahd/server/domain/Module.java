@@ -24,6 +24,12 @@ public class Module {
         this.code = code;
     }
 
+    public Module(Integer code, String name) {
+        this.name = name;
+        this.code = code;
+    }
+
+
     public Integer getId() {
         return id;
     }

@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, AfterViewInit, ViewChild, TemplateRef, ElementRef} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, TemplateRef, ElementRef, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -7,11 +7,19 @@ import * as _moment from 'moment';
 import {ColumnAndStyleModel} from "../models/columns-and-styles.model";
 import {PageEvent} from "@angular/material/paginator";
 import {STATUS_COLOR_STYLE} from "../constans/status-color-style.const";
+import {ThemePalette} from '@angular/material/core';
+import {Store} from '@ngrx/store';
+import * as fromStore from '../store';
+import {LoadModule} from '../store';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {TodoItemFlatNode, TodoItemNode} from '../common-component/tree-checkbox/tree-checkbox.component';
+import {COLOR_SNACK_BAR, NotificationSnackBar} from '../notification/notification-snack-bar';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements AfterViewInit {
   // public chosenDate = _moment.now();
@@ -28,7 +36,7 @@ export class DashboardComponent implements AfterViewInit {
   columnsAndStyles: ColumnAndStyleModel[] = [
     {
       columnName: 'position',
-      columnHeaderName:'',
+      columnHeaderName: '',
       styleHeader: {width: '400px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
@@ -36,7 +44,7 @@ export class DashboardComponent implements AfterViewInit {
     },
     {
       columnName: 'name',
-      columnHeaderName:'',
+      columnHeaderName: '',
       styleHeader: {width: '200px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
@@ -44,7 +52,7 @@ export class DashboardComponent implements AfterViewInit {
     },
     {
       columnName: 'weight',
-      columnHeaderName:'',
+      columnHeaderName: '',
       styleHeader: {width: '400px', minWidth: '200px'},
       isSort: false,
       styleBody: STATUS_COLOR_STYLE.RED,
@@ -52,7 +60,7 @@ export class DashboardComponent implements AfterViewInit {
     },
     {
       columnName: 'symbol',
-      columnHeaderName:'',
+      columnHeaderName: '',
       styleHeader: {width: '200px', minWidth: '200px'},
       isSort: true,
       styleBody: null,
@@ -63,7 +71,19 @@ export class DashboardComponent implements AfterViewInit {
   richTextForm!: FormGroup;
   form!: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  checklistSelection: SelectionModel<TodoItemFlatNode> = new SelectionModel<TodoItemFlatNode>(true);
+  data$!: Observable<TodoItemNode[]>;
+  // initSelected$ = new BehaviorSubject<number[]>([]);
+  initSelected$!: Observable<number[]>;
+
+  constructor(private fb: FormBuilder,
+              private store: Store<fromStore.FeatureState>,
+              private notification: NotificationSnackBar) {
+    this.store.dispatch(new LoadModule(null));
+    this.data$ = this.store.select(fromStore.getModuleTodoItemNodeState);
+    this.initSelected$ = of([11,12])
+
+
     // this.options = fb.group({
     //   hideRequired: [true],
     //   floatLabel: ['auto'],
@@ -79,6 +99,15 @@ export class DashboardComponent implements AfterViewInit {
     this.form = this.fb.group({
       selector: ['option2']
     })
+  }
+
+  search() {
+
+    this.notification.openSnackBar('lua', COLOR_SNACK_BAR.RED);
+
+    // console.log(this.checklistSelection.selected);
+    const m = _moment('2021-05-13T14:46:40.315428+09:00').utc().format()
+    console.log("m ",m)
   }
 
   get valueSelector() {
@@ -136,6 +165,48 @@ export class DashboardComponent implements AfterViewInit {
   //   }
   //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   // }
+
+
+  task: Task = {
+    name: 'Indeterminate',
+    completed: false,
+    color: 'primary',
+    subtasks: [
+      {name: 'Primary', completed: false, color: 'primary'},
+      {name: 'Accent', completed: false, color: 'accent'},
+      {name: 'Warn', completed: false, color: 'warn'},
+    ],
+  };
+
+  allComplete: boolean = false;
+
+  updateAllComplete() {
+    this.allComplete = this.task.subtasks != null && this.task.subtasks.every(t => t.completed);
+  }
+
+  someComplete(): boolean {
+    if (this.task.subtasks == null) {
+      return false;
+    }
+    return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+  }
+
+  setAll(completed: boolean) {
+    this.allComplete = completed;
+    if (this.task.subtasks == null) {
+      return;
+    }
+    this.task.subtasks.forEach(t => (t.completed = completed));
+  }
+
+
+}
+
+export interface Task {
+  name: string;
+  completed: boolean;
+  color: ThemePalette;
+  subtasks?: Task[];
 }
 
 export interface PeriodicElement {

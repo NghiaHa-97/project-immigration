@@ -13,3 +13,9 @@ export * from './district.action';
 export * from './position.action';
 export * from './unit-type.action';
 export * from './work-unit.action';
+
+export * from './vehicle.action';
+export * from './role.action';
+export * from './module.action';
+
+export * from './manage-user.action';

@@ -1,7 +1,7 @@
 package com.nghiahd.server.service;
 
 import com.nghiahd.server.domain.TaskForAssistant;
-import com.nghiahd.server.domain.custom.TaskForAssistantDomainCustom;
+import com.nghiahd.server.domain.custom.TaskForAssistantQuery;
 import com.nghiahd.server.model.TaskForAssistantDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +17,5 @@ public interface TaskForAssistantService {
 
     Page<TaskForAssistantDTO> getListTFA(Pageable pageable);
 
-    TaskForAssistantDomainCustom getTFAByID(UUID id);
+    TaskForAssistantQuery getTFAByID(UUID id);
 }

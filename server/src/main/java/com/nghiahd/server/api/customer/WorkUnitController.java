@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/public/work-unit")
+@RequestMapping(value = "api/public/work-unit")
 public class WorkUnitController {
     private final WorkUnitService workUnitService;
     private final MessageUtils messageUtils;

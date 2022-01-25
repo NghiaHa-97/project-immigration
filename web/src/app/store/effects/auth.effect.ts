@@ -23,7 +23,7 @@ export class AuthEffect {
             map(response => new authActions.LoginSuccess(response?.body)),
             tap((response) => {
               if (response instanceof authActions.LoginSuccess) {
-                sessionStorage.setItem("Authorization", response?.payload?.details)
+                sessionStorage.setItem("Authorization", response?.payload?.data?.details)
               }
             }),
             catchError(error => of(new authActions.LoginFail(error)))
@@ -49,7 +49,7 @@ export class AuthEffect {
         return this.authService
           .register(payload)
           .pipe(
-            map(() => new authActions.RegisterSuccess(null)),
+            map((response) => new authActions.RegisterSuccess(response?.body)),
             catchError(error => of(new authActions.RegisterFail(error))),
           );
       })

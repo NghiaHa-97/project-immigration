@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import * as fromStore from '../../store'
 import {Store} from "@ngrx/store";
@@ -6,7 +6,8 @@ import {Store} from "@ngrx/store";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;

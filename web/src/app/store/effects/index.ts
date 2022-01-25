@@ -10,6 +10,14 @@ import {UnitTypeEffect} from './unit-type.effect';
 import {WorkUnitEffect} from './work-unit.effect';
 import {DepartmentEffect} from './department.effect';
 import {PositionEffect} from './position.effect';
+import {VehicleEffect} from './vehicle.effect';
+import {RoleEffect} from './role.effect';
+import {ModuleEffect} from './module.effect';
+import {ManageUserEffect} from './manage-user.effect';
+
+export {VehicleEffect} from './vehicle.effect';
+export {RoleEffect} from './role.effect';
+export {ModuleEffect} from './module.effect';
 
 export const effectsRoot: any[] = [RouterEffects, AuthEffect];
 export const effectsFeatures: any[] = [
@@ -22,7 +30,11 @@ export const effectsFeatures: any[] = [
   UnitTypeEffect,
   WorkUnitEffect,
   DepartmentEffect,
-  PositionEffect
+  PositionEffect,
+  VehicleEffect,
+  RoleEffect,
+  ModuleEffect,
+  ManageUserEffect
 ];
 
 export * from './router.effect';

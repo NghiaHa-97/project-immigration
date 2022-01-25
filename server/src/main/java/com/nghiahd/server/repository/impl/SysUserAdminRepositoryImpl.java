@@ -9,12 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -80,8 +76,8 @@ public class SysUserAdminRepositoryImpl implements SysUserAdminRepositoryCustom 
                                 d.getModuleCode(),
                                 d.getModuleName()),
                         (d1, d2) -> {
-                            d1.addPermissionSet(d2.getPermissionSet());
-                            d1.addModuleSet(d2.getModuleSet());
+                            d1.addItemToMapPermission(d2.getPermissionCode(), d2.getPermissionName());
+                            d1.addItemToMapModule(d2.getModuleCode(), d2.getModuleName());
                             return d1;
                         }));
 

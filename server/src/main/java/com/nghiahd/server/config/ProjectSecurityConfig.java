@@ -43,8 +43,8 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/*/user/login").permitAll()
-                .antMatchers("/admin/user/register").permitAll()
+                .antMatchers("/api/*/user/login").permitAll()
+                .antMatchers("/api/admin/user/register").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(this.jwtTokenValidatorFilter, UsernamePasswordAuthenticationFilter.class);
 

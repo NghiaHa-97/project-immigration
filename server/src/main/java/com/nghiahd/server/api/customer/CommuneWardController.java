@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/public/commune-ward")
+@RequestMapping(value = "api/public/commune-ward")
 public class CommuneWardController {
     private final CommuneWardService communeWardService;
     private final MessageUtils messageUtils;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
@@ -29,7 +29,8 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
 @Component({
   selector: 'app-experts-update',
   templateUrl: './experts-update.component.html',
-  styleUrls: ['./experts-update.component.scss']
+  styleUrls: ['./experts-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertsUpdateComponent implements OnInit{
   formEmployee: FormGroup;

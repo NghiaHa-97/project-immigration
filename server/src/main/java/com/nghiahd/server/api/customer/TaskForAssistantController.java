@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/public/task-for-assistant")
+@RequestMapping(value = "api/public/task-for-assistant")
 public class TaskForAssistantController {
     private final TaskForAssistantService taskForAssistantService;
     private final MessageUtils messageUtils;

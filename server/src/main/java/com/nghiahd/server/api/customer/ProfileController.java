@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/public/profile")
+@RequestMapping(value = "api/public/profile")
 public class ProfileController {
 
     private final ProfileService profileService;

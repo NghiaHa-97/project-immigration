@@ -6,7 +6,7 @@
                   [sticky]="stickyStart"
                   *ngIf="isSelection">
       <th mat-header-cell *matHeaderCellDef>
-        <div [style]="{width:'40px'}">
+        <div [style]="{width:'40px'}" *ngIf="!hiddenCheckBoxCheckAll">
           <mat-checkbox (change)="$event ? masterToggle() : null"
                         [checked]="selection.hasValue() && isAllSelected()"
                         [indeterminate]="selection.hasValue() && !isAllSelected()">

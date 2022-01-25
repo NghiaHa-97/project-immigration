@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/public/employee")
+@RequestMapping(value = "api/public/employee")
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final MessageUtils messageUtils;

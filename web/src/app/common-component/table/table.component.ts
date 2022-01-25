@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -17,6 +17,7 @@ import {getStyleBody} from '../../constans/status-color-style.const';
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent implements OnInit, AfterViewInit {
 
@@ -30,6 +31,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   @Input() menuAction!: MatMenuPanel;
   @Input() isSelection!: boolean;
   @Input() isAction!: boolean;
+  @Input() hiddenCheckBoxCheckAll = false;
 
   // MatPaginator Inputs
   @Input() totalRecord!: number;

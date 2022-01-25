@@ -1,7 +1,7 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.domain.TaskForDepartment;
-import com.nghiahd.server.domain.custom.TaskForDepartmentDomainCustom;
+import com.nghiahd.server.domain.custom.TaskForDepartmentQuery;
 import com.nghiahd.server.model.TaskForDepartmentDTO;
 import com.nghiahd.server.repository.TaskForDepartmentCusRepository;
 import com.nghiahd.server.repository.TaskForDepartmentRepository;
@@ -53,8 +53,8 @@ public class TaskForDepartmentServiceImpl implements TaskForDepartmentService {
     }
 
     @Override
-    public TaskForDepartmentDomainCustom getTFDByID(UUID id) {
-        Optional<TaskForDepartmentDomainCustom> taskForDepartmentCus = taskForDepartmentCusRepository.findById(id);
+    public TaskForDepartmentQuery getTFDByID(UUID id) {
+        Optional<TaskForDepartmentQuery> taskForDepartmentCus = taskForDepartmentCusRepository.findById(id);
         return taskForDepartmentCus.orElse(null);
     }
 

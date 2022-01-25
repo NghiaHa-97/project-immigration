@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/public/position")
+@RequestMapping(value = "api/public/position")
 public class PositionController {
     private final PositionService positionService;
     private final MessageUtils messageUtils;

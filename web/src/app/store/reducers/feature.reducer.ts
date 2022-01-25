@@ -11,6 +11,12 @@ import * as fromPosition from './feature/position.reducer';
 import * as fromUnitType from './feature/unit-type.reducer';
 import * as fromWorkUnit from './feature/work-unit.reducer';
 
+import * as fromVehicle from './feature/vehicle.reducer';
+import * as fromRole from './feature/role.reducer';
+import * as fromModule from './feature/module.reducer';
+
+import * as fromManageUser from './feature/manage-user.reducer';
+
 
 export interface FeatureState {
   employee: fromEmployee.EmployeeState;
@@ -24,6 +30,11 @@ export interface FeatureState {
   position: fromPosition.PositionState;
   unitType: fromUnitType.UnitTypeState;
   workUnit: fromWorkUnit.WorkUnitState;
+  vehicle: fromVehicle.VehicleState;
+  role: fromRole.RoleState;
+  module: fromModule.ModuleState;
+
+  manageUser: fromManageUser.ManageUserState;
 }
 
 export const featuresReducers: ActionReducerMap<FeatureState, any> = {
@@ -37,7 +48,12 @@ export const featuresReducers: ActionReducerMap<FeatureState, any> = {
   district: fromDistrict.reducer,
   position: fromPosition.reducer,
   unitType: fromUnitType.reducer,
-  workUnit: fromWorkUnit.reducer
+  workUnit: fromWorkUnit.reducer,
+  vehicle: fromVehicle.reducer,
+  role: fromRole.reducer,
+  module: fromModule.reducer,
+
+  manageUser: fromManageUser.reducer
 };
 
 export const getFeaturesState = createFeatureSelector<FeatureState>(
@@ -56,3 +72,9 @@ export const getDistrict = (state: FeatureState) => state.district;
 export const getPosition = (state: FeatureState) => state.position;
 export const getUnitType = (state: FeatureState) => state.unitType;
 export const getWorkUnit = (state: FeatureState) => state.workUnit;
+
+export const getVehicle = (state: FeatureState) => state.vehicle;
+export const getRole = (state: FeatureState) => state.role;
+export const getModule = (state: FeatureState) => state.module;
+
+export const getManageUser = (state: FeatureState) => state.manageUser;
