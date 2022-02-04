@@ -1,0 +1,74 @@
+<!--<form class="example-form">-->
+<!--  <mat-form-field class="example-full-width">-->
+<!--    <input matInput placeholder="State" aria-label="State" [matAutocomplete]="statesAutocomplete"-->
+<!--           [formControl]="stateCtrl">-->
+
+<!--    <mat-autocomplete #statesAutocomplete="matAutocomplete" (opened)="autocompleteScroll()">-->
+<!--      <cdk-virtual-scroll-viewport itemSize="25" class="example-viewport">-->
+<!--        <mat-option *cdkVirtualFor="let state of filteredStates" [value]="state.name">-->
+<!--          <img class="example-option-img" aria-hidden [src]="state.flag" height="25">-->
+<!--          <span>{{state.name}}</span> |-->
+<!--          <small>Population: {{state.population}}</small>-->
+<!--        </mat-option>-->
+<!--      </cdk-virtual-scroll-viewport>-->
+<!--&lt;!&ndash;      <mat-option *ngFor="let state of filteredStates" [value]="state.name">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="example-option-img" aria-hidden [src]="state.flag" height="25">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{state.name}}</span> |&ndash;&gt;-->
+<!--&lt;!&ndash;        <small>Population: {{state.population}}</small>&ndash;&gt;-->
+<!--&lt;!&ndash;      </mat-option>&ndash;&gt;-->
+<!--    </mat-autocomplete>-->
+
+
+<!--  </mat-form-field>-->
+<!--  <br>-->
+<!--</form>-->
+
+<!--<mat-form-field>-->
+<!--  <input type="text"-->
+<!--         placeholder="input"-->
+<!--         [formControl]="control"-->
+<!--         matInput-->
+<!--         [matAutocomplete]="auto">-->
+<!--  <mat-autocomplete-->
+<!--                    #auto="matAutocomplete"-->
+<!--                    (opened)="autocompleteScroll()"-->
+<!--                    [ngStyle]="{'height': height}"-->
+<!--                    [autoActiveFirstOption]="true">-->
+<!--    <cdk-virtual-scroll-viewport [itemSize]="48"-->
+<!--                                 [ngStyle]="{'height': height}">-->
+<!--      <mat-option *cdkVirtualFor="let option of filteredOptions"-->
+<!--                  [style.height]="48 + 'px'"-->
+<!--                  [value]="option.name">-->
+<!--        {{option.name}}-->
+<!--      </mat-option>-->
+<!--    </cdk-virtual-scroll-viewport>-->
+<!--  </mat-autocomplete>-->
+<!--</mat-form-field>-->
+
+<mat-form-field appearance="fill">
+  <mat-label>Select an option</mat-label>
+
+  <mat-select (opened)="openOptions()"
+              (closed)="closeOptions()"
+              [formControl]="controlSelect">
+    <mat-form-field class="example-full-width" [style.height]="40 + 'px'">
+      <mat-label>Tìm kiếm</mat-label>
+      <input matInput [formControl]="control" (keydown)="$event.stopPropagation()">
+    </mat-form-field>
+    <mat-option *ngIf="!filteredOptions?.length"
+                [style.height]="48 + 'px'">
+      Không tìm thấy dữ liệu
+    </mat-option>
+    <cdk-virtual-scroll-viewport [itemSize]="48"
+                                 [ngStyle]="{'height': height}">
+      <mat-option *cdkVirtualFor="let option of filteredOptions"
+                  [style.height]="48 + 'px'"
+                  [value]="option">
+        {{option}}
+      </mat-option>
+    </cdk-virtual-scroll-viewport>
+<!--    <mat-option value="option1">Option 1</mat-option>-->
+<!--    <mat-option value="option2">Option 2</mat-option>-->
+<!--    <mat-option value="option3">Option 3</mat-option>-->
+  </mat-select>
+</mat-form-field>

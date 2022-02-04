@@ -1,5 +1,13 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, AfterViewInit, ViewChild, TemplateRef, ElementRef, ChangeDetectionStrategy} from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ViewChild,
+  TemplateRef,
+  ElementRef,
+  ChangeDetectionStrategy,
+  OnInit, ChangeDetectorRef
+} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -10,10 +18,13 @@ import {STATUS_COLOR_STYLE} from "../constans/status-color-style.const";
 import {ThemePalette} from '@angular/material/core';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../store';
-import {LoadModule} from '../store';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {LoadAllRole, LoadModule} from '../store';
+import {BehaviorSubject, interval, Observable, of} from 'rxjs';
 import {TodoItemFlatNode, TodoItemNode} from '../common-component/tree-checkbox/tree-checkbox.component';
 import {COLOR_SNACK_BAR, NotificationSnackBar} from '../notification/notification-snack-bar';
+import {tap} from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import {EmployeeComponent} from '../page-component/employee-component/employee.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,11 +32,16 @@ import {COLOR_SNACK_BAR, NotificationSnackBar} from '../notification/notificatio
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent implements AfterViewInit, OnInit {
   // public chosenDate = _moment.now();
   public chosenDate = Date.now();
-
+  public dataAutoComplete$ = new BehaviorSubject<string[]>([]);
   @ViewChild('sort') sort!: MatSort;
+  @ViewChild('temp') temp!: TemplateRef<any>;
+  // @ViewChild('autoComplete', {
+  //   read: AutoCompleteVirtualScrollComponent,
+  //   static: true
+  // }) autoComplete!: AutoCompleteVirtualScrollComponent;
   // options: FormGroup;
   hide = false;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
@@ -75,14 +91,19 @@ export class DashboardComponent implements AfterViewInit {
   data$!: Observable<TodoItemNode[]>;
   // initSelected$ = new BehaviorSubject<number[]>([]);
   initSelected$!: Observable<number[]>;
+  dataTest!: string[];
+  dataAllRole$!: Observable<any[]>;
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
-              private notification: NotificationSnackBar) {
+              private notification: NotificationSnackBar,
+              private changeDetectorRef: ChangeDetectorRef,
+              private dialog: MatDialog ) {
     this.store.dispatch(new LoadModule(null));
     this.data$ = this.store.select(fromStore.getModuleTodoItemNodeState);
-    this.initSelected$ = of([11,12])
-
+    this.initSelected$ = of([11, 12])
+    this.store.dispatch(new LoadAllRole(null));
+    this.dataAllRole$ = this.store.select(fromStore.getArrayRoleAllState);
 
     // this.options = fb.group({
     //   hideRequired: [true],
@@ -102,12 +123,17 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   search() {
-
-    this.notification.openSnackBar('lua', COLOR_SNACK_BAR.RED);
-
+    this.notification.openSnackBar('lua', COLOR_SNACK_BAR.GREEN);
+    // this.notification.openSnackBar('lua', COLOR_SNACK_BAR.RED);
+    const dialogRef = this.dialog.open(EmployeeComponent, {
+      width: '1000px',
+      height: '80%',
+      data:  {name: 111}
+    });
     // console.log(this.checklistSelection.selected);
     const m = _moment('2021-05-13T14:46:40.315428+09:00').utc().format()
-    console.log("m ",m)
+    console.log("m ", m)
+    // this.dataTest = [...this.dataTest, ...this.dataTest];
   }
 
   get valueSelector() {
@@ -179,6 +205,7 @@ export class DashboardComponent implements AfterViewInit {
   };
 
   allComplete: boolean = false;
+  numberTest: any;
 
   updateAllComplete() {
     this.allComplete = this.task.subtasks != null && this.task.subtasks.every(t => t.completed);
@@ -197,6 +224,31 @@ export class DashboardComponent implements AfterViewInit {
       return;
     }
     this.task.subtasks.forEach(t => (t.completed = completed));
+  }
+
+  ngOnInit(): void {
+
+
+    this.dataTest = Array
+      .from({length: 20})
+      .map((_, i) => Math.random().toString(36).substring(7)).sort();
+    // this.dataTest = ["1","2","3"];
+
+
+    // this.autoComplete.onChangePage.subscribe(
+    //   page => {
+    //     console.log(page);
+    //
+    //     this.dataTest = [...this.dataTest, ...this.dataTest];
+    //
+    //
+    //     this.dataAutoComplete$.next([...this.dataTest]);
+    //     this.changeDetectorRef.detectChanges();
+    //
+    //     // this.dataAutoComplete$.subscribe(data=>console.log(data.length))
+    //     // console.log(this.dataTest.length);
+    //   }
+    // );
   }
 
 

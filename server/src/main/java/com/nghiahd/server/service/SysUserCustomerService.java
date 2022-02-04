@@ -7,9 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface SysUserCustomerService {
-    Page<SysUserCustomerDTO> getPageSysUserCustomer(Pageable pageable);
+    Page<SysUserCustomerDTO> getPageSysUserCustomer(Pageable pageable,
+                                                    String username,
+                                                    String employeeCode,
+                                                    String employeeFullName,
+                                                    String roleName);
 
-    SysUser getDetailByID(Integer id);
+    SysUserCustomerDTO getDetailByID(Integer id);
 
     SysUser save(Integer id, SysUser sysUser);
 

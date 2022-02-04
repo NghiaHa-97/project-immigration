@@ -2,15 +2,18 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ADMIN_API} from '../constans/url-api.const';
+import {createRequestParam} from './create-request-param.function';
 
 @Injectable()
 export class RoleService{
   constructor(private http: HttpClient) {
   }
 
-  getPageRole(): Observable<any> {
+  getPageRole(payload: any): Observable<any> {
+    const param = createRequestParam(payload);
     return this.http.get(ADMIN_API.ROLE.GET_PAGE_ROLE,
       {
+        params: param,
         observe: 'response',
         withCredentials: true
       }
@@ -45,7 +48,7 @@ export class RoleService{
   edit(payload: any): Observable<any> {
     return this.http
       .put(`${ADMIN_API.ROLE.EDIT_ROLE}${payload.id}`,
-        payload.form,
+        payload,
         {observe: 'response', withCredentials: true});
   }
 

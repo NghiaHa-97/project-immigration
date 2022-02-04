@@ -18,7 +18,7 @@ public class RoleRepositoryImpl implements RoleRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Page<Role> getPageRole(Pageable pageable) {
+    public Page<Role> getPageRole(Pageable pageable, String name) {
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder sqlSelect = new StringBuilder();
@@ -29,8 +29,12 @@ public class RoleRepositoryImpl implements RoleRepositoryCustom {
 
         StringBuilder sqlWhere = new StringBuilder();
         sqlWhere.append(" where 1=1 ");
+        if (name != null) {
+            sqlWhere.append(" and name like :name ");
+            params.put("name", "%" + name + "%");
+        }
 
-        try{
+        try {
             Page<Role> page = PageUtilsCommon.getPage(sqlSelect.toString(),
                     sqlFrom.toString(),
                     sqlWhere.toString(),
@@ -40,7 +44,7 @@ public class RoleRepositoryImpl implements RoleRepositoryCustom {
                     entityManager,
                     Role.class);
             return page;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -48,7 +52,10 @@ public class RoleRepositoryImpl implements RoleRepositoryCustom {
 
     private Map<String, String> nameFieldMapSort() {
         Map<String, String> nameFieldMap = new HashMap<>();
-        nameFieldMap.put("name", "name");;
+
+        nameFieldMap.put("name", "name");
+        nameFieldMap.put("createDate", "createDate");
+        nameFieldMap.put("updateDate", "updateDate");
 
         return nameFieldMap;
     }

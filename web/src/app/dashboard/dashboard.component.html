@@ -40,6 +40,8 @@
 
 <mat-card class="example-card">
   <mat-card-content>
+    <app-select-filter-virtual-scroll [dataSource]="dataAllRole$ | async"></app-select-filter-virtual-scroll>
+<!--    <app-auto-complete-virtual-scroll></app-auto-complete-virtual-scroll>-->
 
     <mat-card-title>Table</mat-card-title>
     <app-tree-checkbox [checklistSelection]="checklistSelection"
@@ -117,14 +119,10 @@
       <ng-container left>
         <div class="row">
           <div class="col-md-3">
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Company (disabled)" disabled>
-            </mat-form-field>
+<!--            <app-auto-complete-virtual-scroll>-->
+<!--            </app-auto-complete-virtual-scroll>-->
           </div>
           <div class="col-md-3">
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Username">
-            </mat-form-field>
           </div>
           <div class="col-md-3">
             <mat-form-field class="example-full-width">
@@ -403,4 +401,10 @@
     </ul>
   </span>
 </section>
+
+<ng-template #temp>
+  <div>
+    <h3>LLLLLLLLL</h3>
+  </div>
+</ng-template>
 

@@ -1,9 +1,7 @@
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Store} from '@ngrx/store';
-
 import * as fromStore from '../../store';
 import {Observable} from 'rxjs';
-
 import {getPrefixID} from '../../constans/prefix-id.const';
 import {filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -28,8 +26,7 @@ export class EmployeeExistDetailActivate implements CanActivate {
         map((entities: { [key: string]: any }) => entities[getPrefixID(id)]?.isDetail),
         take(1),
         tap(data => console.log('++++++', data))
-  )
-    ;
+      );
   }
 
   checkStoreAndGetDetail(id: string): Observable<boolean> {

@@ -40,10 +40,10 @@ export function reducer(
     case fromManageUserAction.UPDATE_MANAGE_USER_SUCCESS:
     case fromManageUserAction.CREATE_MANAGE_USER_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
-      const employee = action.payload?.data;
+      const data = action.payload?.data;
       const entities = {
         ...state.entities,
-        [getPrefixID(employee.id)]: {...employee, isDetail: true},
+        [getPrefixID(data.id)]: {...data, isDetail: true},
       };
 
       return {
@@ -55,8 +55,8 @@ export function reducer(
 
     case fromManageUserAction.REMOVE_MANAGE_USER_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
-      const employeeID = action.payload?.data;
-      const {[getPrefixID(employeeID)]: removed, ...entities} = state.entities;
+      const data = action.payload?.data;
+      const {[getPrefixID(data)]: removed, ...entities} = state.entities;
 
       return {
         ...state,

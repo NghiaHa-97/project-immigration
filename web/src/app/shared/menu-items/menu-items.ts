@@ -13,7 +13,8 @@ const MENUITEMS = [
   { state: 'ho-so', name: 'Hồ sơ', type: 'link', icon: 'av_timer' },
   { state: 'nhan-vien', name: 'Nhân viên', type: 'link', icon: 'av_timer' },
   { state: 'chuyen-gia', name: 'Chuyên gia', type: 'link', icon: 'av_timer' },
-  { state: 'quan-ly-nguoi-dung', name: 'Quản lý người dùng', type: 'link', icon: 'av_timer' },
+  { state: 'quan-ly-nguoi-dung', name: 'Người dùng', type: 'link', icon: 'av_timer' },
+  { state: 'quan-ly-vai-tro', name: 'Vai trò', type: 'link', icon: 'av_timer' },
   // { state: 'map', name: 'Map', type: 'link', icon: 'av_timer' },
 
 

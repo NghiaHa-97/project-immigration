@@ -65,7 +65,7 @@ export const ADMIN_API = {
   ROLE: {
     GET_PAGE_ROLE: `${DOMAIN_SERVER}/api/admin/role`,
     GET_ALL_ROLE: `${DOMAIN_SERVER}/api/admin/role/all`,
-    GET_DETAIL_ROLE: `${DOMAIN_SERVER}/api/admin/role/detail/`,   // role/{id}
+    GET_DETAIL_ROLE: `${DOMAIN_SERVER}/api/admin/role/detail/`,   // role/detail/{id}
     CREATE_ROLE: `${DOMAIN_SERVER}/api/admin/role/create`,
     EDIT_ROLE: `${DOMAIN_SERVER}/api/admin/role/edit/`,         // delete/{id}
     DELETE_ROLE: `${DOMAIN_SERVER}/api/admin/role/delete/`       //  delete/{id}

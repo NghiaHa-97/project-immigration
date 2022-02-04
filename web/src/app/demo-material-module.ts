@@ -51,6 +51,7 @@ import {ObserversModule} from '@angular/cdk/observers';
 import {PortalModule} from '@angular/cdk/portal';
 import {MatTreeModule} from '@angular/material/tree';
 import {CdkTreeModule} from '@angular/cdk/tree';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 /**
  * NgModule that includes all Material modules that are required to serve the demo-app.
  */
@@ -99,8 +100,8 @@ import {CdkTreeModule} from '@angular/cdk/tree';
     PlatformModule,
     PortalModule,
     CdkTreeModule,
-    MatTreeModule
-
+    MatTreeModule,
+    ScrollingModule,
   ]
 })
 export class DemoMaterialModule {

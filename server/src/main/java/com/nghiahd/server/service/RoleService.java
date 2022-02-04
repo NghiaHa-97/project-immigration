@@ -14,5 +14,5 @@ public interface RoleService {
      RoleQuery saveRoleAndPermissionRole(RoleQuery roleQuery, Integer id);
      ApiResponseCode deleteRoleAndPermissionRole(int roleID);
 
-    Page<Role> getPageRole(Pageable pageable);
+    Page<Role> getPageRole(Pageable pageable, String name);
 }

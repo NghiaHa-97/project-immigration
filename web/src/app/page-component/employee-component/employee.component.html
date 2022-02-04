@@ -79,9 +79,10 @@
 
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
+                 [hiddenCheckBoxCheckAll]="true"
                  [stickyEnd]="true"
                  [stickyStart]="true"
-                 [isSelection]="true"
+                 [isSelection]="!!selection"
                  [isAction]="true"
                  [dataSource]="employees$ | async"
                  [columnsAndStyles]="columnsAndStyles"
@@ -108,3 +109,8 @@
   </mat-menu>
 
 </mat-card>
+
+<div mat-dialog-actions *ngIf="isDialog" class="float-right">
+  <button mat-button mat-dialog-close>Hủy</button>
+  <button mat-button [mat-dialog-close]="appTable.resultSelected">Đồng ý</button>
+</div>

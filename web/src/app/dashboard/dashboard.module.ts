@@ -13,6 +13,7 @@ import { ContactsComponent } from './dashboard-components/contacts/contacts.comp
 import { ActivityComponent } from './dashboard-components/activity/activity.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonComponentModule} from '../common-component/common-component.module';
+import {PatternFormat} from '../constans/pattern-format-date.const';
 
 
 @NgModule({
@@ -34,6 +35,6 @@ import {CommonComponentModule} from '../common-component/common-component.module
     ContactsComponent,
     ActivityComponent
   ],
-  providers: []
+  providers: [PatternFormat]
 })
 export class DashboardModule {}

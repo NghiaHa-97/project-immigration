@@ -35,7 +35,7 @@ export class ManageUserService {
   edit(payload: any): Observable<any> {
     return this.http
       .put(`${ADMIN_API.MANAGE_USER.EDIT}${payload.id}`,
-        payload.form,
+        payload,
         {observe: 'response', withCredentials: true});
   }
 

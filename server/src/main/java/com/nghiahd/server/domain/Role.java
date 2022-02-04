@@ -1,10 +1,19 @@
 package com.nghiahd.server.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Entity
 @Table(name = "role")
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,27 +22,16 @@ public class Role {
     @Column(name = "name")
     private String name;
 
-    public Role() {
-    }
+    @Column(name = "createdate")
+    private LocalDateTime createDate;
+
+    @Column(name = "updatedate")
+    private LocalDateTime updateDate;
+
 
     public Role(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

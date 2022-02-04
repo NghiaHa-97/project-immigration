@@ -46,6 +46,7 @@
 <!--    <mat-progress-bar -->
 <!--                      mode="indeterminate"-->
 <!--                      color="warn"></mat-progress-bar>-->
+
     <mat-progress-spinner
       *ngIf="process$ | async"
       class="example-margin"
@@ -53,6 +54,7 @@
       [strokeWidth]="10"
       mode="indeterminate"></mat-progress-spinner>
   </div>
+
 
   <!-- ============================================================== -->
   <!-- End Topbar - style you can find in pages.scss -->
@@ -79,7 +81,7 @@
       <div class="page-content">
 
         <router-outlet>
-          <app-spinner></app-spinner>
+<!--          <app-spinner></app-spinner>-->
         </router-outlet>
 
       </div>

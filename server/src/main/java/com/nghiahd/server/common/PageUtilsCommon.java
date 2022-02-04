@@ -77,7 +77,10 @@ public class PageUtilsCommon {
         String nameFieldSort = "";
         Sort sortsSort = pageable.getSort();
         Sort.Order orders = sortsSort.stream().findFirst().orElse(null);
-        if (orders != null && orders.getProperty() != null && !orders.getProperty().isEmpty()) {
+        if (orders == null) {
+            return new StringBuilder();
+        }
+        if (orders.getProperty() != null && !orders.getProperty().isEmpty()) {
             if (!nameColumnMap.containsKey(orders.getProperty())) {
                 return new StringBuilder();
             }
@@ -123,27 +126,56 @@ public class PageUtilsCommon {
 
         if (totalQuery.longValue() > 0) {
             String itemQuery = sqlSelect
-                    + " "
+                    + SPACE
                     + sqlFrom
-                    + " "
+                    + SPACE
                     + sqlWhere
-                    + " "
+                    + SPACE
                     + PageUtilsCommon.orderBySort(pageable, nameFieldsSort, params);
             Query query = null;
-            switch (nameClassDTO.getClass().getSimpleName()){
+            switch (nameClassDTO.getClass().getSimpleName()) {
                 case "Class":
-                    query = entityManager.createNativeQuery(itemQuery, (Class)nameClassDTO);
+                    query = entityManager.createNativeQuery(itemQuery, (Class) nameClassDTO);
                     break;
                 case "String":
-                    query = entityManager.createNativeQuery(itemQuery, (String)nameClassDTO);
+                    query = entityManager.createNativeQuery(itemQuery, (String) nameClassDTO);
                     break;
             }
-            if(query == null){
+            if (query == null) {
                 throw new Exception("variable nameClassDTO in getPage() invalid.");
             }
             PageUtilsCommon.setParamsWithPageable(query, params, pageable);
             listDto = query.getResultList();
         }
         return new PageImpl<>(listDto, pageable, totalQuery.longValue());
+    }
+
+    public static <T> List<T> getList(String sqlSelect,
+                                      String sqlFrom,
+                                      String sqlWhere,
+                                      Map<String, Object> params,
+                                      EntityManager entityManager,
+                                      Object nameClassDTO) throws Exception {
+        String itemQuery = sqlSelect
+                + SPACE
+                + sqlFrom
+                + SPACE
+                + sqlWhere;
+        Query query = null;
+        switch (nameClassDTO.getClass().getSimpleName()) {
+            case "Class":
+                query = entityManager.createNativeQuery(itemQuery, (Class) nameClassDTO);
+                break;
+            case "String":
+                query = entityManager.createNativeQuery(itemQuery, (String) nameClassDTO);
+                break;
+        }
+        if (query == null) {
+            throw new Exception("variable nameClassDTO in getPage() invalid.");
+        }
+        PageUtilsCommon.setParams(query, params);
+        List<T> listDto = query.getResultList();
+
+        return listDto;
     }
 }

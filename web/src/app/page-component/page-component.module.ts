@@ -18,12 +18,16 @@ import {EffectsModule} from '@ngrx/effects';
 import {effectsFeatures} from '../store';
 import {featuresReducers} from '../store';
 import {pageComponentService} from '../services';
-import {canActives} from './can-activate';
+import {canActivate} from './can-activate';
 import {MapComponent} from './map-component/map.component';
 import {PatternFormat} from '../constans/pattern-format-date.const';
 import {DirectiveCustomModule} from '../directive/directive-custom.module';
 import {ManageUserComponent} from './manage-user-component/manage-user.component';
 import {ManageUserUpdateComponent} from './manage-user-component/manage-user-update.component';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {RoleComponent} from './role-component/role.component';
+import {RoleUpdateComponent} from './role-component/role-update.component';
+import {canDeactivate, DialogCanDeactivateComponent} from './can-deactivate';
 
 
 @NgModule({
@@ -49,11 +53,17 @@ import {ManageUserUpdateComponent} from './manage-user-component/manage-user-upd
     ProfileUpdateComponent,
     MapComponent,
     ManageUserComponent,
-    ManageUserUpdateComponent
+    ManageUserUpdateComponent,
+    RoleComponent,
+    RoleUpdateComponent,
+    DialogCanDeactivateComponent
   ],
   providers: [
     ...pageComponentService,
-    ...canActives, PatternFormat
+    ...canActivate,
+    ...canDeactivate,
+    PatternFormat,
+    { provide: MAT_DIALOG_DATA, useValue: {} }
   ]
 })
 export class PageComponentModule {

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface RoleRepositoryCustom {
 
-    Page<Role> getPageRole(Pageable pageable);
+    Page<Role> getPageRole(Pageable pageable, String name);
 }

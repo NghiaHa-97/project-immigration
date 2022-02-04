@@ -32,8 +32,19 @@ public class ManageUserController {
     public ResponseEntity<BodyResponseDTO<List<SysUserCustomerDTO>>> getPageUserCustomers(@PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
                                                                                           @SortDefault.SortDefaults({
                                                                                                   @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-                                                                                          }) Pageable pageable) {
-        Page<SysUserCustomerDTO> page = sysUserCustomerService.getPageSysUserCustomer(PageUtilsCommon.createPageable(pageable));
+                                                                                          }) Pageable pageable,
+                                                                                          @RequestParam(required = false) String username,
+                                                                                          @RequestParam(required = false) String employeeCode,
+                                                                                          @RequestParam(required = false) String employeeFullName,
+                                                                                          @RequestParam(required = false) String roleName
+    ) {
+        Page<SysUserCustomerDTO> page = sysUserCustomerService.getPageSysUserCustomer(
+                PageUtilsCommon.createPageable(pageable),
+                username,
+                employeeCode,
+                employeeFullName,
+                roleName
+        );
         return RestResponseWrapper.getResponse(HttpStatus.OK,
                 ApiResponseCode.SUCCESS,
                 this.messageUtils,
@@ -42,11 +53,16 @@ public class ManageUserController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public ResponseEntity<BodyResponseDTO<SysUser>> getDetailByID(@PathVariable Integer id) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK,
-                ApiResponseCode.SUCCESS,
+    public ResponseEntity<BodyResponseDTO<SysUserCustomerDTO>> getDetailByID(@PathVariable Integer id) {
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        SysUserCustomerDTO sysUserCustomerDTO = this.sysUserCustomerService.getDetailByID(id);
+        if (sysUserCustomerDTO == null) {
+            apiResponseCode = ApiResponseCode.NOT_FOUND;
+        }
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(),
+                apiResponseCode,
                 this.messageUtils,
-                this.sysUserCustomerService.getDetailByID(id));
+                sysUserCustomerDTO);
     }
 
     @PutMapping(value = "/edit/{id}")
@@ -67,7 +83,7 @@ public class ManageUserController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> delete(@PathVariable Integer id) {
+    public ResponseEntity<BodyResponseDTO<Integer>> delete(@PathVariable Integer id) {
         ApiResponseCode apiResponseCode;
         try {
             apiResponseCode = sysUserCustomerService.delete(id);
@@ -79,6 +95,6 @@ public class ManageUserController {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils);
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, id);
     }
 }

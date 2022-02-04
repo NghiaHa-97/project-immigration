@@ -9,6 +9,11 @@ import {ExpertsUpdateComponent} from './experts-component/experts-update.compone
 import {MapComponent} from './map-component/map.component';
 import {ManageUserComponent} from './manage-user-component/manage-user.component';
 import {ManageUserUpdateComponent} from './manage-user-component/manage-user-update.component';
+import {RoleComponent} from './role-component/role.component';
+import {RoleUpdateComponent} from './role-component/role-update.component';
+import {RoleExistDetailActivate} from './can-activate/role-exist-detail.activate';
+import {RoleDeactivate} from './can-deactivate/role.deactivate';
+import {UserCustomerExistDetailActivate} from './can-activate/user-customer-exist-detail.activate';
 
 
 export const PageRoutes: Routes = [
@@ -79,11 +84,31 @@ export const PageRoutes: Routes = [
       {
         path: 'chi-tiet/:id',
         component: ManageUserUpdateComponent,
-        // canActivate: [EmployeeExistDetailActivate]
+        canActivate: [UserCustomerExistDetailActivate]
       },
       {
         path: 'them-moi',
         component: ManageUserUpdateComponent
+      }
+    ]
+  },
+  {
+    path: 'quan-ly-vai-tro',
+    children: [
+      {
+        path: '',
+        component: RoleComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        component: RoleUpdateComponent,
+        canActivate: [RoleExistDetailActivate],
+        canDeactivate: [RoleDeactivate]
+      },
+      {
+        path: 'them-moi',
+        component: RoleUpdateComponent,
+        canDeactivate: [RoleDeactivate]
       }
     ]
   },

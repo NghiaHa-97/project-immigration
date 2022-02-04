@@ -1,19 +1,27 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {PageEvent} from '@angular/material/paginator';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
-import {Go, LoadEmployee, LoadManageUser} from '../../store';
+import {Go, LoadManageUser, RemoveManageUser} from '../../store';
 import {fromEvent, Observable} from 'rxjs';
-import {map, withLatestFrom} from 'rxjs/operators';
+import {map, take, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {TableComponent} from '../../common-component/table/table.component';
-import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {EmployeeUpdateComponent} from '../employee-component/employee-update.component';
+import {PatternFormat} from '../../constans/pattern-format-date.const';
+import {MatDialog} from '@angular/material/dialog';
+import {getPrefixID} from '../../constans/prefix-id.const';
 
 
 @Component({
@@ -24,8 +32,12 @@ import {EmployeeUpdateComponent} from '../employee-component/employee-update.com
 })
 export class ManageUserComponent implements OnInit, AfterViewInit {
   usersCustomer$!: Observable<any[]>;
-
-  public chosenDate = Date.now();
+  params: any = {};
+  usernameDialog$!: Observable<string>;
+  totalItems$!: Observable<number>;
+  @ViewChild('dialogDelete', {
+    static: true
+  }) dialogDelete!: TemplateRef<any>;
   @ViewChild('appTable') appTable!: TableComponent;
   @ViewChild('btnDetail', {
     static: true,
@@ -43,7 +55,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }) btnDelete!: ElementRef;
 
   eventClickDetails$!: Observable<any>;
-  eventClickUpdate$!: Observable<any>;
+  // eventClickUpdate$!: Observable<any>;
   eventClickDelete$!: Observable<any>;
 
   @ViewChild('sort') sort!: MatSort;
@@ -51,115 +63,123 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<any>(true, []);
   columnsAndStyles = COLUMNS_AND_STYLES;
 
-  form!: FormGroup;
+  formSearch!: FormGroup;
   public data!: any[];
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
               private patternFormat: PatternFormat,
               public dialog: MatDialog) {
-    this.form = this.fb.group({
-      selector: ['option2'],
-      time: [moment().format('HH:mm')],
-      date: [moment().format()]
+    this.formSearch = this.fb.group({
+      username: [''],
+      employeeCode: [''],
+      employeeFullName: [''],
+      roleName: ['']
     });
-  }
-  get formControlDate(): FormControl {
-    return this.form.get('date') as FormControl;
-  }
-
-  get valueSelector() {
-    return {
-      image: 'assets/images/users/1.jpg',
-      value: this.form.get('selector')?.value + 'Lua'
-    };
   }
 
   ngOnInit(): void {
-    // const emptyObject: { [property: string]: any } = {};
-    // this.columnsAndStyles.map(val => val.columnName).reduce((obj, name) => {
-    //   obj[name] = null;
-    //   return {obj};
-    // }, emptyObject);
-    // console.log(emptyObject);
 
     this.store.dispatch(new LoadManageUser(null));
     this.usersCustomer$ = this.store.select(fromStore.getArrayManageUserState).pipe(
       map(dataArray => dataArray.map(element => {
         return {
           ...element,
-          createDate: element.createDate ? moment(element.createDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE) : null,
-          updateDate: element.updateDate ? moment(element.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE) : null,
+          createDate: this.patternFormat.formatDatetimeToString(element.createDate),
+          updateDate: this.patternFormat.formatDatetimeToString(element.updateDate)
         };
       })),
-      // map(x => {
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   return x;
-      // })
+    );
+
+    this.totalItems$ = this.store.select(fromStore.getManageUserResponseStatusState).pipe(
+      map(data => data?.totalElements ?? 0)
     );
   }
 
-  handlerChangePage(event: PageEvent): void {
-    console.log('PageEvent', event);
-  }
-
   ngAfterViewInit(): void {
-    // this.dataSource.sort = this.sort;
-    console.log(this.sort);
-    this.sort.sortChange.subscribe(x => console.log(x));
+
+    // console.log(this.sort);
+    this.sort.sortChange.subscribe(x => {
+      this.params = {
+        ...this.params,
+        sort: x.direction === '' ? null : [`${x.active},${x.direction}`]
+      };
+      // console.log(this.params);
+      this.store.dispatch(new LoadManageUser(this.params));
+    });
 
 
     this.eventClickDetails$ = fromEvent(this.btnDetail.nativeElement, 'click').pipe(map(e => 'detail'));
-    this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
+    // this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
     this.eventClickDelete$ = fromEvent(this.btnDelete.nativeElement, 'click').pipe(map(e => 'delete'));
-    // this.buttonDetails$.subscribe(e => console.log(e));
-
-    // zip(this.buttonDetails$, this.appTable.onAction).subscribe(val => console.log(val));
 
     this.eventClickDetails$.pipe(
       withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
+      map(([_, data2]) => data2)
     ).subscribe(x => {
-      this.onNewEmployee();
-      console.log(x);
+      this.onDetailUser(x);
     });
 
-    this.eventClickUpdate$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => data2)
-    ).subscribe(x => {
-      this.onDetailEmployee(x);
-      console.log(x);
-    });
+    // this.eventClickUpdate$.pipe(
+    //   withLatestFrom(this.appTable.selectAction),
+    //   map(([data1, data2]) => data2)
+    // ).subscribe(x => {
+    //
+    //   console.log(x);
+    // });
 
     this.eventClickDelete$.pipe(
       withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
-    ).subscribe(x => console.log(x));
+      map(([_, data2]) => data2)
+    ).subscribe((x: number) => {
+      this.usernameDialog$ = this.store.select(fromStore.getManageUserEntitiesState).pipe(
+        map(entities => entities[getPrefixID(x)]?.username ?? '')
+      );
+      const dialogRef = this.dialog.open(this.dialogDelete, {
+        width: '20%'
+      });
+      dialogRef.afterClosed()
+        .pipe(take(1))
+        .subscribe(result => {
+          if (result) {
+            this.onDeleteUser(x);
+          }
+        });
+    });
   }
 
-  onNewEmployee(): void {
+  onNewUser(): void {
     this.store.dispatch(new Go({path: ['quan-ly-nguoi-dung', 'them-moi']}));
   }
 
-  onDetailEmployee(id: string): void {
+  onDetailUser(id: string): void {
     console.log('manage-user-detail', id);
     this.store.dispatch(new Go({path: ['quan-ly-nguoi-dung', 'chi-tiet', id]}));
   }
 
+  onDeleteUser(id: number): void {
+    this.store.dispatch(new RemoveManageUser(id));
+  }
+
+  handlerChangePage(event: PageEvent): void {
+    this.params = {
+      ...this.params,
+      page: event.pageIndex + 1,
+      size: event.pageSize
+    };
+    // console.log('PageEvent', this.params);
+    this.store.dispatch(new LoadManageUser(this.params));
+  }
+
   handlerSearch(): void {
-    const dialogRef = this.dialog.open(EmployeeUpdateComponent, {
-      width: '1000px',
-    });
-    // console.log(this.form.value);
-    // console.log(moment(this.form.value.date).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST));
-    // console.log(moment(this.form.value.time, PATTERN_FORMAT_DATE.TIME).format(PATTERN_FORMAT_DATE.TIME_SECONDS));
-    console.log(this.patternFormat.combineDateAndTimeToDateTimeRequest(this.form.value.date, this.form.value.time));
-    console.log(this.patternFormat.splitDateTimeResponseToDateAndTime(this.form.value.date));
+    this.params = {
+      ...this.params,
+      page: 1,
+      ...this.formSearch.value
+    };
+
+    // console.log(this.params);
+    this.store.dispatch(new LoadManageUser(this.params));
   }
 }
 
@@ -177,14 +197,14 @@ export const COLUMNS_AND_STYLES: ColumnAndStyleModel[] = [
     columnHeaderName: 'Trạng thái',
     styleHeader: {width: '200px', minWidth: '200px'},
     isSort: true,
-    styleBody: null,
-    isStatus: false
+    styleBody: 'isActive',
+    isStatus: true
   },
   {
     columnName: 'employeeCode',
     columnHeaderName: 'Mã nhân viên',
     styleHeader: {width: '200px', minWidth: '200px'},
-    isSort: false,
+    isSort: true,
     styleBody: null,
     isStatus: false
   },

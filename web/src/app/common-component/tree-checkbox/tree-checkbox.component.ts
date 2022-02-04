@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} fr
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {SelectionModel} from '@angular/cdk/collections';
-import {Observable} from 'rxjs';
+import {combineLatest, Observable} from 'rxjs';
 import {concatMap, tap} from 'rxjs/operators';
 
 
@@ -19,7 +19,7 @@ export class TreeCheckboxComponent implements OnInit {
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
-
+  flatNodeMapLevelOneByID = new Map<number, TodoItemFlatNode>();
   /** Map from nested node to flattened node. This helps us to keep the same object for selection */
     // nestedNodeMap = new Map<TodoItemNode, TodoItemFlatNode>();
   nestedNodeMap = new Map<number, TodoItemFlatNode>();
@@ -50,35 +50,27 @@ export class TreeCheckboxComponent implements OnInit {
     this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-    // this.database.dataChange.subscribe(data => {
-    //   this.dataSource.data = data;
-    // });
   }
 
   ngOnInit(): void {
-    this.data.pipe(
-      tap(data => {
-        this.dataSource.data = data;
-      }),
-      concatMap(() => this.initSelected)
-    ).subscribe((arrNumber) => {
-      arrNumber.forEach(value => {
-        const item = this.nestedNodeMap.get(value) ?? null;
-        if (item !== null && !this.checklistSelection.isSelected(item)) {
-          this.checklistSelection.toggle(item);
-        }
-      });
-      this.changeDetectorRef.detectChanges();
-    });
 
-    // this.initSelected.subscribe(data => {
-    //   data.forEach(value => {
-    //     const item = this.nestedNodeMap.get(value) ?? null;
-    //     if (item !== null && !this.checklistSelection.isSelected(item)) {
-    //       this.checklistSelection.toggle(item);
-    //     }
-    //   });
-    // });
+    combineLatest(this.data, this.initSelected)
+      .subscribe(([data, arrayIdInit]) => {
+        this.dataSource.data = data;
+        if (data.length === 0) {
+          return;
+        }
+        setTimeout(() => {
+          arrayIdInit.forEach(value => {
+            const item = this.flatNodeMapLevelOneByID.get(value) ?? null;
+            if (item !== null && !this.checklistSelection.isSelected(item)) {
+              this.todoItemSelectionToggle(item);
+              // this.checklistSelection.toggle(item);
+            }
+          });
+          this.changeDetectorRef.detectChanges();
+        });
+      });
   }
 
   getLevel = (node: TodoItemFlatNode) => node.level;
@@ -99,11 +91,15 @@ export class TreeCheckboxComponent implements OnInit {
     const flatNode =
       existingNode && existingNode.item === node.item ? existingNode : new TodoItemFlatNode();
     flatNode.item = node.item;
+    flatNode.id = node.id;
     flatNode.code = node.code;
     flatNode.level = level;
     flatNode.expandable = !!node.children?.length;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node.code, flatNode);
+    if (level === 1) {
+      this.flatNodeMapLevelOneByID.set(node.id, flatNode);
+    }
     return flatNode;
   }
 

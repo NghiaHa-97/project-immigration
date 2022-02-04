@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,14 +33,19 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleQuery getDetailRoleByID(int roleID) {
-        return this.roleQueryRepository.findById(roleID).orElse(null);
+        RoleQuery roleQuery = this.roleQueryRepository.findById(roleID).orElse(null);
+        return roleQuery;
     }
 
     @Override
     public RoleQuery saveRoleAndPermissionRole(RoleQuery roleQuery, Integer id) {
-        if (id == null && this.roleRepository.checkExistRoleName(roleQuery.getName()) > 0) {
+        if (id == null && this.roleRepository.checkExistRoleName(roleQuery.getName().trim()) > 0) {
             return null;
         }
+        if (id == null) {
+            roleQuery.setCreateDate(LocalDateTime.now());
+        }
+        roleQuery.setUpdateDate(LocalDateTime.now());
         return this.roleQueryRepository.save(roleQuery);
     }
 
@@ -54,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Page<Role> getPageRole(Pageable pageable) {
-        return roleRepository.getPageRole(pageable);
+    public Page<Role> getPageRole(Pageable pageable, String name) {
+        return roleRepository.getPageRole(pageable, name);
     }
 }

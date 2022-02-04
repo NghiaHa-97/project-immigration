@@ -23,13 +23,15 @@ export const STATUS_COLOR_STYLE = {
 
 };
 
-export function getStyleBody(id: number): any{
+export function getStyleBody(id: any): any{
   switch (id) {
     case 1:
     case 2:
     case 3:
+    case false:
       return STATUS_COLOR_STYLE.RED;
     case 4:
+    case true:
       return STATUS_COLOR_STYLE.GREEN;
     default:
       return null;

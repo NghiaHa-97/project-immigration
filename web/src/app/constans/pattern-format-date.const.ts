@@ -14,6 +14,7 @@ export const PATTERN_FORMAT_DATE = {
 export class PatternFormat {
   constructor() {
   }
+
   combineDateAndTimeToDateTimeRequest(date: any, time: string): string {
     return moment(date).format(PATTERN_FORMAT_DATE.DATE_REQUEST)
       + ' '
@@ -25,5 +26,9 @@ export class PatternFormat {
       date: moment(datetimeResponse).format(PATTERN_FORMAT_DATE.DATE_RESPONSE),
       time: moment(datetimeResponse).format(PATTERN_FORMAT_DATE.TIME)
     };
+  }
+
+  formatDatetimeToString(datetime: any): string | null {
+    return datetime ? moment(datetime).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE) : null;
   }
 }

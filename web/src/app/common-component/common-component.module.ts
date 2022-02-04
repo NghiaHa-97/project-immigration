@@ -16,6 +16,8 @@ import {CustomPaginatorIntl} from './table/custom-paginator-intl';
 import {SafeHtmlPipe} from './safe-html.pipe';
 import {InputImageComponent} from './input-image/input-image.component';
 import {TreeCheckboxComponent} from './tree-checkbox/tree-checkbox.component';
+import {SelectFilterVirtualScrollComponent} from './select-filter-virtual-scroll/select-filter-virtual-scroll.component';
+
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import {TreeCheckboxComponent} from './tree-checkbox/tree-checkbox.component';
     ToolbarActionTableComponent,
     SafeHtmlPipe,
     InputImageComponent,
-    TreeCheckboxComponent
+    TreeCheckboxComponent,
+    SelectFilterVirtualScrollComponent,
   ],
   exports: [
     RichTextEditorComponent,
@@ -44,7 +47,8 @@ import {TreeCheckboxComponent} from './tree-checkbox/tree-checkbox.component';
     TableComponent,
     SafeHtmlPipe,
     InputImageComponent,
-    TreeCheckboxComponent
+    TreeCheckboxComponent,
+    SelectFilterVirtualScrollComponent,
   ],
   providers: [
     {

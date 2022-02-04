@@ -2,12 +2,20 @@ package com.nghiahd.server.domain;
 
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.model.SysUserCustomerDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "sysuser")
 @SqlResultSetMappings({
@@ -57,82 +65,4 @@ public class SysUser {
 
     @Column(name = "roleid")
     private Integer roleID;
-
-    public SysUser() {
-    }
-
-    public SysUser(Integer id, String username, String password, UUID employeeID, Boolean isActive, LocalDateTime createDate, LocalDateTime updateDate, Integer roleID) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.employeeID = employeeID;
-        this.isActive = isActive;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-        this.roleID = roleID;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UUID getEmployeeID() {
-        return employeeID;
-    }
-
-    public void setEmployeeID(UUID employeeID) {
-        this.employeeID = employeeID;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Integer getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(Integer roleID) {
-        this.roleID = roleID;
-    }
 }

@@ -1,4 +1,12 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
@@ -12,6 +20,8 @@ import {map, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {TableComponent} from '../../common-component/table/table.component';
 import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import * as _ from 'lodash';
 
 
 @Component({
@@ -21,6 +31,7 @@ import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeComponent implements OnInit, AfterViewInit {
+  isDialog = false;
   employees$!: Observable<any[]>;
 
   public chosenDate = Date.now();
@@ -46,7 +57,7 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('sort') sort!: MatSort;
 
-  selection = new SelectionModel<any>(true, []);
+  selection!: SelectionModel<number|string>;
   columnsAndStyles = COLUMNS_AND_STYLES;
 
   form!: FormGroup;
@@ -54,13 +65,19 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
-              private patternFormat: PatternFormat) {
+              private patternFormat: PatternFormat,
+              @Inject(MAT_DIALOG_DATA) public dataDialog: any) {
+    this.isDialog = !_.isEmpty(dataDialog);
+    if (this.isDialog) {
+      this.selection = new SelectionModel<number|string>(dataDialog.isSelectMulti, dataDialog.itemSelected);
+    }
     this.form = this.fb.group({
       selector: ['option2'],
       time: [moment().format('HH:mm')],
       date: [moment().format()]
     });
   }
+
   get formControlDate(): FormControl {
     return this.form.get('date') as FormControl;
   }
@@ -73,6 +90,7 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log(this.dataDialog);
     // const emptyObject: { [property: string]: any } = {};
     // this.columnsAndStyles.map(val => val.columnName).reduce((obj, name) => {
     //   obj[name] = null;
@@ -90,14 +108,6 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
           birthDay: element.birthDay ? moment(element.birthDay).format(PATTERN_FORMAT_DATE.DATE_RESPONSE) : null
         };
       })),
-      // map(x => {
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   return x;
-      // })
     );
   }
 
