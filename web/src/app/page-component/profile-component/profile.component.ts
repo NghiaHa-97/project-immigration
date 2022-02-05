@@ -18,14 +18,13 @@ import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import {
   Go,
-  LoadEmployee,
   LoadProfile,
   LoadStatusProfile,
   RemoveProfile
 } from '../../store';
 import {map, take, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
-import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
+import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import {MatDialog} from '@angular/material/dialog';
 

@@ -16,7 +16,7 @@ import {fromEvent, Observable} from 'rxjs';
 import {TableComponent} from '../../common-component/table/table.component';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
-import {Go, LoadEmployee, LoadExperts, RemoveExperts} from '../../store';
+import {Go, LoadExperts, RemoveExperts} from '../../store';
 import {map, take, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {PatternFormat} from '../../constans/pattern-format-date.const';
