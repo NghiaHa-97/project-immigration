@@ -27,10 +27,10 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 
 @RestController
-@RequestMapping(value = "api/admin/user")
-public class UserController {
+@RequestMapping(value = "api/admin/auth")
+public class AuthAdminController {
 
-    Logger log = LoggerFactory.getLogger(UserController.class);
+    Logger log = LoggerFactory.getLogger(AuthAdminController.class);
 
     private final SysUserAdminService sysUserAdminService;
     private final PasswordEncoder passwordEncoder;
@@ -39,12 +39,12 @@ public class UserController {
     private final ReadEnvironment readEnvironment;
     private final MessageUtils messageUtils;
 
-    public UserController(SysUserAdminService sysUserAdminService,
-                          PasswordEncoder passwordEncoder,
-                          AuthenticationManagerBuilder authenticationManagerBuilder,
-                          TokenProvider tokenProvider,
-                          ReadEnvironment readEnvironment,
-                          MessageUtils messageUtils) {
+    public AuthAdminController(SysUserAdminService sysUserAdminService,
+                               PasswordEncoder passwordEncoder,
+                               AuthenticationManagerBuilder authenticationManagerBuilder,
+                               TokenProvider tokenProvider,
+                               ReadEnvironment readEnvironment,
+                               MessageUtils messageUtils) {
         this.sysUserAdminService = sysUserAdminService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;

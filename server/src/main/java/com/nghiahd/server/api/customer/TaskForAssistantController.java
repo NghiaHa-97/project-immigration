@@ -1,13 +1,10 @@
 package com.nghiahd.server.api.customer;
 
-import com.nghiahd.server.api.admin.UserController;
+import com.nghiahd.server.api.admin.AuthAdminController;
 import com.nghiahd.server.common.*;
 import com.nghiahd.server.domain.TaskForAssistant;
-import com.nghiahd.server.domain.TaskForDepartment;
 import com.nghiahd.server.model.TaskForAssistantDTO;
-import com.nghiahd.server.model.TaskForDepartmentDTO;
 import com.nghiahd.server.service.TaskForAssistantService;
-import com.nghiahd.server.service.TaskForDepartmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,7 +32,7 @@ public class TaskForAssistantController {
         this.messageUtils = messageUtils;
     }
 
-    Logger log = LoggerFactory.getLogger(UserController.class);
+    Logger log = LoggerFactory.getLogger(TaskForAssistantController.class);
 
     private void logHttpRequest(HttpServletRequest request) {
         String uri = request.getRequestURI();
