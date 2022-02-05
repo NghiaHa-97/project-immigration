@@ -49,6 +49,9 @@ export const PUBLIC_API = {
   },
   VEHICLE: {
     GET_VEHICLE: `${DOMAIN_SERVER}/api/public/vehicle`,
+  },
+  STATUS_PROFILE: {
+    GET_STATUS_PROFILE: `${DOMAIN_SERVER}/api/public/status-profile`,
   }
 };
 

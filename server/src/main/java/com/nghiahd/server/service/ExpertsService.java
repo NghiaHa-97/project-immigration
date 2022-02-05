@@ -5,6 +5,7 @@ import com.nghiahd.server.domain.Experts;
 import com.nghiahd.server.model.ExpertsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -15,7 +16,13 @@ public interface ExpertsService {
 
     ApiResponseCode deleteExperts(UUID id);
 
-    Page<ExpertsDTO> getPageExperts(Pageable pageable);
+    Page<ExpertsDTO> getPageExperts(Pageable pageable,
+                                    String code,
+                                    String fullname,
+                                    String countryName,
+                                    String permanentResidentialAddress,
+                                    String phoneNumber,
+                                    String passportNumber);
 
     Experts getDetailExperts(UUID id);
 }

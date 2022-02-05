@@ -39,20 +39,53 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     static: true
   }) dialogDelete!: TemplateRef<any>;
   @ViewChild('appTable') appTable!: TableComponent;
-  @ViewChild('btnDetail', {
-    static: true,
-    read: ElementRef
-  }) btnDetail!: ElementRef;
 
-  @ViewChild('btnUpdate', {
-    static: true,
+  @ViewChild('btnDetail', {
+    static: false,
     read: ElementRef
-  }) btnUpdate!: ElementRef;
+  }) set btnDetail(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDetails$ = fromEvent(btn?.nativeElement, 'click').pipe(map(e => 'detail'));
+      this.eventClickDetails$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([_, data2]) => data2)
+      ).subscribe(x => {
+        this.onDetailUser(x);
+      });
+    }
+  }
+
+  // @ViewChild('btnUpdate', {
+  //   static: true,
+  //   read: ElementRef
+  // }) btnUpdate!: ElementRef;
 
   @ViewChild('btnDelete', {
-    static: true,
+    static: false,
     read: ElementRef
-  }) btnDelete!: ElementRef;
+  }) set btnDelete(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDelete$ = fromEvent(btn?.nativeElement, 'click').pipe(map(e => 'delete'));
+      this.eventClickDelete$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([_, data2]) => data2)
+      ).subscribe((x: number) => {
+        this.usernameDialog$ = this.store.select(fromStore.getManageUserEntitiesState).pipe(
+          map(entities => entities[getPrefixID(x)]?.username ?? '')
+        );
+        const dialogRef = this.dialog.open(this.dialogDelete, {
+          width: '20%'
+        });
+        dialogRef.afterClosed()
+          .pipe(take(1))
+          .subscribe(result => {
+            if (result) {
+              this.onDeleteUser(x);
+            }
+          });
+      });
+    }
+  }
 
   eventClickDetails$!: Observable<any>;
   // eventClickUpdate$!: Observable<any>;
@@ -108,18 +141,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
       this.store.dispatch(new LoadManageUser(this.params));
     });
 
-
-    this.eventClickDetails$ = fromEvent(this.btnDetail.nativeElement, 'click').pipe(map(e => 'detail'));
     // this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
-    this.eventClickDelete$ = fromEvent(this.btnDelete.nativeElement, 'click').pipe(map(e => 'delete'));
-
-    this.eventClickDetails$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([_, data2]) => data2)
-    ).subscribe(x => {
-      this.onDetailUser(x);
-    });
-
     // this.eventClickUpdate$.pipe(
     //   withLatestFrom(this.appTable.selectAction),
     //   map(([data1, data2]) => data2)
@@ -127,25 +149,6 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     //
     //   console.log(x);
     // });
-
-    this.eventClickDelete$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([_, data2]) => data2)
-    ).subscribe((x: number) => {
-      this.usernameDialog$ = this.store.select(fromStore.getManageUserEntitiesState).pipe(
-        map(entities => entities[getPrefixID(x)]?.username ?? '')
-      );
-      const dialogRef = this.dialog.open(this.dialogDelete, {
-        width: '20%'
-      });
-      dialogRef.afterClosed()
-        .pipe(take(1))
-        .subscribe(result => {
-          if (result) {
-            this.onDeleteUser(x);
-          }
-        });
-    });
   }
 
   onNewUser(): void {

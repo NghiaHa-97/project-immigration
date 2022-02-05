@@ -40,13 +40,26 @@ export function reducer(
     }
 
     case fromEmployeeAction.LOAD_DETAIL_EMPLOYEE_SUCCESS:
-    case fromEmployeeAction.UPDATE_EMPLOYEE_SUCCESS:
-    case fromEmployeeAction.CREATE_EMPLOYEE_SUCCESS: {
+    case fromEmployeeAction.UPDATE_EMPLOYEE_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
       const employee = action.payload?.data;
       const entities = {
         ...state.entities,
         [getPrefixID(employee.id)]: {...employee, isDetail: true},
+      };
+
+      return {
+        ...state,
+        entities,
+        responseStatus
+      };
+    }
+    case fromEmployeeAction.CREATE_EMPLOYEE_SUCCESS: {
+      const responseStatus: ResponseStatusModel = action.payload;
+      const employee = action.payload?.data;
+      const entities = {
+        ...state.entities,
+        [getPrefixID(employee.id)]: {...employee, isDetail: false},
       };
 
       return {

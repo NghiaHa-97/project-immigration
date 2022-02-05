@@ -5,5 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EmployeeRepositoryCustom {
-    Page<EmployeeDTO> getPageEmployee(Pageable pageable);
+    Page<EmployeeDTO> getPageEmployee(Pageable pageable,
+                                      String code,
+                                      String fullname,
+                                      String workUnitName,
+                                      String cityProvinceName,
+                                      String phoneNumber,
+                                      String numberIdentityCard);
 }

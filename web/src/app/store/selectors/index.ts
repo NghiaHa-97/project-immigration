@@ -15,6 +15,8 @@ export * from './unit-type.selector';
 export * from './work-unit.selector';
 
 export * from './vehicle.selector';
+export * from './status-profile.selector';
+
 export * from './role.selector';
 export * from './module.selector';
 

@@ -4,7 +4,7 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
+  OnInit, TemplateRef,
   ViewChild
 } from '@angular/core';
 import {MatSort} from '@angular/material/sort';
@@ -14,14 +14,15 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PageEvent} from '@angular/material/paginator';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
-import {Go, LoadEmployee} from '../../store';
+import {Go, LoadEmployee, RemoveEmployee} from '../../store';
 import {fromEvent, Observable} from 'rxjs';
-import {map, withLatestFrom} from 'rxjs/operators';
+import {map, take, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {TableComponent} from '../../common-component/table/table.component';
-import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {PatternFormat} from '../../constans/pattern-format-date.const';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import * as _ from 'lodash';
+import {getPrefixID} from '../../constans/prefix-id.const';
 
 
 @Component({
@@ -32,122 +33,125 @@ import * as _ from 'lodash';
 })
 export class EmployeeComponent implements OnInit, AfterViewInit {
   isDialog = false;
+  params: any = {};
   employees$!: Observable<any[]>;
-
-  public chosenDate = Date.now();
+  nameEmployeeDel$!: Observable<string>;
+  totalItems$!: Observable<number>;
+  @ViewChild('dialogDelete', {
+    static: true
+  }) dialogDelete!: TemplateRef<any>;
   @ViewChild('appTable') appTable!: TableComponent;
-  @ViewChild('btnDetail', {
-    static: true,
-    read: ElementRef
-  }) btnDetail!: ElementRef;
 
-  @ViewChild('btnUpdate', {
-    static: true,
+  @ViewChild('btnDetail', {
+    static: false,
     read: ElementRef
-  }) btnUpdate!: ElementRef;
+  }) set btnDetail(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDetails$ = fromEvent(btn?.nativeElement, 'click')
+        .pipe(map(e => 'detail'));
+      this.eventClickDetails$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([data1, data2]) => data2)
+      ).subscribe(x => {
+        this.onDetailEmployee(x);
+      });
+    }
+  }
+
+  // @ViewChild('btnUpdate', {
+  //   static: false,
+  //   read: ElementRef
+  // }) btnUpdate!: ElementRef;
 
   @ViewChild('btnDelete', {
-    static: true,
+    static: false,
     read: ElementRef
-  }) btnDelete!: ElementRef;
+  }) set btnDelete(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDelete$ = fromEvent(btn?.nativeElement, 'click')
+        .pipe(map(e => 'delete'));
+      this.eventClickDelete$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([data1, data2]) => data2)
+      ).subscribe(x => {
+        this.nameEmployeeDel$ = this.store.select(fromStore.getEmployeeEntitiesState)
+          .pipe(
+            map(entities => entities[getPrefixID(x)]?.fullname ?? '')
+          );
+        const dialogRef = this.dialog.open(this.dialogDelete, {
+          width: '20%'
+        });
+        dialogRef.afterClosed()
+          .pipe(take(1))
+          .subscribe(result => {
+            if (result) {
+              this.onDeleteEmployee(x);
+            }
+          });
+      });
+    }
+  }
 
   eventClickDetails$!: Observable<any>;
-  eventClickUpdate$!: Observable<any>;
+  // eventClickUpdate$!: Observable<any>;
   eventClickDelete$!: Observable<any>;
 
   @ViewChild('sort') sort!: MatSort;
 
-  selection!: SelectionModel<number|string>;
+  selection!: SelectionModel<number | string>;
   columnsAndStyles = COLUMNS_AND_STYLES;
 
-  form!: FormGroup;
+  formSearch!: FormGroup;
   public data!: any[];
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
               private patternFormat: PatternFormat,
+              private dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public dataDialog: any) {
     this.isDialog = !_.isEmpty(dataDialog);
     if (this.isDialog) {
-      this.selection = new SelectionModel<number|string>(dataDialog.isSelectMulti, dataDialog.itemSelected);
+      this.selection = new SelectionModel<number | string>(dataDialog.isSelectMulti, dataDialog.itemSelected);
     }
-    this.form = this.fb.group({
-      selector: ['option2'],
-      time: [moment().format('HH:mm')],
-      date: [moment().format()]
+    this.formSearch = this.fb.group({
+      code: [''],
+      fullname: [''],
+      workUnitName: [''],
+      cityProvinceName: [''],
+      phoneNumber: [''],
+      numberIdentityCard: ['']
     });
   }
 
-  get formControlDate(): FormControl {
-    return this.form.get('date') as FormControl;
-  }
-
-  get valueSelector() {
-    return {
-      image: 'assets/images/users/1.jpg',
-      value: this.form.get('selector')?.value + 'Lua'
-    };
-  }
-
   ngOnInit(): void {
-    console.log(this.dataDialog);
-    // const emptyObject: { [property: string]: any } = {};
-    // this.columnsAndStyles.map(val => val.columnName).reduce((obj, name) => {
-    //   obj[name] = null;
-    //   return {obj};
-    // }, emptyObject);
-    // console.log(emptyObject);
-
     this.store.dispatch(new LoadEmployee(null));
     this.employees$ = this.store.select(fromStore.getArrayEmployeeState).pipe(
       map(dataArray => dataArray.map(element => {
         return {
           ...element,
-          createDate: moment(element.createDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE),
-          updateDate: element.updateDate ? moment(element.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE) : null,
-          birthDay: element.birthDay ? moment(element.birthDay).format(PATTERN_FORMAT_DATE.DATE_RESPONSE) : null
+          createDate: this.patternFormat.formatDatetimeToString(element.createDate),
+          updateDate: this.patternFormat.formatDatetimeToString(element.updateDate),
+          birthDay: this.patternFormat.formatDateToString(element.birthDay),
+          gender: element.gender ? 'Nam' : 'Nữ'
         };
       })),
     );
-  }
 
-  handlerChangePage(event: PageEvent): void {
-    console.log('PageEvent', event);
+    this.totalItems$ = this.store.select(fromStore.getEmployeeResponseStatusState).pipe(
+      map(data => data?.totalElements ?? 0)
+    );
   }
 
   ngAfterViewInit(): void {
     // this.dataSource.sort = this.sort;
-    console.log(this.sort);
-    this.sort.sortChange.subscribe(x => console.log(x));
-
-
-    this.eventClickDetails$ = fromEvent(this.btnDetail.nativeElement, 'click').pipe(map(e => 'detail'));
-    this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
-    this.eventClickDelete$ = fromEvent(this.btnDelete.nativeElement, 'click').pipe(map(e => 'delete'));
-    // this.buttonDetails$.subscribe(e => console.log(e));
-
-    // zip(this.buttonDetails$, this.appTable.onAction).subscribe(val => console.log(val));
-
-    this.eventClickDetails$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
-    ).subscribe(x => {
-      this.onNewEmployee();
-      console.log(x);
+    // console.log(this.sort);
+    this.sort.sortChange.subscribe(x => {
+      this.params = {
+        ...this.params,
+        sort: x.direction === '' ? null : [`${x.active},${x.direction}`]
+      };
+      this.store.dispatch(new LoadEmployee(this.params));
     });
-
-    this.eventClickUpdate$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => data2)
-    ).subscribe(x => {
-      this.onDetailEmployee(x);
-      console.log(x);
-    });
-
-    this.eventClickDelete$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
-    ).subscribe(x => console.log(x));
   }
 
   onNewEmployee(): void {
@@ -155,16 +159,29 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
   }
 
   onDetailEmployee(id: string): void {
-    console.log('onDetailEmployee', id);
     this.store.dispatch(new Go({path: ['nhan-vien', 'chi-tiet', id]}));
   }
 
+  onDeleteEmployee(id: string): void {
+    this.store.dispatch(new RemoveEmployee(id));
+  }
+
+  handlerChangePage(event: PageEvent): void {
+    this.params = {
+      ...this.params,
+      page: event.pageIndex + 1,
+      size: event.pageSize
+    };
+    this.store.dispatch(new LoadEmployee(this.params));
+  }
+
   handlerSearch(): void {
-    // console.log(this.form.value);
-    // console.log(moment(this.form.value.date).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST));
-    // console.log(moment(this.form.value.time, PATTERN_FORMAT_DATE.TIME).format(PATTERN_FORMAT_DATE.TIME_SECONDS));
-    console.log(this.patternFormat.combineDateAndTimeToDateTimeRequest(this.form.value.date, this.form.value.time));
-    console.log(this.patternFormat.splitDateTimeResponseToDateAndTime(this.form.value.date));
+    this.params = {
+      ...this.params,
+      page: 1,
+      ...this.formSearch.value
+    };
+    this.store.dispatch(new LoadEmployee(this.params));
   }
 }
 
@@ -185,14 +202,14 @@ export const COLUMNS_AND_STYLES: ColumnAndStyleModel[] = [
     styleBody: null,
     isStatus: false
   },
-  {
-    columnName: 'avatar',
-    columnHeaderName: 'Ảnh',
-    styleHeader: {width: '60px', minWidth: '60px'},
-    isSort: false,
-    styleBody: null,
-    isStatus: false
-  },
+  // {
+  //   columnName: 'avatar',
+  //   columnHeaderName: 'Ảnh',
+  //   styleHeader: {width: '60px', minWidth: '60px'},
+  //   isSort: false,
+  //   styleBody: null,
+  //   isStatus: false
+  // },
   {
     columnName: 'gender',
     columnHeaderName: 'Giới tính',

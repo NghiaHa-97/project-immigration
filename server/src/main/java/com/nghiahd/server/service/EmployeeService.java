@@ -10,7 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public interface EmployeeService {
-    Page<EmployeeDTO> getPageEmployee(Pageable pageable);
+    Page<EmployeeDTO> getPageEmployee(Pageable pageable,
+                                      String code,
+                                      String fullname,
+                                      String workUnitName,
+                                      String cityProvinceName,
+                                      String phoneNumber,
+                                      String numberIdentityCard);
 
     Employee getDetailEmployee(UUID id);
 

@@ -16,7 +16,6 @@ import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import * as moment from 'moment';
 import {Go, LoadRole, RemoveRole} from '../../store';
 import {map, take, withLatestFrom} from 'rxjs/operators';
 import {PageEvent} from '@angular/material/paginator';
@@ -39,11 +38,28 @@ export class RoleComponent implements OnInit, AfterViewInit {
   @ViewChild('dialogDelete', {
     static: true
   }) dialogDelete!: TemplateRef<any>;
+
   @ViewChild('appTable') appTable!: TableComponent;
+  // @ViewChild('btnDetail', {
+  //   static: false,
+  //   read: ElementRef
+  // }) btnDetail!: ElementRef;
+
   @ViewChild('btnDetail', {
-    static: true,
+    static: false,
     read: ElementRef
-  }) btnDetail!: ElementRef;
+  }) set btnDetail(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDetails$ = fromEvent(btn.nativeElement, 'click').pipe(map(e => 'detail'));
+      this.eventClickDetails$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([notUsed, data2]) => data2)
+      ).subscribe(x => {
+        this.onDetailRole(x);
+        // console.log(x);
+      });
+    }
+  }
 
   // @ViewChild('btnUpdate', {
   //   static: true,
@@ -51,9 +67,33 @@ export class RoleComponent implements OnInit, AfterViewInit {
   // }) btnUpdate!: ElementRef;
 
   @ViewChild('btnDelete', {
-    static: true,
+    static: false,
     read: ElementRef
-  }) btnDelete!: ElementRef;
+  }) set btnDelete(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDelete$ = fromEvent(btn.nativeElement, 'click').pipe(map(e => 'delete'));
+      this.eventClickDelete$
+        .pipe(
+          withLatestFrom(this.appTable.selectAction),
+          map(([notUsed, data2]) => data2)
+        )
+        .subscribe((x: number) => {
+          this.nameRoleDel$ = this.store.select(fromStore.getRoleEntitiesState).pipe(
+            map(entities => entities[getPrefixID(x)]?.name ?? '')
+          );
+          const dialogRef = this.dialog.open(this.dialogDelete, {
+            width: '20%'
+          });
+          dialogRef.afterClosed()
+            .pipe(take(1))
+            .subscribe(result => {
+              if (result) {
+                this.onDeleteRole(x);
+              }
+            });
+        });
+    }
+  }
 
   eventClickDetails$!: Observable<any>;
   // eventClickUpdate$!: Observable<any>;
@@ -99,7 +139,6 @@ export class RoleComponent implements OnInit, AfterViewInit {
     );
   }
 
-
   ngAfterViewInit(): void {
     // console.log(this.sort);
     this.sort.sortChange.subscribe(x => {
@@ -113,19 +152,19 @@ export class RoleComponent implements OnInit, AfterViewInit {
     });
 
 
-    this.eventClickDetails$ = fromEvent(this.btnDetail.nativeElement, 'click').pipe(map(e => 'detail'));
+    // if (this.btnDetail?.nativeElement) {
+    //   this.eventClickDetails$ = fromEvent(this.btnDetail.nativeElement, 'click').pipe(map(e => 'detail'));
+    //   this.eventClickDetails$.pipe(
+    //     withLatestFrom(this.appTable.selectAction),
+    //     map(([_, data2]) => data2)
+    //   ).subscribe(x => {
+    //     this.onDetailRole(x);
+    //     // console.log(x);
+    //   });
+    // }
+
+
     // this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
-    this.eventClickDelete$ = fromEvent(this.btnDelete.nativeElement, 'click').pipe(map(e => 'delete'));
-
-
-    this.eventClickDetails$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([_, data2]) => data2)
-    ).subscribe(x => {
-      this.onDetailRole(x);
-      // console.log(x);
-    });
-
     // this.eventClickUpdate$.pipe(
     //   withLatestFrom(this.appTable.selectAction),
     //   map(([data1, data2]) => data2)
@@ -133,26 +172,29 @@ export class RoleComponent implements OnInit, AfterViewInit {
     //   console.log(x);
     // });
 
-    this.eventClickDelete$
-      .pipe(
-        withLatestFrom(this.appTable.selectAction),
-        map(([_, data2]) => data2)
-      )
-      .subscribe((x: number) => {
-        this.nameRoleDel$ = this.store.select(fromStore.getRoleEntitiesState).pipe(
-          map(entities => entities[getPrefixID(x)]?.name ?? '')
-        );
-        const dialogRef = this.dialog.open(this.dialogDelete, {
-          width: '20%'
-        });
-        dialogRef.afterClosed()
-          .pipe(take(1))
-          .subscribe(result => {
-            if (result) {
-              this.onDeleteRole(x);
-            }
-          });
-      });
+    // if (this.btnDelete?.nativeElement) {
+    //   this.eventClickDelete$ = fromEvent(this.btnDelete.nativeElement, 'click').pipe(map(e => 'delete'));
+    //   this.eventClickDelete$
+    //     .pipe(
+    //       withLatestFrom(this.appTable.selectAction),
+    //       map(([_, data2]) => data2)
+    //     )
+    //     .subscribe((x: number) => {
+    //       this.nameRoleDel$ = this.store.select(fromStore.getRoleEntitiesState).pipe(
+    //         map(entities => entities[getPrefixID(x)]?.name ?? '')
+    //       );
+    //       const dialogRef = this.dialog.open(this.dialogDelete, {
+    //         width: '20%'
+    //       });
+    //       dialogRef.afterClosed()
+    //         .pipe(take(1))
+    //         .subscribe(result => {
+    //           if (result) {
+    //             this.onDeleteRole(x);
+    //           }
+    //         });
+    //     });
+    // }
   }
 
   onNewRole(): void {

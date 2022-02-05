@@ -6,5 +6,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface ExpertsRepositoryCustom {
 
-    Page<ExpertsDTO> getPageExperts(Pageable pageable);
+    Page<ExpertsDTO> getPageExperts(Pageable pageable,
+                                    String code,
+                                    String fullname,
+                                    String countryName,
+                                    String permanentResidentialAddress,
+                                    String phoneNumber,
+                                    String passportNumber);
 }

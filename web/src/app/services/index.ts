@@ -13,6 +13,7 @@ import {ModuleService} from './module.service';
 import {VehicleService} from './vehicle.service';
 import {RoleService} from './role.service';
 import {ManageUserService} from './manage-user.service';
+import {StatusProfileService} from './status-profile.service';
 
 export * from './auth.service';
 export * from './profile.service';
@@ -31,6 +32,7 @@ export * from './role.service';
 export * from './module.service';
 
 export * from './manage-user.service';
+export * from './status-profile.service';
 
 export const pageComponentService = [
   EmployeeService,
@@ -46,6 +48,7 @@ export const pageComponentService = [
   ModuleService,
   VehicleService,
   RoleService,
-  ManageUserService
+  ManageUserService,
+  StatusProfileService
 ];
 export const appComponentService = [AuthService];

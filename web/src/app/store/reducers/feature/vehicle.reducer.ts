@@ -28,9 +28,7 @@ export function reducer(
             [getPrefixID(item.id)]: item,
           };
         },
-        {
-          ...state.entities,
-        }
+        {}
       );
 
       return {

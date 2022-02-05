@@ -6,11 +6,14 @@ import {Injectable} from '@angular/core';
 import * as fromService from '../../services';
 import * as authActions from '../actions/auth.action';
 import * as routerActions from '../actions/router.action';
+import {COLOR_SNACK_BAR, NotificationSnackBar} from '../../notification/notification-snack-bar';
+import * as roleActions from '../actions/role.action';
 
 @Injectable()
 export class EmployeeEffect {
   constructor(private actions$: Actions,
-              private employeeService: fromService.EmployeeService) {
+              private employeeService: fromService.EmployeeService,
+              private notification: NotificationSnackBar) {
   }
 
   getPage$ = createEffect(
@@ -52,21 +55,28 @@ export class EmployeeEffect {
         return this.employeeService
           .create(payload)
           .pipe(
-            map(response => new employeeActions.CreateEmployeeSuccess(response?.body)),
-            catchError(error => of(new employeeActions.CreateEmployeeFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new employeeActions.CreateEmployeeSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new employeeActions.CreateEmployeeFail(error));
+            })
           );
       })
     )
   );
 
-  createSuccess$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(employeeActions.CREATE_EMPLOYEE_SUCCESS),
-      map((action: employeeActions.CreateEmployeeSuccess) =>
-        new routerActions.Go({path: ['nhan-vien', 'chi-tiet', action.payload.data.id]})
-      )
-    )
-  );
+  // createSuccess$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(employeeActions.CREATE_EMPLOYEE_SUCCESS),
+  //     map((action: employeeActions.CreateEmployeeSuccess) =>
+  //       new routerActions.Go({path: ['nhan-vien', 'chi-tiet', action.payload.data.id]})
+  //     )
+  //   )
+  // );
 
   update$ = createEffect(
     () => this.actions$.pipe(
@@ -76,8 +86,15 @@ export class EmployeeEffect {
         return this.employeeService
           .edit(payload)
           .pipe(
-            map(response => new employeeActions.UpdateEmployeeSuccess(response?.body)),
-            catchError(error => of(new employeeActions.UpdateEmployeeFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new employeeActions.UpdateEmployeeSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new employeeActions.UpdateEmployeeFail(error));
+            })
           );
       })
     )
@@ -91,8 +108,15 @@ export class EmployeeEffect {
         return this.employeeService
           .remove(payload)
           .pipe(
-            map(response => new employeeActions.RemoveEmployeeSuccess(response?.body)),
-            catchError(error => of(new employeeActions.RemoveEmployeeFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new employeeActions.RemoveEmployeeSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new employeeActions.RemoveEmployeeFail(error));
+            })
           );
       })
     )

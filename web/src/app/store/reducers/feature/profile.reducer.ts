@@ -23,12 +23,10 @@ export function reducer(
         (result: { [id: string]: any }, item: any) => {
           return {
             ...result,
-            [getPrefixID(item.id)]: item,
+            [getPrefixID(item.id)]: {...item, isDetail: false},
           };
         },
-        {
-          ...state.entities,
-        }
+        {}
       );
 
       return {
@@ -38,13 +36,26 @@ export function reducer(
       };
     }
 
-    case fromProfileAction.UPDATE_PROFILE_SUCCESS:
+    case fromProfileAction.UPDATE_PROFILE_SUCCESS: {
+      const responseStatus: ResponseStatusModel = action.payload;
+      const profile = action.payload.data;
+      const entities = {
+        ...state.entities,
+        [getPrefixID(profile.id)]: {...profile, isDetail: true},
+      };
+
+      return {
+        ...state,
+        entities,
+        responseStatus
+      };
+    }
     case fromProfileAction.CREATE_PROFILE_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
       const profile = action.payload.data;
       const entities = {
         ...state.entities,
-        [getPrefixID(profile.id)]: profile,
+        [getPrefixID(profile.id)]: {...profile, isDetail: false},
       };
 
       return {

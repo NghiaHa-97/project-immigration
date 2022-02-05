@@ -3,6 +3,7 @@ package com.nghiahd.server.repository.impl;
 import com.nghiahd.server.common.PageUtilsCommon;
 import com.nghiahd.server.model.SysUserCustomerDTO;
 import com.nghiahd.server.repository.SysUserCustomerRepositoryCustom;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,19 +59,19 @@ public class SysUserCustomerRepositoryImpl implements SysUserCustomerRepositoryC
 
         StringBuilder sqlWhere = new StringBuilder();
         sqlWhere.append(" where 1=1 ");
-        if (username != null) {
+        if (Strings.isNotEmpty(username)) {
             sqlWhere.append(" and sys.username like :username ");
             params.put("username", "%" + username + "%");
         }
-        if (employeeCode != null) {
+        if (Strings.isNotEmpty(employeeCode)) {
             sqlWhere.append(" and e.Code like :employeeCode ");
             params.put("employeeCode", "%" + employeeCode + "%");
         }
-        if (employeeFullName != null) {
+        if (Strings.isNotEmpty(employeeFullName)) {
             sqlWhere.append(" and e.FullName like :employeeFullName ");
             params.put("employeeFullName", "%" + employeeFullName + "%");
         }
-        if (roleName != null) {
+        if (Strings.isNotEmpty(roleName )) {
             sqlWhere.append(" and r.Name like :roleName ");
             params.put("roleName", "%" + roleName + "%");
         }

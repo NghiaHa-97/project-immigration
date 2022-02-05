@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {DOMAIN_SERVER} from '../../constans/url-api.const';
 
@@ -9,18 +17,24 @@ import {DOMAIN_SERVER} from '../../constans/url-api.const';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputImageComponent implements OnInit {
-  @Input() imagePath!: string;
+  imagePath: { name: string } = {name: ''};
+
+  @Input() set dataNameImage(data: { name: string }) {
+    console.log(data);
+    if (data?.name) {
+      this.imagePath = {name: `${DOMAIN_SERVER}/${data?.name}`};
+    }else{
+      this.imagePath = {name: ''};
+    }
+  }
 
   @Output() changeFileImage: EventEmitter<any>;
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.changeFileImage = new EventEmitter<any>();
   }
 
   ngOnInit(): void {
-    if (this.imagePath){
-      this.imagePath = `${DOMAIN_SERVER}/${this.imagePath}`;
-    }
   }
 
   changeFileInput(event: any): void {
@@ -31,16 +45,17 @@ export class InputImageComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.imagePath = reader.result as string;
+        this.imagePath = {name: reader.result as string};
+        this.changeDetectorRef.detectChanges();
       };
       reader.readAsDataURL(file);
-    }else{
+    } else {
       this.changeFileImage.emit(null);
     }
   }
 
   removeImage(): void {
-    this.imagePath = '';
+    this.imagePath = {name: ''};
     this.changeFileImage.emit(null);
   }
 }

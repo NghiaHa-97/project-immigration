@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class ProfileController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> deleteProfile(@PathVariable UUID id) {
+    public ResponseEntity<BodyResponseDTO<UUID>> deleteProfile(@PathVariable UUID id) {
         ApiResponseCode apiResponseCode;
         try {
             profileService.deleteProfile(id);
@@ -54,17 +55,29 @@ public class ProfileController {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils);
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, id);
     }
 
     @GetMapping()
     public ResponseEntity<BodyResponseDTO<List<ProfileDTO>>> getAllClaims(
             @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
             @SortDefault.SortDefaults({
-                    @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-            }) Pageable pageable) {
+                    @SortDefault(sort = "updateDate", direction = Sort.Direction.DESC)
+            }) Pageable pageable,
+            @RequestParam(required = false) String code,
+            @RequestParam(required = false) String projectMissionName,
+            @RequestParam(required = false) Integer statusProfileID,
+            @RequestParam(required = false) String employeeCreate,
+            @RequestParam(required = false) String approver,
+            @RequestParam(required = false) LocalDate expirationDate) {
 
-        Page<ProfileDTO> claimsDTOS = profileService.getListProfile(PageUtilsCommon.createPageable(pageable));
+        Page<ProfileDTO> claimsDTOS = profileService.getListProfile(PageUtilsCommon.createPageable(pageable),
+                code,
+                projectMissionName,
+                statusProfileID,
+                employeeCreate,
+                approver,
+                expirationDate);
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, claimsDTOS);
     }
 

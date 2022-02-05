@@ -1,17 +1,33 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {PageEvent} from '@angular/material/paginator';
 import {fromEvent, Observable} from 'rxjs';
 import {TableComponent} from '../../common-component/table/table.component';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
-import {Go, LoadProfile} from '../../store';
-import {map, withLatestFrom} from 'rxjs/operators';
+import {
+  Go,
+  LoadEmployee,
+  LoadProfile,
+  LoadStatusProfile,
+  RemoveProfile
+} from '../../store';
+import {map, take, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
-import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
+import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
+import {getPrefixID} from '../../constans/prefix-id.const';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile',
@@ -19,28 +35,68 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
   styleUrls: ['./profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileComponent implements OnInit, AfterViewInit{
+export class ProfileComponent implements OnInit, AfterViewInit {
   profiles$!: Observable<any[]>;
+  params: any = {};
+  codeProfileDel$!: Observable<string>;
+  totalItems$!: Observable<number>;
+  listStatusProfile$!: Observable<any>;
 
-  public chosenDate = Date.now();
   @ViewChild('appTable') appTable!: TableComponent;
-  @ViewChild('btnDetail', {
-    static: true,
-    read: ElementRef
-  }) btnDetail!: ElementRef;
+  @ViewChild('dialogDelete', {
+    static: true
+  }) dialogDelete!: TemplateRef<any>;
 
-  @ViewChild('btnUpdate', {
-    static: true,
+  @ViewChild('btnDetail', {
+    static: false,
     read: ElementRef
-  }) btnUpdate!: ElementRef;
+  }) set btnDetail(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDetails$ = fromEvent(btn?.nativeElement, 'click').pipe(map(e => 'detail'));
+      this.eventClickDetails$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([data1, data2]) => data2)
+      ).subscribe(x => {
+        this.onDetailProfile(x);
+      });
+    }
+  }
+
+  // @ViewChild('btnUpdate', {
+  //   static: true,
+  //   read: ElementRef
+  // }) btnUpdate!: ElementRef;
 
   @ViewChild('btnDelete', {
-    static: true,
+    static: false,
     read: ElementRef
-  }) btnDelete!: ElementRef;
+  }) set btnDelete(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDelete$ = fromEvent(btn?.nativeElement, 'click').pipe(map(e => 'delete'));
+      this.eventClickDelete$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([data1, data2]) => data2)
+      ).subscribe(x => {
+        this.codeProfileDel$ = this.store.select(fromStore.getProfileEntitiesState)
+          .pipe(
+            map(entities => entities[getPrefixID(x)]?.code ?? '')
+          );
+        const dialogRef = this.dialog.open(this.dialogDelete, {
+          width: '20%'
+        });
+        dialogRef.afterClosed()
+          .pipe(take(1))
+          .subscribe(result => {
+            if (result) {
+              this.onDeleteProfile(x);
+            }
+          });
+      });
+    }
+  }
 
   eventClickDetails$!: Observable<any>;
-  eventClickUpdate$!: Observable<any>;
+  // eventClickUpdate$!: Observable<any>;
   eventClickDelete$!: Observable<any>;
 
   @ViewChild('sort') sort!: MatSort;
@@ -48,88 +104,75 @@ export class ProfileComponent implements OnInit, AfterViewInit{
   selection = new SelectionModel<any>(true, []);
   columnsAndStyles = COLUMNS_AND_STYLES;
 
-  form!: FormGroup;
+  formSearch!: FormGroup;
   public data!: any[];
 
   constructor(private fb: FormBuilder,
-              private store: Store<fromStore.FeatureState>) {
-    this.form = this.fb.group({
-      selector: ['option2']
+              private store: Store<fromStore.FeatureState>,
+              private patternFormat: PatternFormat,
+              private dialog: MatDialog) {
+    this.formSearch = this.fb.group({
+      code: [''],
+      projectMissionName: [''],
+      statusProfileID: [''],
+      employeeCreate: [''],
+      approver: [''],
+      expirationDate: [moment().format()]
     });
   }
 
-  get valueSelector() {
-    return {
-      image: 'assets/images/users/1.jpg',
-      value: this.form.get('selector')?.value + 'Lua'
-    };
+  get expirationDate(): FormControl {
+    return this.formSearch.get('expirationDate') as FormControl;
   }
 
+
   ngOnInit(): void {
-    // const emptyObject: { [property: string]: any } = {};
-    // this.columnsAndStyles.map(val => val.columnName).reduce((obj, name) => {
-    //   obj[name] = null;
-    //   return {obj};
-    // }, emptyObject);
-    // console.log(emptyObject);
+    this.listStatusProfile$ = this.store.select(fromStore.getArrayStatusProfileState);
+    this.store.select(fromStore.getStatusProfileLoadedState)
+      .pipe(take(1))
+      .subscribe(isLoaded => {
+      if (!isLoaded) {
+        this.store.dispatch(new LoadStatusProfile(null));
+      }
+    });
 
     this.store.dispatch(new LoadProfile(null));
     this.profiles$ = this.store.select(fromStore.getArrayProfileState).pipe(
       map(dataArray => dataArray.map(element => {
         return {
           ...element,
-          createDate: moment(element.createDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE),
-          updateDate: element.updateDate ? moment(element.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_RESPONSE) : null
+          createDate: this.patternFormat.formatDatetimeToString(element.createDate),
+          updateDate: this.patternFormat.formatDatetimeToString(element.updateDate),
+          expirationDate: this.patternFormat.formatDatetimeToString(element.expirationDate)
         };
       })),
-      // map(x => {
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   x.push(Object.create(null));
-      //   return x;
-      // })
+    );
+    this.totalItems$ = this.store.select(fromStore.getProfileResponseStatusState).pipe(
+      map(data => data?.totalElements ?? 0)
     );
   }
 
-  handlerChangePage(event: PageEvent): void {
-    console.log('PageEvent', event);
-  }
 
   ngAfterViewInit(): void {
-    // this.dataSource.sort = this.sort;
-    console.log(this.sort);
-    this.sort.sortChange.subscribe(x => console.log(x));
-
-
-    this.eventClickDetails$ = fromEvent(this.btnDetail.nativeElement, 'click').pipe(map(e => 'detail'));
-    this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
-    this.eventClickDelete$ = fromEvent(this.btnDelete.nativeElement, 'click').pipe(map(e => 'delete'));
-    // this.buttonDetails$.subscribe(e => console.log(e));
-
-    // zip(this.buttonDetails$, this.appTable.onAction).subscribe(val => console.log(val));
-
-    this.eventClickDetails$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
-    ).subscribe(x => {
-      this.onNewProfile();
-      console.log(x);
+    this.sort.sortChange.subscribe(x => {
+      this.params = {
+        ...this.params,
+        sort: x.direction === '' ? null : [`${x.active},${x.direction}`]
+      };
+      this.store.dispatch(new LoadProfile(this.params));
     });
 
-    this.eventClickUpdate$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => data2)
-    ).subscribe(x => {
-      this.onDetailProfile(x);
-      console.log(x);
-    });
 
-    this.eventClickDelete$.pipe(
-      withLatestFrom(this.appTable.selectAction),
-      map(([data1, data2]) => `${data1}  ${data2}`)
-    ).subscribe(x => console.log(x));
+    // this.eventClickUpdate$ = fromEvent(this.btnUpdate.nativeElement, 'click').pipe(map(e => 'update'));
+    // this.eventClickUpdate$.pipe(
+    //   withLatestFrom(this.appTable.selectAction),
+    //   map(([data1, data2]) => data2)
+    // ).subscribe(x => {
+    //   this.onDetailProfile(x);
+    //   console.log(x);
+    // });
+
+
   }
 
   onNewProfile(): void {
@@ -137,8 +180,30 @@ export class ProfileComponent implements OnInit, AfterViewInit{
   }
 
   onDetailProfile(id: string): void {
-    console.log('onDetailProfile', id);
     this.store.dispatch(new Go({path: ['ho-so', 'chi-tiet', id]}));
+  }
+
+  onDeleteProfile(id: string): void {
+    this.store.dispatch(new RemoveProfile(id));
+  }
+
+  handlerChangePage(event: PageEvent): void {
+    this.params = {
+      ...this.params,
+      page: event.pageIndex + 1,
+      size: event.pageSize
+    };
+    this.store.dispatch(new LoadProfile(this.params));
+  }
+
+  handlerSearch(): void {
+    this.params = {
+      ...this.params,
+      page: 1,
+      ...this.formSearch.value,
+      expirationDate: this.patternFormat.formatDateToDateRequest(this.formSearch.value.expirationDate)
+    };
+    this.store.dispatch(new LoadProfile(this.params));
   }
 }
 

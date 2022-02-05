@@ -51,8 +51,21 @@ public class ExpertsServiceImpl implements ExpertsService {
     }
 
     @Override
-    public Page<ExpertsDTO> getPageExperts(Pageable pageable) {
-        return expertsRepository.getPageExperts(pageable);
+    public Page<ExpertsDTO> getPageExperts(Pageable pageable,
+                                           String code,
+                                           String fullname,
+                                           String countryName,
+                                           String permanentResidentialAddress,
+                                           String phoneNumber,
+                                           String passportNumber) {
+        return expertsRepository.getPageExperts(
+                pageable,
+                code,
+                fullname,
+                countryName,
+                permanentResidentialAddress,
+                phoneNumber,
+                passportNumber);
     }
 
     @Override

@@ -1,4 +1,4 @@
-import { RouterEffects } from './router.effect';
+import {RouterEffects} from './router.effect';
 import {AuthEffect} from './auth.effect';
 import {EmployeeEffect} from './employee.effect';
 import {ExpertsEffect} from './experts.effect';
@@ -14,10 +14,12 @@ import {VehicleEffect} from './vehicle.effect';
 import {RoleEffect} from './role.effect';
 import {ModuleEffect} from './module.effect';
 import {ManageUserEffect} from './manage-user.effect';
+import {StatusProfileEffect} from './status-profile.effect';
 
-export {VehicleEffect} from './vehicle.effect';
-export {RoleEffect} from './role.effect';
-export {ModuleEffect} from './module.effect';
+
+// export {VehicleEffect} from './vehicle.effect';
+// export {RoleEffect} from './role.effect';
+// export {ModuleEffect} from './module.effect';
 
 export const effectsRoot: any[] = [RouterEffects, AuthEffect];
 export const effectsFeatures: any[] = [
@@ -34,7 +36,8 @@ export const effectsFeatures: any[] = [
   VehicleEffect,
   RoleEffect,
   ModuleEffect,
-  ManageUserEffect
+  ManageUserEffect,
+  StatusProfileEffect
 ];
 
 export * from './router.effect';

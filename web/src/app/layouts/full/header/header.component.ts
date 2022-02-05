@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -32,5 +33,6 @@ export class AppHeaderComponent implements OnInit {
   logout(): void {
     this.isLogout = true;
     this.store.dispatch(new fromStore.Logout());
+    // this.store.dispatch(new routerActions.Go({path: ['login']}));
   }
 }

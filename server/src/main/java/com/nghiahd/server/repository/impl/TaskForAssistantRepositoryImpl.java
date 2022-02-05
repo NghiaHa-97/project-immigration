@@ -2,19 +2,14 @@ package com.nghiahd.server.repository.impl;
 
 import com.nghiahd.server.common.PageUtilsCommon;
 import com.nghiahd.server.model.TaskForAssistantDTO;
-import com.nghiahd.server.model.TaskForDepartmentDTO;
 import com.nghiahd.server.repository.TaskForAssistantRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TaskForAssistantRepositoryImpl implements TaskForAssistantRepositoryCustom {
@@ -25,7 +20,6 @@ public class TaskForAssistantRepositoryImpl implements TaskForAssistantRepositor
     @Override
     public Page<TaskForAssistantDTO> getListTFA(Pageable pageable) {
         Map<String, Object> params = new HashMap<>();
-        List<TaskForAssistantDTO> tfaDTOList = new ArrayList<>();
 
         StringBuilder sqlSelect = new StringBuilder();
         sqlSelect.append("select tfa.*\n" +
@@ -44,23 +38,21 @@ public class TaskForAssistantRepositoryImpl implements TaskForAssistantRepositor
 
         StringBuilder sqlWhere = new StringBuilder();
         sqlWhere.append(" where 1=1 ");
-        ;
 
-        StringBuilder sqlCount = new StringBuilder(" select count(1) ");
-
-        StringBuilder countItemQuery = new StringBuilder().append(sqlCount).append(sqlFrom).append(sqlWhere);
-        Query countQuery = entityManager.createNativeQuery(countItemQuery.toString());
-        PageUtilsCommon.setParams(countQuery, params);
-        Number totalQuery = (Number) countQuery.getSingleResult();
-
-        if (totalQuery.longValue() > 0) {
-            StringBuilder itemQuery = new StringBuilder().append(sqlSelect).append(sqlFrom).append(sqlWhere)
-                    .append(PageUtilsCommon.orderBySort(pageable, nameFieldMapSort(), params));
-            Query query = entityManager.createNativeQuery(itemQuery.toString(), "tfaDTOList");
-            PageUtilsCommon.setParamsWithPageable(query, params, pageable);
-            tfaDTOList = query.getResultList();
+        try{
+            Page<TaskForAssistantDTO> page = PageUtilsCommon.getPage(sqlSelect.toString(),
+                    sqlFrom.toString(),
+                    sqlWhere.toString(),
+                    nameFieldMapSort(),
+                    params,
+                    pageable,
+                    entityManager,
+                    "tfaDTOList");
+            return page;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        return new PageImpl<>(tfaDTOList, pageable, totalQuery.longValue());
     }
 
     private Map<String, String> nameFieldMapSort() {

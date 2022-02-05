@@ -3,6 +3,7 @@ package com.nghiahd.server.repository.impl;
 import com.nghiahd.server.common.PageUtilsCommon;
 import com.nghiahd.server.domain.Role;
 import com.nghiahd.server.repository.RoleRepositoryCustom;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class RoleRepositoryImpl implements RoleRepositoryCustom {
 
         StringBuilder sqlWhere = new StringBuilder();
         sqlWhere.append(" where 1=1 ");
-        if (name != null) {
+        if (Strings.isNotEmpty(name)) {
             sqlWhere.append(" and name like :name ");
             params.put("name", "%" + name + "%");
         }

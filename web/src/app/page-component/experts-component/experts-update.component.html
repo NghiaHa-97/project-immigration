@@ -3,12 +3,12 @@
     <mat-card-title>{{!!(entityUpdate$ | async) ? 'Chi tiết' : 'Thêm mới'}}</mat-card-title>
     <form [formGroup]="formEmployee" (ngSubmit)="onSubmit()">
       <div class="row">
-        <div class="col-md-4 col-sm-4">
-          <app-input-image (changeFileImage)="setFileImageControl($event)" [imagePath]="linkImage"></app-input-image>
-        </div>
-        <div class="col-md-4 col-sm-4">
-          <app-input-image (changeFileImage)="setFileImageControl($event)" [imagePath]="linkImage"></app-input-image>
-        </div>
+<!--        <div class="col-md-4 col-sm-4">-->
+<!--          <app-input-image (changeFileImage)="setFileImageControl($event)" [imagePath]="linkImage"></app-input-image>-->
+<!--        </div>-->
+<!--        <div class="col-md-4 col-sm-4">-->
+<!--          <app-input-image (changeFileImage)="setFileImageControl($event)" [imagePath]="linkImage"></app-input-image>-->
+<!--        </div>-->
         <div class="col-md-4 col-sm-4">
           <mat-form-field class="example-full-width">
             <input formControlName="code" matInput placeholder="Mã chuyên gia" >

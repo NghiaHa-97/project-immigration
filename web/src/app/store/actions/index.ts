@@ -19,3 +19,4 @@ export * from './role.action';
 export * from './module.action';
 
 export * from './manage-user.action';
+export * from './status-profile.action';

@@ -3,17 +3,15 @@ package com.nghiahd.server.repository.impl;
 import com.nghiahd.server.common.PageUtilsCommon;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.repository.ProfileRepositoryCustom;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
@@ -23,10 +21,15 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Page<ProfileDTO> getListProfile(Pageable pageable) {
+    public Page<ProfileDTO> getListProfile(Pageable pageable,
+                                           String code,
+                                           String projectMissionName,
+                                           Integer statusProfileID,
+                                           String employeeCreate,
+                                           String approver,
+                                           LocalDate expirationDate) {
 
         Map<String, Object> params = new HashMap<>();
-        List<ProfileDTO> profileDTOList = new ArrayList<>();
 
         StringBuilder sqlSelect = new StringBuilder();
         sqlSelect.append(" select p.*,\n" +
@@ -62,39 +65,68 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
                 "         left join StatusProfile sp on sp.ID = p.StatusProfileID ");
 
         StringBuilder sqlWhere = new StringBuilder();
-        sqlWhere.append(" where 1=1 ");;
+        sqlWhere.append(" where 1=1 ");
 
-        StringBuilder sqlCount = new StringBuilder(" select count(1) ");
-
-        StringBuilder countItemQuery = new StringBuilder().append(sqlCount).append(sqlFrom).append(sqlWhere);
-        Query countQuery = entityManager.createNativeQuery(countItemQuery.toString());
-        PageUtilsCommon.setParams( countQuery, params);
-        Number totalQuery = (Number) countQuery.getSingleResult();
-
-        if (totalQuery.longValue() > 0) {
-            StringBuilder itemQuery = new StringBuilder().append(sqlSelect).append(sqlFrom).append(sqlWhere)
-                    .append(PageUtilsCommon.orderBySort(pageable, nameFieldMapSort(), params));
-            Query query = entityManager.createNativeQuery(itemQuery.toString(), "ProfileListDTO");
-            PageUtilsCommon.setParamsWithPageable(query, params, pageable);
-            profileDTOList = query.getResultList();
+        if (Strings.isNotEmpty(code)) {
+            sqlWhere.append(" and p.code like :code ");
+            params.put("code", "%" + code + "%");
         }
-        return new PageImpl<>(profileDTOList, pageable, totalQuery.longValue());
+        if (Strings.isNotEmpty(projectMissionName)) {
+            sqlWhere.append(" and pm.Name like :projectMissionName ");
+            params.put("projectMissionName", "%" + projectMissionName + "%");
+        }
+        if (statusProfileID != null) {
+            sqlWhere.append(" and sp.ID = :statusProfileID ");
+            params.put("statusProfileID", statusProfileID);
+        }
+        if (Strings.isNotEmpty(employeeCreate)) {
+            sqlWhere.append(" and (em_1.code like :employeeCreate or em_1.fullname like :employeeCreate) ");
+            params.put("employeeCreate", "%" + employeeCreate + "%");
+        }
+        if (Strings.isNotEmpty(approver)) {
+            sqlWhere.append(" and (em_0.code like :approver or em_0.fullname like :approver) ");
+            params.put("approver", "%" + approver + "%");
+        }
+        if (expirationDate != null) {
+            sqlWhere.append(" and p.expirationDate >= :expirationDate ");
+            sqlWhere.append(" and p.expirationDate < :nextExpirationDate ");
+            params.put("expirationDate", expirationDate);
+            params.put("nextExpirationDate", expirationDate.plusDays(1));
+        }
+
+        try{
+            Page<ProfileDTO> page = PageUtilsCommon.getPage(sqlSelect.toString(),
+                    sqlFrom.toString(),
+                    sqlWhere.toString(),
+                    nameFieldMapSort(),
+                    params,
+                    pageable,
+                    entityManager,
+                    "ProfileListDTO");
+            return page;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private Map<String, String> nameFieldMapSort() {
         Map<String, String> nameFieldMap = new HashMap<>();
         nameFieldMap.put("code", "code");
-        nameFieldMap.put("description", "description");
-        nameFieldMap.put("createDate", "createDate");
-        nameFieldMap.put("updateDate", "updateDate");
-        nameFieldMap.put("expirationDate", "expirationDate");
-//        nameFieldMap.put("expertsCode", "expertsCode");
-//        nameFieldMap.put("expertsFullName", "expertsFullName");
         nameFieldMap.put("projectMissionName", "projectMissionName");
+        nameFieldMap.put("statusProfileName", "statusProfileName");
         nameFieldMap.put("workUnitName", "workUnitName");
         nameFieldMap.put("departmentName", "departmentName");
         nameFieldMap.put("vehicleName", "vehicleName");
-        nameFieldMap.put("statusProfileName", "statusProfileName");
+        nameFieldMap.put("quantityEmployee", "quantityEmployee");
+        nameFieldMap.put("quantityExperts", "quantityExperts");
+        nameFieldMap.put("employeeCreateName", "employeeCreateName");
+        nameFieldMap.put("approverName", "approverName");
+        nameFieldMap.put("unitCreateProfileName", "unitCreateProfileName");
+        nameFieldMap.put("expirationDate", "expirationDate");
+        nameFieldMap.put("createDate", "createDate");
+        nameFieldMap.put("updateDate", "updateDate");
+
         return nameFieldMap;
     }
 }

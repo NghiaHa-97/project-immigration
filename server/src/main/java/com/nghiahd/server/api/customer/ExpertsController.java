@@ -41,7 +41,7 @@ public class ExpertsController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> deleteExperts(@PathVariable UUID id) {
+    public ResponseEntity<BodyResponseDTO<UUID>> deleteExperts(@PathVariable UUID id) {
         // cần check xem đã tồn tại trong hồ sơ thì không đc xóa
         ApiResponseCode apiResponseCode;
         try {
@@ -54,17 +54,30 @@ public class ExpertsController {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils);
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, id);
     }
 
     @GetMapping()
     public ResponseEntity<BodyResponseDTO<List<ExpertsDTO>>> getPageExperts(
             @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
             @SortDefault.SortDefaults({
-                    @SortDefault(sort = "code", direction = Sort.Direction.DESC)
-            }) Pageable pageable) {
+                    @SortDefault(sort = "updateDate", direction = Sort.Direction.DESC)
+            }) Pageable pageable,
+            @RequestParam(required = false) String code,
+            @RequestParam(required = false) String fullname,
+            @RequestParam(required = false) String countryName,
+            @RequestParam(required = false) String permanentResidentialAddress,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String passportNumber) {
 
-        Page<ExpertsDTO> page = expertsService.getPageExperts(PageUtilsCommon.createPageable(pageable));
+        Page<ExpertsDTO> page = expertsService.getPageExperts(
+                PageUtilsCommon.createPageable(pageable),
+                code,
+                fullname,
+                countryName,
+                permanentResidentialAddress,
+                phoneNumber,
+                passportNumber);
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, page);
     }
 

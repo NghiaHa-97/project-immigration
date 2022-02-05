@@ -1,7 +1,6 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.domain.Profile;
-import com.nghiahd.server.domain.custom.ProfileCustom;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.repository.ProfileCustomRepository;
 import com.nghiahd.server.repository.ProfileRepository;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,8 +50,20 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Page<ProfileDTO> getListProfile(Pageable pageable) {
-        Page<ProfileDTO> listProfile = profileRepository.getListProfile(pageable);
+    public Page<ProfileDTO> getListProfile(Pageable pageable,
+                                           String code,
+                                           String projectMissionName,
+                                           Integer statusProfileID,
+                                           String employeeCreate,
+                                           String approver,
+                                           LocalDate expirationDate) {
+        Page<ProfileDTO> listProfile = profileRepository.getListProfile(pageable,
+                code,
+                projectMissionName,
+                statusProfileID,
+                employeeCreate,
+                approver,
+                expirationDate);
         return listProfile;
     }
 

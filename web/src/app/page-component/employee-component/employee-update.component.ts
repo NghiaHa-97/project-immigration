@@ -10,7 +10,7 @@ import {
   getArrayDistrictState,
   getArrayPositionState,
   getArrayUnitTypeState,
-  getArrayWorkUnitState, getEmployeeEntitiesState,
+  getArrayWorkUnitState, getEmployeeEntitiesState, Go,
   LoadCityProvince,
   LoadCommuneWardByDistrict,
   LoadDepartmentByWorkUnit,
@@ -20,11 +20,11 @@ import {
   LoadWorkUnitByUnitType, UpdateEmployee
 } from '../../store';
 import * as moment from 'moment';
-import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
-import {Observable, of} from 'rxjs';
-import {map, switchMap, take, tap} from 'rxjs/operators';
-import {getPrefixID} from '../../constans/prefix-id.const';
 
+import {Observable, of} from 'rxjs';
+import {filter, map, switchMap, take, tap} from 'rxjs/operators';
+import {getPrefixID} from '../../constans/prefix-id.const';
+import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
 
 @Component({
   selector: 'app-employee-update',
@@ -45,6 +45,7 @@ export class EmployeeUpdateComponent implements OnInit {
   public department$!: Observable<any>;
   public position$!: Observable<any>;
   public entityUpdate$!: Observable<any>;
+  private readonly initForm: any;
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>) {
@@ -52,7 +53,7 @@ export class EmployeeUpdateComponent implements OnInit {
       code: [{value: '', disabled: true}],
       fullname: ['Dev Test'],
       avatar: [null],
-      gender: [0],
+      gender: [true],
       birthDay: [moment().format()],
       workUnitID: [null],
       departmentID: [null],
@@ -66,29 +67,25 @@ export class EmployeeUpdateComponent implements OnInit {
       unitTypeID: [null]
       // createDate: [moment().format(PATTERN_FORMAT_DATE.DATETIME_REQUEST)]
     });
+    this.initForm = this.formEmployee.value;
   }
 
   get formControlBirthDay(): FormControl {
     return this.formEmployee.get('birthDay') as FormControl;
   }
 
-  get linkImage(): string {
-    return this.formEmployee.value.avatar;
+  get linkImage(): { name: string } {
+    return {name: this.formEmployee.value.avatar};
   }
 
 
   ngOnInit(): void {
-    // this.formEmployee.patchValue({
-    //   code: 'NV'
-    // });
     this.entityUpdate$ = this.store.select(fromStore.getRouterParamsState).pipe(
       switchMap((data: any) => {
-        console.log(data);
         if (data?.id) {
           return this.store.select(getEmployeeEntitiesState).pipe(
             map(entities => entities[getPrefixID(data?.id)]),
             tap(entity => {
-              console.log('entity===============', entity);
               this.entityEmployee = entity;
               this.formEmployee.patchValue({...entity});
             })
@@ -124,23 +121,33 @@ export class EmployeeUpdateComponent implements OnInit {
 
   onSubmit(): void {
 
-      let value = this.formEmployee.value;
-      value.birthDay = moment(value.birthDay).format(PATTERN_FORMAT_DATE.DATE_REQUEST);
-      if (!!this.entityEmployee) {
-        value = {...this.entityEmployee, ...value};
-        value.createDate = moment(value.createDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
-        value.updateDate = moment(value.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
-      }
-      if (this.formData.has('employee')) {
-        this.formData.set('employee', JSON.stringify(value));
-      } else {
-        this.formData.append('employee', JSON.stringify(value));
-      }
-      if (!!this.entityEmployee) {
-        this.store.dispatch(new UpdateEmployee({form: this.formData, id: value.id}));
-      } else {
-        this.store.dispatch(new CreateEmployee(this.formData));
-      }
+    let value = this.formEmployee.value;
+    value.birthDay = moment(value.birthDay).format(PATTERN_FORMAT_DATE.DATE_REQUEST);
+    if (!!this.entityEmployee) {
+      value = {...this.entityEmployee, ...value};
+      value.createDate = moment(value.createDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
+      value.updateDate = moment(value.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
+    }
+    if (this.formData.has('employee')) {
+      this.formData.set('employee', JSON.stringify(value));
+    } else {
+      this.formData.append('employee', JSON.stringify(value));
+    }
+    if (!!this.entityEmployee) {
+      this.store.dispatch(new UpdateEmployee({form: this.formData, id: value.id}));
+    } else {
+      this.store.dispatch(new CreateEmployee(this.formData));
+      // reset form
+      this.store.select(fromStore.getEmployeeResponseStatusState).pipe(
+        map(({status}) => status),
+        filter(isNotNull => !!isNotNull),
+        take(1)
+      ).subscribe(status => {
+        if (status === '200') {
+          this.formEmployee.reset(this.initForm);
+        }
+      });
+    }
 
     // console.log(moment(this.formEmployee.value.birthDay).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST));
     // this.store.dispatch(new CreateEmployee(this.formData));
@@ -152,5 +159,9 @@ export class EmployeeUpdateComponent implements OnInit {
     } else {
       this.formData.append('file', file);
     }
+  }
+
+  back(): void {
+    this.store.dispatch(new Go({path: ['nhan-vien']}));
   }
 }

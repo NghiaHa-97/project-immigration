@@ -3,69 +3,43 @@
     <mat-card-title>Nhân Viên</mat-card-title>
 
     <app-toolbar-action-table (handlerSearch)= "handlerSearch()">
-      <ng-container left [formGroup]="form">
+      <ng-container left [formGroup]="formSearch">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Company (disabled)" disabled>
+              <input matInput formControlName="code" placeholder="Mã">
             </mat-form-field>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Username">
+              <input matInput formControlName="fullname" placeholder="Họ tên">
             </mat-form-field>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Email address" type="email">
+              <input matInput formControlName="workUnitName" placeholder="Đơn vị">
             </mat-form-field>
           </div>
-          <div class="col-md-3">
+
+        </div>
+        <div class="row">
+          <div class="col-md-4">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Email address" type="email">
+              <input matInput formControlName="cityProvinceName" placeholder="Địa chỉ">
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="phoneNumber" placeholder="Số điện thoại">
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="numberIdentityCard" placeholder="số căn cước">
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-3">
-            <mat-form-field>
-              <mat-label>Choose an option</mat-label>
-              <mat-select formControlName="selector">
-                <mat-select-trigger>
-                  <div class="d-flex flex-row">
-                    <div class="p-2"><img src="{{valueSelector.image}}" alt="user" class="profile-pic"></div>
-                    <div class="p-2">{{valueSelector.value}}</div>
-                  </div>
-                </mat-select-trigger>
-                <mat-option value="option1">Option 1</mat-option>
-                <mat-option value="option2">
-                  <div class="d-flex flex-row">
-                    <div class="p-2"><img src="assets/images/users/1.jpg" alt="user" class="profile-pic"></div>
-                    <div class="p-2">Flex item 3</div>
-                  </div>
-                </mat-option>
-                <mat-option value="option3">Option 3</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Username">
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <mat-form-field class="example-full-width">
-              <input formControlName="time"
-                     matInput
-                     placeholder="Giờ - phút"
-                     type="time" id="appt" name="appt" required>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <app-datepicker [control]="formControlDate"
-                            name="Ngày sinh"></app-datepicker>
-          </div>
-        </div>
+
       </ng-container>
 
       <ng-container right>
@@ -88,7 +62,7 @@
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
                  (handlerChangePage)="handlerChangePage($event)"
-                 [totalRecord]="100">
+                 [totalRecord]="totalItems$ | async">
       </app-table>
     </div>
 
@@ -98,10 +72,10 @@
       <mat-icon>details</mat-icon>
       <span>Chi Tiết</span>
     </button>
-    <button #btnUpdate mat-menu-item>
-      <mat-icon>update</mat-icon>
-      <span>Sửa</span>
-    </button>
+<!--    <button #btnUpdate mat-menu-item>-->
+<!--      <mat-icon>update</mat-icon>-->
+<!--      <span>Sửa</span>-->
+<!--    </button>-->
     <button #btnDelete mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
@@ -114,3 +88,14 @@
   <button mat-button mat-dialog-close>Hủy</button>
   <button mat-button [mat-dialog-close]="appTable.resultSelected">Đồng ý</button>
 </div>
+
+<ng-template #dialogDelete>
+  <h1 mat-dialog-title>Xóa nhân viên {{nameEmployeeDel$ | async}}</h1>
+  <div mat-dialog-content>
+    <p>Bạn có chắc muốn xóa?</p>
+  </div>
+  <div mat-dialog-actions class="float-right">
+    <button mat-button [mat-dialog-close]="true">Đồng ý</button>
+    <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Hủy</button>
+  </div>
+</ng-template>

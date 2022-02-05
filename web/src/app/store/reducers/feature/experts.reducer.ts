@@ -23,12 +23,10 @@ export function reducer(
         (result: { [id: string]: any }, item: any) => {
           return {
             ...result,
-            [getPrefixID(item.id)]: item,
+            [getPrefixID(item.id)]: {...item, isDetail: false},
           };
         },
-        {
-          ...state.entities,
-        }
+        {}
       );
 
       return {
@@ -38,13 +36,26 @@ export function reducer(
       };
     }
 
-    case fromExpertsAction.UPDATE_EXPERTS_SUCCESS:
+    case fromExpertsAction.UPDATE_EXPERTS_SUCCESS: {
+      const responseStatus: ResponseStatusModel = action.payload;
+      const experts = action.payload.data;
+      const entities = {
+        ...state.entities,
+        [getPrefixID(experts.id)]: {...experts, isDetail: true},
+      };
+
+      return {
+        ...state,
+        entities,
+        responseStatus
+      };
+    }
     case fromExpertsAction.CREATE_EXPERTS_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
       const experts = action.payload.data;
       const entities = {
         ...state.entities,
-        [getPrefixID(experts.id)]: experts,
+        [getPrefixID(experts.id)]: {...experts, isDetail: false},
       };
 
       return {

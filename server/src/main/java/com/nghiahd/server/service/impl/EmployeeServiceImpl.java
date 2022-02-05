@@ -31,8 +31,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeDTO> getPageEmployee(Pageable pageable) {
-        return employeeRepository.getPageEmployee(pageable);
+    public Page<EmployeeDTO> getPageEmployee(Pageable pageable,
+                                             String code,
+                                             String fullname,
+                                             String workUnitName,
+                                             String cityProvinceName,
+                                             String phoneNumber,
+                                             String numberIdentityCard) {
+        return employeeRepository.getPageEmployee(pageable,
+                code,
+                fullname,
+                workUnitName,
+                cityProvinceName,
+                phoneNumber,
+                numberIdentityCard);
     }
 
     @Override

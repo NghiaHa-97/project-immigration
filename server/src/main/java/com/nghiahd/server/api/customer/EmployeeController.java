@@ -36,9 +36,23 @@ public class EmployeeController {
     public ResponseEntity<BodyResponseDTO<List<EmployeeDTO>>> getPageEmployee(
             @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
             @SortDefault.SortDefaults({
-                    @SortDefault(sort = "code", direction = Sort.Direction.DESC)
-            }) Pageable pageable) {
-        Page<EmployeeDTO> page = employeeService.getPageEmployee(PageUtilsCommon.createPageable(pageable));
+                    @SortDefault(sort = "updateDate", direction = Sort.Direction.DESC)
+            }) Pageable pageable,
+            @RequestParam(required = false) String code,
+            @RequestParam(required = false) String fullname,
+            @RequestParam(required = false) String workUnitName,
+            @RequestParam(required = false) String cityProvinceName,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String numberIdentityCard
+    ) {
+        Page<EmployeeDTO> page = employeeService.getPageEmployee(
+                PageUtilsCommon.createPageable(pageable),
+                code,
+                fullname,
+                workUnitName,
+                cityProvinceName,
+                phoneNumber,
+                numberIdentityCard);
         return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, page);
     }
 
@@ -60,13 +74,13 @@ public class EmployeeController {
         ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
         Employee employee = ObjectMapperUtils.convertJsonToObject(em, Employee.class);
         Employee employeeSaved = null;
-        if(employee != null){
+        if (employee != null) {
             employeeSaved = this.employeeService.createEmployee(employee, file);
-        }else{
+        } else {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        if (employeeSaved == null){
+        if (employeeSaved == null) {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
         return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, employee);
@@ -79,20 +93,20 @@ public class EmployeeController {
         ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
         Employee employee = ObjectMapperUtils.convertJsonToObject(em, Employee.class);
         Employee employeeSaved = null;
-        if(employee != null){
+        if (employee != null) {
             employeeSaved = this.employeeService.editEmployee(employee, file, id);
-        }else{
+        } else {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        if (employeeSaved == null){
+        if (employeeSaved == null) {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(),apiResponseCode, this.messageUtils, employeeSaved);
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, employeeSaved);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> deleteEmployee(@PathVariable UUID id) {
+    public ResponseEntity<BodyResponseDTO<UUID>> deleteEmployee(@PathVariable UUID id) {
         // cần check xem đã tồn tại trong hồ sơ thì không đc xóa
         ApiResponseCode apiResponseCode;
         try {
@@ -105,7 +119,7 @@ public class EmployeeController {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
 
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils);
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, id);
     }
 
 

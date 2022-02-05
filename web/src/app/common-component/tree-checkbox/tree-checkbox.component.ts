@@ -54,7 +54,7 @@ export class TreeCheckboxComponent implements OnInit {
 
   ngOnInit(): void {
 
-    combineLatest(this.data, this.initSelected)
+    combineLatest([this.data, this.initSelected])
       .subscribe(([data, arrayIdInit]) => {
         this.dataSource.data = data;
         if (data.length === 0) {
