@@ -11,6 +11,7 @@ export interface Menu {
 
 const MENUITEMS = [
   { state: 'ho-so', name: 'Hồ sơ', type: 'link', icon: 'av_timer' },
+  { state: 'nhiem-vu-cong-viec', name: 'Công việc, nhiệm vụ', type: 'link', icon: 'av_timer' },
   { state: 'nhan-vien', name: 'Nhân viên', type: 'link', icon: 'av_timer' },
   { state: 'chuyen-gia', name: 'Chuyên gia', type: 'link', icon: 'av_timer' },
   { state: 'quan-ly-nguoi-dung', name: 'Người dùng', type: 'link', icon: 'av_timer' },

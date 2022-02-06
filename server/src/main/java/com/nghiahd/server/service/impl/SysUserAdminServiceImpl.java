@@ -18,18 +18,18 @@ public class SysUserAdminServiceImpl implements SysUserAdminService {
         this.sysUserAdminRepository = sysUserAdminRepository;
     }
 
-    @Override
-    public UserLogin getUserByUsername(String username) {
-        return sysUserAdminRepository.getUserByUsername(username);
-    }
-
-    @Override
-    public boolean checkUsernameIsExist(String username) {
-        return sysUserAdminRepository.checkUsernameIsExist(username) == 1;
-    }
-
-    @Override
-    public SysUserAdmin save(SysUserAdmin userAdmin) {
-        return sysUserAdminRepository.save(userAdmin);
-    }
+//    @Override
+//    public UserLogin getUserByUsername(String username) {
+//        return sysUserAdminRepository.getUserByUsername(username);
+//    }
+//
+//    @Override
+//    public boolean checkUsernameIsExist(String username) {
+//        return sysUserAdminRepository.checkUsernameIsExist(username) != 0;
+//    }
+//
+//    @Override
+//    public SysUserAdmin save(SysUserAdmin userAdmin) {
+//        return sysUserAdminRepository.save(userAdmin);
+//    }
 }

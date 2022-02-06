@@ -1,6 +1,6 @@
 package com.nghiahd.server.api.customer;
 
-import com.nghiahd.server.api.admin.UserController;
+import com.nghiahd.server.api.admin.AuthAdminController;
 import com.nghiahd.server.common.*;
 import com.nghiahd.server.domain.TaskForDepartment;
 import com.nghiahd.server.model.TaskForDepartmentDTO;
@@ -33,7 +33,7 @@ public class TaskForDepartmentController {
         this.messageUtils = messageUtils;
     }
 
-    Logger log = LoggerFactory.getLogger(UserController.class);
+    Logger log = LoggerFactory.getLogger(TaskForDepartmentController.class);
 
     private void logHttpRequest(HttpServletRequest request) {
         String uri = request.getRequestURI();

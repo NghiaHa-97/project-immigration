@@ -14,6 +14,8 @@ import {RoleUpdateComponent} from './role-component/role-update.component';
 import {RoleExistDetailActivate} from './can-activate/role-exist-detail.activate';
 import {RoleDeactivate} from './can-deactivate/role.deactivate';
 import {UserCustomerExistDetailActivate} from './can-activate/user-customer-exist-detail.activate';
+import {ProjectMissionComponent} from './project-mission-component/project-mission.component';
+import {ProjectMissionUpdateComponent} from './project-mission-component/project-mission-update.component';
 
 
 export const PageRoutes: Routes = [
@@ -31,6 +33,23 @@ export const PageRoutes: Routes = [
       {
         path: 'them-moi',
         component: ProfileUpdateComponent
+      }
+    ]
+  },
+  {
+    path: 'nhiem-vu-cong-viec',
+    children: [
+      {
+        path: '',
+        component: ProjectMissionComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        component: ProjectMissionUpdateComponent
+      },
+      {
+        path: 'them-moi',
+        component: ProjectMissionUpdateComponent
       }
     ]
   },

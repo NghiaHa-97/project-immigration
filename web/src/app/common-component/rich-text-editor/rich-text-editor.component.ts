@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from "@angular/core";
-import {FormGroup} from "@angular/forms";
-import {QuillConfiguration} from "./quill-configuration";
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {QuillConfiguration} from './quill-configuration';
 
 @Component({
   selector: 'app-rich-text-editor',
@@ -10,7 +10,8 @@ import {QuillConfiguration} from "./quill-configuration";
 })
 export class RichTextEditorComponent implements  OnInit{
   quillConfiguration = QuillConfiguration;
-  @Input() richTextForm!: FormGroup;
+  @Input() description!: FormControl;
+  @Input() label!: string;
 
   constructor() {
   }

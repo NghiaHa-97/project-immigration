@@ -1,6 +1,8 @@
 package com.nghiahd.server.config;
 
+import com.nghiahd.server.constant.TypeLogin;
 import com.nghiahd.server.model.UserLogin;
+import com.nghiahd.server.service.AuthService;
 import com.nghiahd.server.service.SysUserAdminService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,22 +19,32 @@ import java.util.*;
 public class UsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
     private final PasswordEncoder passwordEncoder;
-    private final SysUserAdminService sysUserAdminService;
+    private final AuthService authService;
+//    private final SysUserAdminService sysUserAdminService;
+//    private final SysUserCustomerService sysUserCustomerService;
 
     public UsernamePwdAuthenticationProvider(PasswordEncoder passwordEncoder,
-                                             SysUserAdminService sysUserAdminService) {
+                                             AuthService authService) {
         this.passwordEncoder = passwordEncoder;
-        this.sysUserAdminService = sysUserAdminService;
+        this.authService = authService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String pwd = authentication.getCredentials().toString();
-        UserLogin user = this.sysUserAdminService.getUserByUsername(username);
+        UserLogin user = null;
+        // check login with admin
+        if(TypeLogin.compareAdmin(username)){
+            user = this.authService.getUserAdminByUsername(TypeLogin.getUsername(username));
+        }else{
+            user = this.authService.getUserCustomerByUsername(TypeLogin.getUsername(username));
+        }
 
         if (user != null) {
             if (passwordEncoder.matches(pwd, user.getPassword())) {
+                // thêm prefix vào username để sau khi đọc token check lại
+                user.setUsername(username);
                 return new UsernamePasswordAuthenticationToken(user,
                         null,
                         Collections.singletonList(new SimpleGrantedAuthority(user.getRoleName() == null ? "ROLE_0" : user.getRoleName())));

@@ -2,8 +2,11 @@ package com.nghiahd.server.config.filter;
 
 import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.config.TokenProvider;
+import com.nghiahd.server.constant.TypeLogin;
 import com.nghiahd.server.model.UserLogin;
+import com.nghiahd.server.service.AuthService;
 import com.nghiahd.server.service.SysUserAdminService;
+import com.nghiahd.server.service.SysUserCustomerService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +32,11 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     @Autowired
     private TokenProvider tokenProvider;
     @Autowired
-    private SysUserAdminService sysUserAdminService;
+    private AuthService authService;
+//    @Autowired
+//    private SysUserAdminService sysUserAdminService;
+//    @Autowired
+//    private SysUserCustomerService sysUserCustomerService;
     @Autowired
     private ReadEnvironment readEnvironment;
 
@@ -55,7 +62,12 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         }
         if (Strings.isNotEmpty(jwt)) {
             String username = this.tokenProvider.validateAndGetUserName(jwt);
-            UserLogin user = this.sysUserAdminService.getUserByUsername(username);
+            UserLogin user = null;
+            if(TypeLogin.compareAdmin(username)){
+                user = this.authService.getUserAdminByUsername(TypeLogin.getUsername(username));
+            }else{
+                user = this.authService.getUserCustomerByUsername(TypeLogin.getUsername(username));
+            }
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(user,
                     null,
@@ -68,7 +80,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/admin/user/login")
-                || request.getServletPath().equals("/admin/user/register");
+        return request.getServletPath().equals("/api/admin/auth/login")
+                || request.getServletPath().equals("/api/admin/auth/register")
+                || request.getServletPath().equals("/api/public/auth/login");
     }
 }
