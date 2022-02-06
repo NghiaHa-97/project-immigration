@@ -6,5 +6,4 @@ import java.util.Map;
 
 public interface SysUserAdminRepositoryCustom {
     UserLogin getUserByUsername(String username);
-    Integer checkUsernameIsExist(String username);
 }

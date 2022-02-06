@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import * as _ from 'lodash';
 
-import {filter, map, switchMap, take, tap} from 'rxjs/operators';
+import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
   CreateProjectMission,
   Go,
@@ -111,6 +111,7 @@ export class ProjectMissionUpdateComponent implements OnInit, OnDestroy {
         console.log('create', {...this.formProjectMission.value});
         this.store.dispatch(new CreateProjectMission({...this.formProjectMission.value}));
         this.store.select(fromStore.getProjectMissionResponseStatusState).pipe(
+          skip(1),
           map(({status}) => status),
           filter(isNotNull => !!isNotNull),
           take(1)

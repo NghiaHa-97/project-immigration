@@ -33,7 +33,8 @@ public class UserLoginRowMapper {
     private Set<Permission> permissionSet;
     private Set<Module> moduleSet;
 
-    public UserLoginRowMapper(int id,
+    //admin
+    public UserLoginRowMapper(Integer id,
                               String username,
                               String password,
                               LocalDateTime createDate,
@@ -57,7 +58,8 @@ public class UserLoginRowMapper {
         this.moduleName = moduleName;
     }
 
-    public UserLoginRowMapper(int id,
+    //customer
+    public UserLoginRowMapper(Integer id,
                               String username,
                               String password,
                               LocalDateTime createDate,

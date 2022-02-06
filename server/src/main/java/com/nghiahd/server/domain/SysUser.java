@@ -2,6 +2,7 @@ package com.nghiahd.server.domain;
 
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.model.SysUserCustomerDTO;
+import com.nghiahd.server.model.UserLoginRowMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,31 @@ import java.util.UUID;
                                         @ColumnResult(name = "employeeID", type = UUID.class),
                                         @ColumnResult(name = "employeeCode", type = String.class),
                                         @ColumnResult(name = "employeeFullName", type = String.class),
+                                }
+                        )
+                }
+        ),
+        @SqlResultSetMapping(
+                name = "UserLoginRowMapperCustomer",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = UserLoginRowMapper.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = Integer.class),
+                                        @ColumnResult(name = "username", type = String.class),
+                                        @ColumnResult(name = "password", type = String.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "updateDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "roleID", type = Integer.class),
+                                        @ColumnResult(name = "roleName", type = String.class),
+                                        @ColumnResult(name = "permissionCode", type = Integer.class),
+                                        @ColumnResult(name = "permissionName", type = String.class),
+                                        @ColumnResult(name = "moduleCode", type = Integer.class),
+                                        @ColumnResult(name = "moduleName", type = String.class),
+                                        @ColumnResult(name = "isActive", type = Boolean.class),
+                                        @ColumnResult(name = "employeeID", type = UUID.class),
+                                        @ColumnResult(name = "workUnitID", type = Integer.class),
+                                        @ColumnResult(name = "unitTypeID", type = Integer.class),
                                 }
                         )
                 }
