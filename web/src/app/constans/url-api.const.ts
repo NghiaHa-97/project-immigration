@@ -2,8 +2,9 @@ export const DOMAIN_SERVER = 'http://localhost:8090';
 
 // api url public
 export const PUBLIC_API = {
-  LOGIN: `${DOMAIN_SERVER}/api/public/user/login`,
-  LOAD_USER: `${DOMAIN_SERVER}/api/public/user/get-user-refresh-app`,
+  LOGIN: `${DOMAIN_SERVER}/api/public/auth/login`,
+  LOGOUT: `${DOMAIN_SERVER}/api/public/auth/logout`,
+  LOAD_USER: `${DOMAIN_SERVER}/api/public/auth/get-user-refresh-app`,
   PROFILE: {
     GET_PROFILE: `${DOMAIN_SERVER}/api/public/profile`,
     CREATE_PROFILE: `${DOMAIN_SERVER}/api/public/profile/create`,
@@ -58,10 +59,10 @@ export const PUBLIC_API = {
 
 // ${DOMAIN_SERVER}/api url admin
 export const ADMIN_API = {
-  LOGIN: `${DOMAIN_SERVER}/api/admin/user/login`,
-  REGISTER: `${DOMAIN_SERVER}/api/admin/user/register`,
-  LOGOUT: `${DOMAIN_SERVER}/api/admin/user/logout`,
-  LOAD_USER: `${DOMAIN_SERVER}/api/admin/user/get-user-refresh-app`,
+  LOGIN: `${DOMAIN_SERVER}/api/admin/auth/login`,
+  REGISTER: `${DOMAIN_SERVER}/api/admin/auth/register`,
+  LOGOUT: `${DOMAIN_SERVER}/api/admin/auth/logout`,
+  LOAD_USER: `${DOMAIN_SERVER}/api/admin/auth/get-user-refresh-app`,
   MODULE: {
     GET_ALL_MODULE: `${DOMAIN_SERVER}/api/admin/module`
   },

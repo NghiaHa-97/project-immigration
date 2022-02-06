@@ -23,7 +23,7 @@ export class AuthEffect {
             map(response => new authActions.LoginSuccess(response?.body)),
             tap((response) => {
               if (response instanceof authActions.LoginSuccess) {
-                sessionStorage.setItem("Authorization", response?.payload?.data?.details)
+                sessionStorage.setItem('Authorization', response?.payload?.data?.details);
               }
             }),
             catchError(error => of(new authActions.LoginFail(error)))
@@ -41,29 +41,29 @@ export class AuthEffect {
     )
   );
 
-  register$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(authActions.REGISTER_USER),
-      map((action: authActions.Login) => action.payload),
-      switchMap((payload) => {
-        return this.authService
-          .register(payload)
-          .pipe(
-            map((response) => new authActions.RegisterSuccess(response?.body)),
-            catchError(error => of(new authActions.RegisterFail(error))),
-          );
-      })
-    )
-  );
-
-  registerSuccess$ = createEffect(
-    ()=>this.actions$.pipe(
-      ofType(authActions.REGISTER_USER_SUCCESS),
-      map(() =>
-        new routerActions.Go({path: ["login"]})
-      )
-    )
-  );
+  // register$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(authActions.REGISTER_USER),
+  //     map((action: authActions.Login) => action.payload),
+  //     switchMap((payload) => {
+  //       return this.authService
+  //         .register(payload)
+  //         .pipe(
+  //           map((response) => new authActions.RegisterSuccess(response?.body)),
+  //           catchError(error => of(new authActions.RegisterFail(error))),
+  //         );
+  //     })
+  //   )
+  // );
+  //
+  // registerSuccess$ = createEffect(
+  //   ()=>this.actions$.pipe(
+  //     ofType(authActions.REGISTER_USER_SUCCESS),
+  //     map(() =>
+  //       new routerActions.Go({path: ["login"]})
+  //     )
+  //   )
+  // );
 
   logout$ = createEffect(
     () => this.actions$.pipe(

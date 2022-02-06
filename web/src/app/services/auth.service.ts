@@ -10,22 +10,22 @@ export class AuthService {
 
   login(payload: any): Observable<any> {
     return this.http
-      .post(ADMIN_API.LOGIN, payload, { observe: 'response', withCredentials: true });
+      .post(PUBLIC_API.LOGIN, payload, { observe: 'response', withCredentials: true });
   }
 
-  register(payload: any): Observable<any> {
-    return this.http
-      .post(ADMIN_API.REGISTER, payload, { observe: 'response', withCredentials: true });
-  }
+  // register(payload: any): Observable<any> {
+  //   return this.http
+  //     .post(ADMIN_API.REGISTER, payload, { observe: 'response', withCredentials: true });
+  // }
 
   logout(): Observable<any> {
     return this.http
-      .get(ADMIN_API.LOGOUT, { observe: 'response', withCredentials: true });
+      .get(PUBLIC_API.LOGOUT, { observe: 'response', withCredentials: true });
   }
 
   loadUser(): Observable<any> {
     return this.http
-      .get(ADMIN_API.LOAD_USER, { observe: 'response', withCredentials: true });
+      .get(PUBLIC_API.LOAD_USER, { observe: 'response', withCredentials: true });
   }
 
 }
