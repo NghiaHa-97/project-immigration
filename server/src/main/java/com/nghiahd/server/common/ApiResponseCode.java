@@ -18,7 +18,9 @@ public enum ApiResponseCode {
     LOGIN_SUCCESS(HttpStatus.OK, "200", "LOGIN_SUCCESS"),
     LOGOUT_SUCCESS(HttpStatus.OK, "200", "LOGOUT_SUCCESS"),
     WRONG_FORMAT_DATETIME(HttpStatus.UNPROCESSABLE_ENTITY, "422", "GLOBAL.WRONG_FORMAT_DATETIME"),
-    NOT_FOUND(HttpStatus.NOT_FOUND, "404", "NOT_FOUND");
+    NOT_FOUND(HttpStatus.NOT_FOUND, "404", "NOT_FOUND"),
+    WORK_UNIT_OR_EMPLOYEE_NULL(HttpStatus.BAD_REQUEST, "400", "WORK_UNIT_OR_EMPLOYEE_NULL");
+
 
     private final HttpStatus status;
     private final String code;

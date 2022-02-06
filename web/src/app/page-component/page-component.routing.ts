@@ -16,6 +16,7 @@ import {RoleDeactivate} from './can-deactivate/role.deactivate';
 import {UserCustomerExistDetailActivate} from './can-activate/user-customer-exist-detail.activate';
 import {ProjectMissionComponent} from './project-mission-component/project-mission.component';
 import {ProjectMissionUpdateComponent} from './project-mission-component/project-mission-update.component';
+import {ProjectMissionExistDetailActivate} from './can-activate/project-mission-exist-detail.activate';
 
 
 export const PageRoutes: Routes = [
@@ -45,7 +46,8 @@ export const PageRoutes: Routes = [
       },
       {
         path: 'chi-tiet/:id',
-        component: ProjectMissionUpdateComponent
+        component: ProjectMissionUpdateComponent,
+        canActivate: [ProjectMissionExistDetailActivate]
       },
       {
         path: 'them-moi',

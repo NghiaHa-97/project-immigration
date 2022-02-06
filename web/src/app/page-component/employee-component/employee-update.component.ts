@@ -22,7 +22,7 @@ import {
 import * as moment from 'moment';
 
 import {Observable, of} from 'rxjs';
-import {filter, map, switchMap, take, tap} from 'rxjs/operators';
+import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
 
@@ -139,6 +139,7 @@ export class EmployeeUpdateComponent implements OnInit {
       this.store.dispatch(new CreateEmployee(this.formData));
       // reset form
       this.store.select(fromStore.getEmployeeResponseStatusState).pipe(
+        skip(1),
         map(({status}) => status),
         filter(isNotNull => !!isNotNull),
         take(1)

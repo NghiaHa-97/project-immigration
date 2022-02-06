@@ -14,5 +14,4 @@ public interface SysUserCustomerRepositoryCustom {
     SysUserCustomerDTO findSysUserCustomerByID(Integer id);
 
     UserLogin getUserByUsername(String username);
-    Integer checkUsernameIsExist(String username);
 }

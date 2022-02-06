@@ -1,12 +1,37 @@
 package com.nghiahd.server.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nghiahd.server.model.SysUserCustomerDTO;
+import com.nghiahd.server.model.UserLoginRowMapper;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "sysuseradmin")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "UserLoginRowMapperAdmin",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = UserLoginRowMapper.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = Integer.class),
+                                        @ColumnResult(name = "username", type = String.class),
+                                        @ColumnResult(name = "password", type = String.class),
+                                        @ColumnResult(name = "createDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "updateDate", type = LocalDateTime.class),
+                                        @ColumnResult(name = "roleID", type = Integer.class),
+                                        @ColumnResult(name = "roleName", type = String.class),
+                                        @ColumnResult(name = "permissionCode", type = Integer.class),
+                                        @ColumnResult(name = "permissionName", type = String.class),
+                                        @ColumnResult(name = "moduleCode", type = Integer.class),
+                                        @ColumnResult(name = "moduleName", type = String.class),
+                                }
+                        )
+                }
+        ),
+})
 public class SysUserAdmin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

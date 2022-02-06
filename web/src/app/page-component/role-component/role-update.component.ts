@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import * as _ from 'lodash';
 
-import {filter, map, switchMap, take, tap} from 'rxjs/operators';
+import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
   CreateRole,
   Go,
@@ -116,6 +116,7 @@ export class RoleUpdateComponent implements OnInit, IDeactivate, OnDestroy {
       console.log('create', role);
       this.store.dispatch(new CreateRole(role));
       this.store.select(fromStore.getRoleResponseStatusState).pipe(
+        skip(1),
         map(({status}) => status),
         filter(isNotNull => !!isNotNull),
         take(1)
