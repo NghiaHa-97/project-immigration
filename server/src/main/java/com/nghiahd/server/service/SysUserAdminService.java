@@ -5,7 +5,7 @@ import com.nghiahd.server.model.UserLogin;
 
 
 public interface SysUserAdminService {
-    UserLogin getUserByUsername(String username);
-    boolean checkUsernameIsExist(String username);
-    SysUserAdmin save(SysUserAdmin userAdmin);
+//    UserLogin getUserByUsername(String username);
+//    boolean checkUsernameIsExist(String username);
+//    SysUserAdmin save(SysUserAdmin userAdmin);
 }

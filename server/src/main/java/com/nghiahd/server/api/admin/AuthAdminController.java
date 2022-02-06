@@ -3,8 +3,11 @@ package com.nghiahd.server.api.admin;
 import com.nghiahd.server.common.*;
 import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.config.TokenProvider;
+import com.nghiahd.server.constant.TypeLogin;
 import com.nghiahd.server.domain.SysUserAdmin;
 import com.nghiahd.server.model.RequestLogin;
+import com.nghiahd.server.model.UserLogin;
+import com.nghiahd.server.service.AuthService;
 import com.nghiahd.server.service.SysUserAdminService;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -32,20 +35,20 @@ public class AuthAdminController {
 
     Logger log = LoggerFactory.getLogger(AuthAdminController.class);
 
-    private final SysUserAdminService sysUserAdminService;
+    private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final ReadEnvironment readEnvironment;
     private final MessageUtils messageUtils;
 
-    public AuthAdminController(SysUserAdminService sysUserAdminService,
+    public AuthAdminController(AuthService authService,
                                PasswordEncoder passwordEncoder,
                                AuthenticationManagerBuilder authenticationManagerBuilder,
                                TokenProvider tokenProvider,
                                ReadEnvironment readEnvironment,
                                MessageUtils messageUtils) {
-        this.sysUserAdminService = sysUserAdminService;
+        this.authService = authService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.tokenProvider = tokenProvider;
@@ -71,7 +74,7 @@ public class AuthAdminController {
         String pwd = Base64Common.decodeBaseToString(requestLogin.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, pwd);
+                new UsernamePasswordAuthenticationToken(TypeLogin.convertUserName(TypeLogin.ADMIN, username), pwd);
         try {
             Authentication authentication = this.authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -86,9 +89,11 @@ public class AuthAdminController {
                     (int) this.readEnvironment.getTokenValidityInSeconds(),
                     "/" + this.readEnvironment.getFolderImages());
             response.addCookie(cookie);
-//            return ResponseEntity.ok().body(new ResponseLogin(username, response.getHeader(this.readEnvironment.getHeader())));
+
             ((UsernamePasswordAuthenticationToken) authentication).setDetails(jwt);
-//            return ResponseEntity.ok().body(authentication);
+            // set username đúng để response
+            ((UserLogin) authentication.getPrincipal()).setUsername(username);
+
             return RestResponseWrapper.getResponse(ApiResponseCode.LOGIN_SUCCESS.getStatus(),
                     ApiResponseCode.LOGIN_SUCCESS,
                     this.messageUtils,
@@ -128,7 +133,7 @@ public class AuthAdminController {
         String username = Base64Common.decodeBaseToString(userAdmin.getUsername());
         String pwd = Base64Common.decodeBaseToString(userAdmin.getPassword());
 
-        if (sysUserAdminService.checkUsernameIsExist(username)) {
+        if (this.authService.checkUsernameAdminIsExist(username)) {
             log.error(uri + " username is exist");
             return RestResponseWrapper.getResponse(ApiResponseCode.USERNAME_EXIST.getStatus(),
                     ApiResponseCode.USERNAME_EXIST,
@@ -138,7 +143,7 @@ public class AuthAdminController {
         userAdmin.setPassword(this.passwordEncoder.encode(pwd));
         userAdmin.setCreateDate(LocalDateTime.now());
         userAdmin.setUpdateDate(LocalDateTime.now());
-        SysUserAdmin result = this.sysUserAdminService.save(userAdmin);
+        SysUserAdmin result = this.authService.saveAdmin(userAdmin);
 //        return ResponseEntity.ok().body(result);
         return RestResponseWrapper.getResponse(ApiResponseCode.REGISTER_SUCCESS.getStatus(),
                 ApiResponseCode.REGISTER_SUCCESS,

@@ -3,11 +3,16 @@ package com.nghiahd.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nghiahd.server.domain.Module;
 import com.nghiahd.server.domain.Permission;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+@Getter
+@Setter
 public class UserLoginRowMapper {
     private Integer id;
     private String username;
@@ -21,6 +26,10 @@ public class UserLoginRowMapper {
     private String permissionName;
     private Integer moduleCode;
     private String moduleName;
+    private Boolean isActive;
+    private UUID employeeID;
+    private Integer workUnitID;
+    private Integer unitTypeID;
     private Set<Permission> permissionSet;
     private Set<Module> moduleSet;
 
@@ -48,95 +57,39 @@ public class UserLoginRowMapper {
         this.moduleName = moduleName;
     }
 
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
+    public UserLoginRowMapper(int id,
+                              String username,
+                              String password,
+                              LocalDateTime createDate,
+                              LocalDateTime updateDate,
+                              Integer roleID,
+                              String roleName,
+                              Integer permissionCode,
+                              String permissionName,
+                              Integer moduleCode,
+                              String moduleName,
+                              Boolean isActive,
+                              UUID employeeID,
+                              Integer workUnitID,
+                              Integer unitTypeID
+                              ) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
-    }
-
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public Integer getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(Integer roleID) {
         this.roleID = roleID;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
         this.roleName = roleName;
-    }
-
-    public Integer getPermissionCode() {
-        return permissionCode;
-    }
-
-    public void setPermissionCode(Integer permissionCode) {
         this.permissionCode = permissionCode;
-    }
-
-    public String getPermissionName() {
-        return permissionName;
-    }
-
-    public void setPermissionName(String permissionName) {
         this.permissionName = permissionName;
-    }
-
-    public Integer getModuleCode() {
-        return moduleCode;
-    }
-
-    public void setModuleCode(Integer moduleCode) {
         this.moduleCode = moduleCode;
-    }
-
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+        this.isActive = isActive;
+        this.employeeID = employeeID;
+        this.workUnitID = workUnitID;
+        this.unitTypeID = unitTypeID;
     }
+
 
     @Override
     public String toString() {

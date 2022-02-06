@@ -3,6 +3,7 @@ package com.nghiahd.server.service.impl;
 import com.nghiahd.server.common.ApiResponseCode;
 import com.nghiahd.server.domain.SysUser;
 import com.nghiahd.server.model.SysUserCustomerDTO;
+import com.nghiahd.server.model.UserLogin;
 import com.nghiahd.server.repository.SysUserCustomerRepository;
 import com.nghiahd.server.service.SysUserCustomerService;
 import org.apache.logging.log4j.util.Strings;
@@ -64,4 +65,14 @@ public class SysUserCustomerServiceImpl implements SysUserCustomerService {
         this.sysUserCustomerRepository.deleteById(id);
         return ApiResponseCode.SUCCESS;
     }
+
+//    @Override
+//    public UserLogin getUserByUsername(String username) {
+//        return sysUserCustomerRepository.getUserByUsername(username);
+//    }
+//
+//    @Override
+//    public boolean checkUsernameIsExist(String username) {
+//        return sysUserCustomerRepository.checkUsernameIsExist(username) != 0;
+//    }
 }

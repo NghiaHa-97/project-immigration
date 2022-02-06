@@ -4,7 +4,9 @@ import com.nghiahd.server.api.admin.AuthAdminController;
 import com.nghiahd.server.common.*;
 import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.config.TokenProvider;
+import com.nghiahd.server.constant.TypeLogin;
 import com.nghiahd.server.model.RequestLogin;
+import com.nghiahd.server.model.UserLogin;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -61,7 +62,7 @@ public class AuthCustomerController {
         String pwd = Base64Common.decodeBaseToString(requestLogin.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, pwd);
+                new UsernamePasswordAuthenticationToken(TypeLogin.convertUserName(TypeLogin.PUBLIC, username), pwd);
         try {
             Authentication authentication = this.authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -78,6 +79,8 @@ public class AuthCustomerController {
             response.addCookie(cookie);
 
             ((UsernamePasswordAuthenticationToken) authentication).setDetails(jwt);
+            // set username đúng để response
+            ((UserLogin) authentication.getPrincipal()).setUsername(username);
 
             return RestResponseWrapper.getResponse(ApiResponseCode.LOGIN_SUCCESS.getStatus(),
                     ApiResponseCode.LOGIN_SUCCESS,

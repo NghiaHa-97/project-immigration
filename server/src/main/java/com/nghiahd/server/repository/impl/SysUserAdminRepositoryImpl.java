@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +19,7 @@ public class SysUserAdminRepositoryImpl implements SysUserAdminRepositoryCustom 
     Logger log = LoggerFactory.getLogger(SysUserAdminRepositoryImpl.class);
 
     @Autowired
+    @PersistenceContext
     EntityManager entityManager;
 
 //    @Autowired
@@ -84,7 +86,9 @@ public class SysUserAdminRepositoryImpl implements SysUserAdminRepositoryCustom 
 
         if (userLoginMap.size() > 0) {
             Map.Entry<Integer, UserLogin> firstValue = userLoginMap.entrySet().iterator().next();
-            return firstValue.getValue();
+            UserLogin result = firstValue.getValue();
+            result.setIsAdmin(true);
+            return result;
         }
         return null;
     }
