@@ -53,7 +53,14 @@ export const PUBLIC_API = {
   },
   STATUS_PROFILE: {
     GET_STATUS_PROFILE: `${DOMAIN_SERVER}/api/public/status-profile`,
-  }
+  },
+  PROJECT_MISSION: {
+    GET_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission`,
+    CREATE_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission/create`,
+    EDIT_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission/edit/`,         //    /edit/{id}
+    DELETE_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission/delete/`,       //    /delete/{id}
+    GET_DETAIL_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission/detail/`,     //     /detail/{id}
+  },
 };
 
 

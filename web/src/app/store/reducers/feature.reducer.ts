@@ -17,6 +17,8 @@ import * as fromRole from './feature/role.reducer';
 import * as fromModule from './feature/module.reducer';
 
 import * as fromManageUser from './feature/manage-user.reducer';
+import * as fromProjectMission from './feature/project-mission.reducer';
+
 
 
 export interface FeatureState {
@@ -35,9 +37,8 @@ export interface FeatureState {
   statusProfile: fromStatusProfile.StatusProfileState;
   role: fromRole.RoleState;
   module: fromModule.ModuleState;
-
-
   manageUser: fromManageUser.ManageUserState;
+  projectMission: fromProjectMission.ProjectMissionState;
 }
 
 export const featuresReducers: ActionReducerMap<FeatureState, any> = {
@@ -56,8 +57,8 @@ export const featuresReducers: ActionReducerMap<FeatureState, any> = {
   statusProfile: fromStatusProfile.reducer,
   role: fromRole.reducer,
   module: fromModule.reducer,
-
-  manageUser: fromManageUser.reducer
+  manageUser: fromManageUser.reducer,
+  projectMission: fromProjectMission.reducer,
 };
 
 export const getFeaturesState = createFeatureSelector<FeatureState>(
@@ -84,3 +85,4 @@ export const getRole = (state: FeatureState) => state.role;
 export const getModule = (state: FeatureState) => state.module;
 
 export const getManageUser = (state: FeatureState) => state.manageUser;
+export const getProjectMission = (state: FeatureState) => state.projectMission;

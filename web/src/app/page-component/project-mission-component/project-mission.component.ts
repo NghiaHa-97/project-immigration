@@ -16,7 +16,7 @@ import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {Go, LoadRole, RemoveRole} from '../../store';
+import {Go, LoadProjectMission, RemoveProjectMission} from '../../store';
 import {map, take, withLatestFrom} from 'rxjs/operators';
 import {PageEvent} from '@angular/material/paginator';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
@@ -24,15 +24,15 @@ import {getPrefixID} from '../../constans/prefix-id.const';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html',
-  styleUrls: ['./role.component.scss'],
+  selector: 'app-project-mission',
+  templateUrl: './project-mission.component.html',
+  styleUrls: ['./project-mission.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RoleComponent implements OnInit, AfterViewInit {
+export class ProjectMissionComponent implements OnInit, AfterViewInit {
   isDialog = false;
   params: any = {};
-  roles$!: Observable<any[]>;
+  projectMissions$!: Observable<any[]>;
   totalItems$!: Observable<number>;
 
   @ViewChild('dialogDelete', {
@@ -55,7 +55,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
         withLatestFrom(this.appTable.selectAction),
         map(([notUsed, data2]) => data2)
       ).subscribe(x => {
-        this.onDetailRole(x);
+        this.onDetailProjectMission(x);
         // console.log(x);
       });
     }
@@ -78,7 +78,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
           map(([notUsed, data2]) => data2)
         )
         .subscribe((x: number) => {
-          this.nameRoleDel$ = this.store.select(fromStore.getRoleEntitiesState).pipe(
+          this.nameProjectMissionDel$ = this.store.select(fromStore.getProjectMissionEntitiesState).pipe(
             map(entities => entities[getPrefixID(x)]?.name ?? '')
           );
           const dialogRef = this.dialog.open(this.dialogDelete, {
@@ -88,7 +88,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
             .pipe(take(1))
             .subscribe(result => {
               if (result) {
-                this.onDeleteRole(x);
+                this.onDeleteProjectMission(x);
               }
             });
         });
@@ -106,7 +106,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
 
   formSearch!: FormGroup;
   public data!: any[];
-  public nameRoleDel$!: Observable<string>;
+  public nameProjectMissionDel$!: Observable<string>;
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
@@ -120,12 +120,16 @@ export class RoleComponent implements OnInit, AfterViewInit {
 
     this.formSearch = this.fb.group({
       name: [''],
+      workUnitCreateName: [''],
+      employeeName: [''],
+      employeeCode: [''],
+
     });
   }
 
   ngOnInit(): void {
-    this.store.dispatch(new LoadRole(null));
-    this.roles$ = this.store.select(fromStore.getArrayRoleState).pipe(
+    this.store.dispatch(new LoadProjectMission(null));
+    this.projectMissions$ = this.store.select(fromStore.getArrayProjectMissionState).pipe(
       map(dataArray => dataArray.map(element => {
         return {
           ...element,
@@ -134,7 +138,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
         };
       }))
     );
-    this.totalItems$ = this.store.select(fromStore.getRoleResponseStatusState).pipe(
+    this.totalItems$ = this.store.select(fromStore.getProjectMissionResponseStatusState).pipe(
       map(data => data?.totalElements ?? 0)
     );
   }
@@ -148,7 +152,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
         sort: x.direction === '' ? null : [`${x.active},${x.direction}`]
       };
       // console.log(this.params);
-      this.store.dispatch(new LoadRole(this.params));
+      this.store.dispatch(new LoadProjectMission(this.params));
     });
 
 
@@ -158,7 +162,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
     //     withLatestFrom(this.appTable.selectAction),
     //     map(([_, data2]) => data2)
     //   ).subscribe(x => {
-    //     this.onDetailRole(x);
+    //     this.onDetailProjectMission(x);
     //     // console.log(x);
     //   });
     // }
@@ -180,7 +184,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
     //       map(([_, data2]) => data2)
     //     )
     //     .subscribe((x: number) => {
-    //       this.nameRoleDel$ = this.store.select(fromStore.getRoleEntitiesState).pipe(
+    //       this.nameProjectMissionDel$ = this.store.select(fromStore.getProjectMissionEntitiesState).pipe(
     //         map(entities => entities[getPrefixID(x)]?.name ?? '')
     //       );
     //       const dialogRef = this.dialog.open(this.dialogDelete, {
@@ -190,24 +194,23 @@ export class RoleComponent implements OnInit, AfterViewInit {
     //         .pipe(take(1))
     //         .subscribe(result => {
     //           if (result) {
-    //             this.onDeleteRole(x);
+    //             this.onDeleteProjectMission(x);
     //           }
     //         });
     //     });
     // }
   }
 
-  onNewRole(): void {
-    this.store.dispatch(new Go({path: ['quan-ly-vai-tro', 'them-moi']}));
+  onNewProjectMission(): void {
+    this.store.dispatch(new Go({path: ['nhiem-vu-cong-viec', 'them-moi']}));
   }
 
-  onDetailRole(id: string): void {
-    // console.log('manage-user-detail', id);
-    this.store.dispatch(new Go({path: ['quan-ly-vai-tro', 'chi-tiet', id]}));
+  onDetailProjectMission(id: string): void {
+    this.store.dispatch(new Go({path: ['nhiem-vu-cong-viec', 'chi-tiet', id]}));
   }
 
-  onDeleteRole(id: number): void {
-    this.store.dispatch(new RemoveRole(id));
+  onDeleteProjectMission(id: number): void {
+    this.store.dispatch(new RemoveProjectMission(id));
   }
 
   handlerChangePage(event: PageEvent): void {
@@ -217,7 +220,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
       size: event.pageSize
     };
     // console.log('PageEvent', this.params);
-    this.store.dispatch(new LoadRole(this.params));
+    this.store.dispatch(new LoadProjectMission(this.params));
   }
 
   handlerSearch(): void {
@@ -228,7 +231,7 @@ export class RoleComponent implements OnInit, AfterViewInit {
     };
 
     // console.log(this.params);
-    this.store.dispatch(new LoadRole(this.params));
+    this.store.dispatch(new LoadProjectMission(this.params));
 
   }
 }
@@ -236,7 +239,31 @@ export class RoleComponent implements OnInit, AfterViewInit {
 export const COLUMNS_AND_STYLES: ColumnAndStyleModel[] = [
   {
     columnName: 'name',
-    columnHeaderName: 'Tên vai trò',
+    columnHeaderName: 'Tên dự án, nhiệm vụ',
+    styleHeader: {width: '350px'},
+    isSort: true,
+    styleBody: null,
+    isStatus: false
+  },
+  {
+    columnName: 'workUnitCreateName',
+    columnHeaderName: 'Tên đơn vị',
+    styleHeader: {width: '200px'},
+    isSort: true,
+    styleBody: null,
+    isStatus: false
+  },
+  {
+    columnName: 'employeeName',
+    columnHeaderName: 'Tên nhân viên tạo',
+    styleHeader: {width: '200px'},
+    isSort: true,
+    styleBody: null,
+    isStatus: false
+  },
+  {
+    columnName: 'employeeCode',
+    columnHeaderName: 'Mã nhân viên tạo',
     styleHeader: {width: '200px'},
     isSort: true,
     styleBody: null,

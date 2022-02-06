@@ -28,6 +28,8 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {RoleComponent} from './role-component/role.component';
 import {RoleUpdateComponent} from './role-component/role-update.component';
 import {canDeactivate, DialogCanDeactivateComponent} from './can-deactivate';
+import {ProjectMissionComponent} from './project-mission-component/project-mission.component';
+import {ProjectMissionUpdateComponent} from './project-mission-component/project-mission-update.component';
 
 
 @NgModule({
@@ -56,7 +58,9 @@ import {canDeactivate, DialogCanDeactivateComponent} from './can-deactivate';
     ManageUserUpdateComponent,
     RoleComponent,
     RoleUpdateComponent,
-    DialogCanDeactivateComponent
+    DialogCanDeactivateComponent,
+    ProjectMissionComponent,
+    ProjectMissionUpdateComponent
   ],
   providers: [
     ...pageComponentService,
