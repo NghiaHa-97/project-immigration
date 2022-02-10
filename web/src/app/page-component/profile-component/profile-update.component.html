@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-content>
-    <mat-card-title>{{!isCreate ? 'Chi tiết' : 'Thêm mới'}}</mat-card-title>
+    <mat-card-title>{{!!(entityUpdate$ | async) ? 'Chi tiết' : 'Thêm mới'}}</mat-card-title>
     <form [formGroup]="formProfile" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-md-4 col-sm-4">
