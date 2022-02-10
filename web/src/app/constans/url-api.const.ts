@@ -30,6 +30,9 @@ export const PUBLIC_API = {
   CITY_PROVINCE: {
     GET_CITY_PROVINCE: `${DOMAIN_SERVER}/api/public/city-province`,
   },
+  COUNTRY: {
+    GET_COUNTRY: `${DOMAIN_SERVER}/api/public/country`,
+  },
   DISTRICT: {
     GET_DISTRICT_BY_CITY_PROVINCE: `${DOMAIN_SERVER}/api/public/district/city-province/`,      //  city-province/{cityProvinceID}
   },

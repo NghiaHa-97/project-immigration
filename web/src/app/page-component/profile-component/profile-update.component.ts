@@ -1,30 +1,29 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Observable, of} from 'rxjs';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import * as moment from 'moment';
-import {map, switchMap, take, tap} from 'rxjs/operators';
+import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
-  CreateEmployee,
-  getArrayCityProvinceState,
-  getArrayCommuneWardState,
+  CreateProfile,
   getArrayDepartmentState,
-  getArrayDistrictState,
-  getArrayPositionState,
-  getArrayUnitTypeState,
-  getArrayWorkUnitState,
-  getEmployeeEntitiesState,
-  LoadCityProvince,
-  LoadCommuneWardByDistrict,
+  getArrayStatusProfileState,
+  getArrayVehicleState,
+  getProfileEntitiesState,
+  getStatusProfileLoadedState,
+  getVehicleLoadedState,
+  Go,
   LoadDepartmentByWorkUnit,
-  LoadDistrictByCityProvince,
-  LoadPositionByDepartment,
-  LoadUnitType,
-  LoadWorkUnitByUnitType, UpdateEmployee
+  LoadStatusProfile,
+  LoadVehicle, UpdateProfile,
 } from '../../store';
 import {getPrefixID} from '../../constans/prefix-id.const';
-import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
+import {PatternFormat} from '../../constans/pattern-format-date.const';
+import {MatDialog} from '@angular/material/dialog';
+import {EmployeeComponent} from '../employee-component/employee.component';
+import {ExpertsComponent} from '../experts-component/experts.component';
+import {ProjectMissionComponent} from '../project-mission-component/project-mission.component';
 
 @Component({
   selector: 'app-profile-update',
@@ -32,139 +31,339 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
   styleUrls: ['./profile-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileUpdateComponent implements OnInit{
-  formEmployee: FormGroup;
-  formData: FormData = new FormData();
-  entityEmployee: any;
-  public cityProvince$!: Observable<any>;
-  public district$!: Observable<any>;
-  public communeWard$!: Observable<any>;
-
-  public unitType$!: Observable<any>;
-  public workUnit$!: Observable<any>;
-  public department$!: Observable<any>;
-  public position$!: Observable<any>;
+export class ProfileUpdateComponent implements OnInit {
+  isCreate = true;
+  formProfile: FormGroup;
+  entityProfile: any = null;
+  public statusProfile$!: Observable<any>;
+  public vehicles$!: Observable<any>;
   public entityUpdate$!: Observable<any>;
+  private readonly initForm: any;
+  public readonly EMPLOYEE = 'EMPLOYEE';
+  public readonly EXPERT = 'EXPERT';
+  public readonly PROJECT_MISSION = 'PROJECT_MISSION';
+  public department$!: Observable<any>;
 
-  richTextForm!: FormGroup;
   constructor(private fb: FormBuilder,
-              private store: Store<fromStore.FeatureState>) {
-    this.formEmployee = this.fb.group({
-      code: [{value: '', disabled: true}],
-      fullname: ['Dev Test'],
-      avatar: [null],
-      gender: [0],
-      birthDay: [moment().format()],
-      workUnitID: [null],
+              private store: Store<fromStore.FeatureState>,
+              private patternFormat: PatternFormat,
+              private dialog: MatDialog,
+              private changeDetectorRef: ChangeDetectorRef) {
+    this.formProfile = this.fb.group({
+      code: [{value: null, disabled: true}],
       departmentID: [null],
-      positionID: [null],
-      cityProvinceID: [null],
-      districtID: [null],
-      communeWardID: [null],
-      description: ['description'],
-      phoneNumber: ['phoneNumber'],
-      numberIdentityCard: ['numberIdentityCard'],
-      unitTypeID: [null]
-      // createDate: [moment().format(PATTERN_FORMAT_DATE.DATETIME_REQUEST)]
+      vehicleID: [null],
+      description: [null]
     });
-    this.richTextForm = this.fb.group(
-      {
-        title: ["Hello, I am ", Validators.required],
-        description: [
-          `<h2><u>This is </u>a <span style=\"color: rgb(240, 102, 102);\">RICH</span> <strong>text editor</strong> <em>for</em> - <a href=\"http://jira.trungk18.com/\" rel=\"noopener noreferrer\" target=\"_blank\">http://.com/</a></h2><h3><span style=\"color: rgb(153, 51, 255);\">I hope you </span><strong style=\"color: rgb(153, 51, 255);\">like it!</strong></h3>`
-        ]
-      }
-    )
+    this.initForm = this.formProfile.value;
   }
 
-  get formControlBirthDay(): FormControl {
-    return this.formEmployee.get('birthDay') as FormControl;
+  get description(): FormControl {
+    return this.formProfile.get('description') as FormControl;
   }
 
-  get linkImage(): string {
-    return this.formEmployee.value.avatar;
+  get getProjectMissionName(): any {
+    return this.entityProfile?.projectMission?.name ?? '';
   }
 
+  get getProjectMissionUpdateDate(): any {
+    if (!this.entityProfile?.projectMission?.isFormatDate) {
+      return this.patternFormat.formatDatetimeToString(this.entityProfile?.projectMission?.updateDate);
+    }
+    return this.entityProfile?.projectMission?.updateDate;
+  }
+
+  get getProjectMissionCreateDate(): any {
+    if (!this.entityProfile?.projectMission?.isFormatDate) {
+      return this.patternFormat.formatDatetimeToString(this.entityProfile?.projectMission?.createDate);
+    }
+    return this.entityProfile?.projectMission?.createDate;
+  }
+
+  get getEmployeeCreate(): any {
+    return this.entityProfile?.employeeCreate;
+  }
+
+  get getApprover(): any {
+    return this.entityProfile?.approver;
+  }
+
+  get getEmployees(): any[] {
+    return this.entityProfile?.employees ?? [];
+  }
+
+  set setEmployees(data: any[]) {
+    if (!this.entityProfile) {
+      this.entityProfile = {};
+    }
+    this.entityProfile.employees = data;
+  }
+
+  get getExperts(): any[] {
+    return this.entityProfile?.experts ?? [];
+  }
+
+  set setExperts(data: any[]) {
+    if (!this.entityProfile) {
+      this.entityProfile = {};
+    }
+    this.entityProfile.experts = data;
+  }
+
+  get getWorkUnitName(): string {
+    return this.entityProfile?.workUnit?.name ?? 'Không có đơn vị';
+  }
+
+  formatDateToString(date: any, isFormatDate: any): string {
+    if (!isFormatDate) {
+      return this.patternFormat.formatDateToString(date) ?? '';
+    }
+    return date;
+  }
+
+  // get formControlBirthDay(): FormControl {
+  //   return this.formExpert.get('birthDay') as FormControl;
+  // }
+  //
+  // get formControlExpiryDate(): FormControl {
+  //   return this.formExpert.get('expiryDate') as FormControl;
+  // }
+  //
+  // get formControlDateOfEntry(): FormControl {
+  //   return this.formExpert.get('dateOfEntry') as FormControl;
+  // }
 
   ngOnInit(): void {
-    // this.formEmployee.patchValue({
-    //   code: 'NV'
-    // });
+    this.department$ = this.store.select(getArrayDepartmentState);
     this.entityUpdate$ = this.store.select(fromStore.getRouterParamsState).pipe(
-      tap((data: any) => {
-        console.log('select', data);
-      }),
-      take(1),
       switchMap((data: any) => {
-        console.log(data);
         if (data?.id) {
-          return this.store.select(getEmployeeEntitiesState).pipe(
+          return this.store.select(getProfileEntitiesState).pipe(
             map(entities => entities[getPrefixID(data?.id)]),
-            take(1),
             tap(entity => {
-              // console.log('entity', entity);
-              this.entityEmployee = entity;
-              this.formEmployee.patchValue({...entity});
+              this.entityProfile = {...entity};
+              this.isCreate = false;
+              const workUnitID = entity?.workUnit?.id;
+              if (workUnitID) {
+                this.store.dispatch(new LoadDepartmentByWorkUnit(workUnitID));
+              }
+              this.formProfile.patchValue({...entity});
             })
           );
         }
         return of(null);
       }),
-      map(entity => entity)
+      take(1)
     );
+    this.store.select(getStatusProfileLoadedState)
+      .pipe(take(1))
+      .subscribe(isLoaded => {
+        if (!isLoaded) {
+          this.store.dispatch(new LoadStatusProfile(null));
+        }
+      });
+    this.statusProfile$ = this.store.select(getArrayStatusProfileState);
 
-    // console.log(moment(new Date()).format("DD/MM/YYYY"));
-    this.store.dispatch(new LoadUnitType(null));
-    this.store.dispatch(new LoadCityProvince(null));
-
-    this.cityProvince$ = this.store.select(getArrayCityProvinceState);
-    this.district$ = this.store.select(getArrayDistrictState);
-    this.communeWard$ = this.store.select(getArrayCommuneWardState);
-
-    this.unitType$ = this.store.select(getArrayUnitTypeState);
-    this.workUnit$ = this.store.select(getArrayWorkUnitState);
-    this.department$ = this.store.select(getArrayDepartmentState);
-    this.position$ = this.store.select(getArrayPositionState);
-
-
-    this.formEmployee.get('cityProvinceID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadDistrictByCityProvince(val)));
-    this.formEmployee.get('districtID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadCommuneWardByDistrict(val)));
-
-    this.formEmployee.get('unitTypeID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadWorkUnitByUnitType(val)));
-    this.formEmployee.get('workUnitID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadDepartmentByWorkUnit(val)));
-    this.formEmployee.get('departmentID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadPositionByDepartment(val)));
+    this.store.select(getVehicleLoadedState)
+      .pipe(take(1))
+      .subscribe(isLoaded => {
+        if (!isLoaded) {
+          this.store.dispatch(new LoadVehicle(null));
+        }
+      });
+    this.vehicles$ = this.store.select(getArrayVehicleState);
   }
 
 
   onSubmit(): void {
 
-    let value = this.formEmployee.value;
-    value.birthDay = moment(this.formEmployee.value.birthDay).format(PATTERN_FORMAT_DATE.DATE_REQUEST);
-    if (!!this.entityEmployee) {
-      value = {...this.entityEmployee, ...value};
-      value.createDate = moment(value.createDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
-      value.updateDate = moment(value.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
-    }
-    if (this.formData.has('employee')) {
-      this.formData.set('employee', JSON.stringify(value));
+    const value = this.formProfile.value;
+    const dataRequest = {...this.entityProfile, ...value};
+    console.log(dataRequest);
+    if (!this.isCreate) {
+      this.store.dispatch(new UpdateProfile(dataRequest));
     } else {
-      this.formData.append('employee', JSON.stringify(value));
+      this.store.dispatch(new CreateProfile(dataRequest));
+      // reset form
+      this.store.select(fromStore.getProfileResponseStatusState).pipe(
+        skip(1),
+        map((response) => response?.status),
+        filter(isNotNull => !!isNotNull),
+        take(1)
+      ).subscribe(status => {
+        if (status === '200') {
+          // this.formProfile.reset(this.initForm);
+        }
+      });
     }
-    if (!!this.entityEmployee) {
-      this.store.dispatch(new UpdateEmployee({form: this.formData, id: value.id}));
-    } else {
-      this.store.dispatch(new CreateEmployee(this.formData));
-    }
-
-    // console.log(moment(this.formEmployee.value.birthDay).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST));
-    // this.store.dispatch(new CreateEmployee(this.formData));
   }
 
-  setFileImageControl(file: any): void {
-    if (this.formData.has('file')) {
-      this.formData.set('file', file);
-    } else {
-      this.formData.append('file', file);
+  openDialog(type: string): void {
+
+    switch (type) {
+      case this.EMPLOYEE: {
+        const dialogEmployeeRef = this.dialog.open(EmployeeComponent, {
+          width: '60%',
+          height: '75%',
+          data: {
+            isSelectMulti: true,
+            itemSelected: this.entityProfile?.employees?.map((item: any) => item.id) ?? []
+          }
+        });
+
+        dialogEmployeeRef.afterClosed()
+          .pipe(take(1))
+          .subscribe((result: Map<number | string, any>) => {
+            if (!!result) {
+              if (result.size === 0) {
+                this.removeValue(this.EMPLOYEE);
+                return;
+              }
+              const arrEmployees: any[] = [];
+              const it = result.keys();
+              let item = it.next();
+              while (!item.done) {
+                const value = result.get(item.value);
+                if (value) {
+                  arrEmployees.push({
+                    id: value.id,
+                    code: value.code,
+                    fullname: value.fullname,
+                    birthDay: value.birthDay,
+                    department: {
+                      name: value.departmentName
+                    },
+                    position: {
+                      name: value.positionName
+                    },
+                    isFormatDate: true
+                  });
+                } else {
+                  const i = this.getEmployees.find(v => v.id === item.value);
+                  arrEmployees.push(i);
+                }
+                item = it.next();
+              }
+              this.setEmployees = arrEmployees;
+              this.changeDetectorRef.detectChanges();
+            }
+          });
+        break;
+      }
+      case this.EXPERT: {
+        const dialogRoleRef = this.dialog.open(ExpertsComponent, {
+          width: '60%',
+          height: '75%',
+          data: {
+            isSelectMulti: true,
+            itemSelected: this.entityProfile?.experts?.map((item: any) => item.id) ?? []
+          }
+        });
+
+        dialogRoleRef.afterClosed()
+          .pipe(take(1))
+          .subscribe((result: Map<number | string, any>) => {
+            if (!!result) {
+              if (result.size === 0) {
+                this.removeValue(this.EXPERT);
+                return;
+              }
+              const arrExperts: any[] = [];
+              const it = result.keys();
+              let item = it.next();
+              while (!item.done) {
+                const value = result.get(item.value);
+                if (value) {
+                  arrExperts.push({
+                    id: value.id,
+                    code: value.code,
+                    fullname: value.fullname,
+                    birthDay: value.birthDay,
+                    country: {
+                      name: value.countryName
+                    },
+                    isFormatDate: true
+                  });
+                } else {
+                  const i = this.getExperts.find(v => v.id === item.value);
+                  arrExperts.push(i);
+                }
+                item = it.next();
+              }
+              this.setExperts = arrExperts;
+              this.changeDetectorRef.detectChanges();
+            }
+          });
+        break;
+      }
+
+      case this.PROJECT_MISSION: {
+        const dialogRoleRef = this.dialog.open(ProjectMissionComponent, {
+          width: '60%',
+          height: '75%',
+          data: {
+            isSelectMulti: false,
+            itemSelected: this.entityProfile?.projectMission?.id ? [this.entityProfile?.projectMission?.id] : []
+          }
+        });
+
+        dialogRoleRef.afterClosed()
+          .pipe(take(1))
+          .subscribe((result: Map<number | string, any>) => {
+            if (!!result) {
+              if (result.size === 0) {
+                this.removeValue(this.PROJECT_MISSION);
+                return;
+              }
+              const it = result.keys();
+              let item = it.next();
+              while (!item.done) {
+                const value = result.get(item.value);
+                if (value) {
+                  this.entityProfile = this.entityProfile ?? {};
+                  this.entityProfile.projectMission = {
+                    id: value.id,
+                    name: value.name,
+                    createDate: value.createDate,
+                    updateDate: value.updateDate,
+                    isFormatDate: true
+                  };
+                }
+                item = it.next();
+              }
+              this.changeDetectorRef.detectChanges();
+            }
+          });
+        break;
+      }
     }
+  }
+
+  back(): void {
+    this.store.dispatch(new Go({path: ['ho-so']}));
+  }
+
+  private removeValue(type: string): void {
+    switch (type) {
+      case this.EMPLOYEE: {
+        if (this.entityProfile?.employees) {
+          this.setEmployees = [];
+        }
+        break;
+      }
+      case this.EXPERT: {
+        if (this.entityProfile?.experts) {
+          this.setExperts = [];
+        }
+        break;
+      }
+      case this.PROJECT_MISSION: {
+        if (this.entityProfile?.projectMission) {
+          this.entityProfile.projectMission = null;
+        }
+        break;
+      }
+    }
+    this.changeDetectorRef.detectChanges();
   }
 }

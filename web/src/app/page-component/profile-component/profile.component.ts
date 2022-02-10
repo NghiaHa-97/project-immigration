@@ -17,7 +17,7 @@ import {TableComponent} from '../../common-component/table/table.component';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import {
-  Go,
+  Go, LoadDetailProfile,
   LoadProfile,
   LoadStatusProfile,
   RemoveProfile
@@ -301,14 +301,14 @@ export const COLUMNS_AND_STYLES: ColumnAndStyleModel[] = [
     styleBody: null,
     isStatus: false
   },
-  {
-    columnName: 'unitCreateProfileName',
-    columnHeaderName: 'Đơn vị tạo',
-    styleHeader: {width: '200px'},
-    isSort: true,
-    styleBody: null,
-    isStatus: false
-  },
+  // {
+  //   columnName: 'unitCreateProfileName',
+  //   columnHeaderName: 'Đơn vị tạo',
+  //   styleHeader: {width: '200px'},
+  //   isSort: true,
+  //   styleBody: null,
+  //   isStatus: false
+  // },
   {
     columnName: 'expirationDate',
     columnHeaderName: 'Ngày hết hạn',

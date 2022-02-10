@@ -6,13 +6,16 @@ import com.nghiahd.server.model.ExpertsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
 public interface ExpertsService {
-    Experts saveExperts(Experts experts);
 
-    Experts editExperts(Experts experts, UUID id);
+    Experts editExperts(Experts experts,
+                        MultipartFile passportImage,
+                        MultipartFile portraitPhotography,
+                        UUID id);
 
     ApiResponseCode deleteExperts(UUID id);
 
@@ -25,4 +28,8 @@ public interface ExpertsService {
                                     String passportNumber);
 
     Experts getDetailExperts(UUID id);
+
+    Experts createExperts(Experts experts,
+                          MultipartFile passportImage,
+                          MultipartFile portraitPhotography);
 }

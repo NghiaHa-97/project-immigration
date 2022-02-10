@@ -20,7 +20,7 @@ export class CityProvinceEffect {
           .getAll()
           .pipe(
             map(response => new cityProvinceActions.LoadCityProvinceSuccess(response?.body)),
-            catchError(error => of(new cityProvinceActions.LoadCityProvinceFail(error)))
+            catchError(({error}) => of(new cityProvinceActions.LoadCityProvinceFail(error)))
           );
       })
     )

@@ -36,6 +36,7 @@ export function reducer(
       };
     }
 
+    case fromExpertsAction.LOAD_DETAIL_EXPERTS_SUCCESS:
     case fromExpertsAction.UPDATE_EXPERTS_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
       const experts = action.payload.data;

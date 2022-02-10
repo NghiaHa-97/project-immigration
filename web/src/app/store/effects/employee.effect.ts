@@ -4,10 +4,7 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import * as fromService from '../../services';
-import * as authActions from '../actions/auth.action';
-import * as routerActions from '../actions/router.action';
 import {COLOR_SNACK_BAR, NotificationSnackBar} from '../../notification/notification-snack-bar';
-import * as roleActions from '../actions/role.action';
 
 @Injectable()
 export class EmployeeEffect {

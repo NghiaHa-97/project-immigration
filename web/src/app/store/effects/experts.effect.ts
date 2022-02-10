@@ -4,11 +4,13 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import * as fromService from '../../services';
+import {COLOR_SNACK_BAR, NotificationSnackBar} from '../../notification/notification-snack-bar';
 
 @Injectable()
 export class ExpertsEffect {
   constructor(private actions$: Actions,
-              private expertsService: fromService.ExpertsService) {
+              private expertsService: fromService.ExpertsService,
+              private notification: NotificationSnackBar) {
   }
 
   getPage$ = createEffect(
@@ -50,8 +52,15 @@ export class ExpertsEffect {
         return this.expertsService
           .create(payload)
           .pipe(
-            map(response => new expertsActions.CreateExpertsSuccess(response?.body)),
-            catchError(error => of(new expertsActions.CreateExpertsFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new expertsActions.CreateExpertsSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new expertsActions.CreateExpertsFail(error));
+            })
           );
       })
     )
@@ -66,8 +75,15 @@ export class ExpertsEffect {
         return this.expertsService
           .edit(payload)
           .pipe(
-            map(response => new expertsActions.UpdateExpertsSuccess(response?.body)),
-            catchError(error => of(new expertsActions.UpdateExpertsFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new expertsActions.UpdateExpertsSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new expertsActions.UpdateExpertsFail(error));
+            })
           );
       })
     )
@@ -81,8 +97,15 @@ export class ExpertsEffect {
         return this.expertsService
           .remove(payload)
           .pipe(
-            map(response => new expertsActions.RemoveExpertsSuccess(response?.body)),
-            catchError(error => of(new expertsActions.RemoveExpertsFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new expertsActions.RemoveExpertsSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new expertsActions.RemoveExpertsFail(error));
+            })
           );
       })
     )

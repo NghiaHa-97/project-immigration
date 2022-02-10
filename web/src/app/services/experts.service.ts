@@ -36,7 +36,7 @@ export class ExpertsService{
   edit(payload: any): Observable<any> {
     return this.http
       .put(`${PUBLIC_API.EXPERTS.EDIT_EXPERTS}${payload.id}`,
-        payload,
+        payload.form,
         {observe: 'response', withCredentials: true});
   }
 

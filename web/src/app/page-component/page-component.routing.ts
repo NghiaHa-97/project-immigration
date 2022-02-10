@@ -17,6 +17,8 @@ import {UserCustomerExistDetailActivate} from './can-activate/user-customer-exis
 import {ProjectMissionComponent} from './project-mission-component/project-mission.component';
 import {ProjectMissionUpdateComponent} from './project-mission-component/project-mission-update.component';
 import {ProjectMissionExistDetailActivate} from './can-activate/project-mission-exist-detail.activate';
+import {ExpertExistDetailActivate} from './can-activate/expert-exist-detail.activate';
+import {ProfileExistDetailActivate} from './can-activate/profile-exist-detail.activate';
 
 
 export const PageRoutes: Routes = [
@@ -29,7 +31,8 @@ export const PageRoutes: Routes = [
       },
       {
         path: 'chi-tiet/:id',
-        component: ProfileUpdateComponent
+        component: ProfileUpdateComponent,
+        canActivate: [ProfileExistDetailActivate]
       },
       {
         path: 'them-moi',
@@ -83,7 +86,7 @@ export const PageRoutes: Routes = [
       {
         path: 'chi-tiet/:id',
         component: ExpertsUpdateComponent,
-        // canActivate: [EmployeeExistDetailActivate]
+        canActivate: [ExpertExistDetailActivate]
       },
       {
         path: 'them-moi',

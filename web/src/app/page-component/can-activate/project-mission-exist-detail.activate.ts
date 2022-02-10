@@ -24,8 +24,7 @@ export class ProjectMissionExistDetailActivate implements CanActivate {
       .select(fromStore.getProjectMissionEntitiesState)
       .pipe(
         map((entities: { [key: string]: any }) => entities[getPrefixID(id)]?.isDetail),
-        take(1),
-        // tap(data => console.log('++++++', data))
+        take(1)
       );
   }
 
@@ -38,8 +37,7 @@ export class ProjectMissionExistDetailActivate implements CanActivate {
         }
       }),
       filter(loaded => loaded),
-      take(1),
-      // tap(data => console.log(data))
+      take(1)
     );
   }
 

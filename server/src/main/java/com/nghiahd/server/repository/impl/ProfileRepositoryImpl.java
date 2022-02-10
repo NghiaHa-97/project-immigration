@@ -33,7 +33,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 
         StringBuilder sqlSelect = new StringBuilder();
         sqlSelect.append(" select p.*,\n" +
-                "       wu_0.Name     unitCreateProfileName,\n" +
+//                "       wu_0.Name     unitCreateProfileName,\n" +
                 "       em_0.FullName approverName,\n" +
                 "       em_1.FullName employeeCreateName,\n" +
                 "       emip.quantityEmployee,\n" +
@@ -47,7 +47,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 
         StringBuilder sqlFrom = new StringBuilder();
         sqlFrom.append(" from Profile p\n" +
-                "         left join WorkUnit wu_0 on wu_0.ID = p.UnitCreateProfileID\n" +
+//                "         left join WorkUnit wu_0 on wu_0.ID = p.UnitCreateProfileID\n" +
                 "         left join Employee em_0 on em_0.ID = p.ApproverID\n" +
                 "         left join Employee em_1 on em_1.ID = p.EmployeeCreateID\n" +
                 "         left join (select EmployeeInProfile.ProfileID, count(1) as quantityEmployee\n" +

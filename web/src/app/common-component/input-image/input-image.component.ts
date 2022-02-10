@@ -18,9 +18,7 @@ import {DOMAIN_SERVER} from '../../constans/url-api.const';
 })
 export class InputImageComponent implements OnInit {
   imagePath: { name: string } = {name: ''};
-
   @Input() set dataNameImage(data: { name: string }) {
-    console.log(data);
     if (data?.name) {
       this.imagePath = {name: `${DOMAIN_SERVER}/${data?.name}`};
     }else{

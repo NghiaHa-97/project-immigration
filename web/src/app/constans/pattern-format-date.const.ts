@@ -25,6 +25,10 @@ export class PatternFormat {
     return moment(date).format(PATTERN_FORMAT_DATE.DATE_REQUEST);
   }
 
+  formatDatetimeToDatetimeRequest(date: any): string {
+    return moment(date).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
+  }
+
   splitDateTimeResponseToDateAndTime(datetimeResponse: any): { date: string, time: string } {
     return {
       date: moment(datetimeResponse).format(PATTERN_FORMAT_DATE.DATE_RESPONSE),

@@ -4,11 +4,13 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import * as fromService from '../../services';
+import {COLOR_SNACK_BAR, NotificationSnackBar} from '../../notification/notification-snack-bar';
 
 @Injectable()
 export class ProfileEffect {
   constructor(private actions$: Actions,
-              private profileService: fromService.ProfileService) {
+              private profileService: fromService.ProfileService,
+              private notification: NotificationSnackBar) {
   }
 
   getPage$ = createEffect(
@@ -50,8 +52,15 @@ export class ProfileEffect {
         return this.profileService
           .create(payload)
           .pipe(
-            map(response => new profileActions.CreateProfileSuccess(response?.body)),
-            catchError(error => of(new profileActions.CreateProfileFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new profileActions.CreateProfileSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new profileActions.CreateProfileFail(error));
+            })
           );
       })
     )
@@ -65,8 +74,15 @@ export class ProfileEffect {
         return this.profileService
           .edit(payload)
           .pipe(
-            map(response => new profileActions.UpdateProfileSuccess(response?.body)),
-            catchError(error => of(new profileActions.UpdateProfileFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new profileActions.UpdateProfileSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new profileActions.UpdateProfileFail(error));
+            })
           );
       })
     )
@@ -80,8 +96,15 @@ export class ProfileEffect {
         return this.profileService
           .remove(payload)
           .pipe(
-            map(response => new profileActions.RemoveProfileSuccess(response?.body)),
-            catchError(error => of(new profileActions.RemoveProfileFail(error)))
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new profileActions.RemoveProfileSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new profileActions.RemoveProfileFail(error));
+            })
           );
       })
     )

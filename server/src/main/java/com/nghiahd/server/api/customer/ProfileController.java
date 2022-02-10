@@ -2,6 +2,7 @@ package com.nghiahd.server.api.customer;
 
 import com.nghiahd.server.common.*;
 import com.nghiahd.server.domain.Profile;
+import com.nghiahd.server.domain.custom.ProfileQuery;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.service.ProfileService;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,13 +33,19 @@ public class ProfileController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<BodyResponseDTO<Object>> createProfile(@RequestBody Profile profile) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, profileService.saveProfile(profile));
+    public ResponseEntity<BodyResponseDTO<ProfileQuery>> createProfile(@RequestBody ProfileQuery profile) {
+        return RestResponseWrapper.getResponse(HttpStatus.OK,
+                ApiResponseCode.SUCCESS,
+                this.messageUtils,
+                profileService.saveProfile(profile));
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> editProfile(@RequestBody Profile profile, @PathVariable UUID id) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, profileService.editProfile(profile, id));
+    public ResponseEntity<BodyResponseDTO<ProfileQuery>> editProfile(@RequestBody ProfileQuery profile, @PathVariable UUID id) {
+        return RestResponseWrapper.getResponse(HttpStatus.OK,
+                ApiResponseCode.SUCCESS,
+                this.messageUtils,
+                profileService.editProfile(profile, id));
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -82,9 +89,16 @@ public class ProfileController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public ResponseEntity<BodyResponseDTO<Profile>> getDetailByProfile(@PathVariable UUID id){
-        Profile profile = profileService.getProfileByID(id);
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, profile);
+    public ResponseEntity<BodyResponseDTO<ProfileQuery>> getDetailByProfile(@PathVariable UUID id) {
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        ProfileQuery profile = profileService.getProfileByID(id);
+        if (profile == null) {
+            apiResponseCode = ApiResponseCode.NOT_FOUND;
+        }
+        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(),
+                apiResponseCode,
+                this.messageUtils,
+                profile);
     }
 
 }

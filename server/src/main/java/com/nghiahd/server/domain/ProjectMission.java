@@ -1,5 +1,9 @@
 package com.nghiahd.server.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.nghiahd.server.common.mapper.LocalDateTimeDeserializer;
+import com.nghiahd.server.common.mapper.LocalDateTimeSerializer;
 import com.nghiahd.server.model.ProjectMissionDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,9 +57,13 @@ public class ProjectMission {
     @Column(name = "employeeid")
     private UUID employeeID;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "createdate")
     private LocalDateTime createDate;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "updatedate")
     private LocalDateTime updateDate;
 

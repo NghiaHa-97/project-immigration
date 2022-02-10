@@ -36,6 +36,7 @@ export function reducer(
       };
     }
 
+    case fromProfileAction.LOAD_DETAIL_PROFILE_SUCCESS:
     case fromProfileAction.UPDATE_PROFILE_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
       const profile = action.payload.data;

@@ -1,17 +1,21 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>{{!!(entityUpdate$ | async) ? 'Chi tiết' : 'Thêm mới'}}</mat-card-title>
-    <form [formGroup]="formEmployee" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formExpert" (ngSubmit)="onSubmit()">
       <div class="row">
-<!--        <div class="col-md-4 col-sm-4">-->
-<!--          <app-input-image (changeFileImage)="setFileImageControl($event)" [imagePath]="linkImage"></app-input-image>-->
-<!--        </div>-->
-<!--        <div class="col-md-4 col-sm-4">-->
-<!--          <app-input-image (changeFileImage)="setFileImageControl($event)" [imagePath]="linkImage"></app-input-image>-->
-<!--        </div>-->
-        <div class="col-md-4 col-sm-4">
+        <div class="col-md-4">
+          <app-input-image (changeFileImage)="setFilePassportImageControl($event)"
+                           [dataNameImage]="linkPassportImage$ | async">
+          </app-input-image>
+        </div>
+        <div class="col-md-4">
+          <app-input-image (changeFileImage)="setFilePortraitImageControl($event)"
+                           [dataNameImage]="linkPortraitImage$ | async">
+          </app-input-image>
+        </div>
+        <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <input formControlName="code" matInput placeholder="Mã chuyên gia" >
+            <input formControlName="code" matInput placeholder="Mã chuyên gia">
           </mat-form-field>
         </div>
       </div>
@@ -21,14 +25,11 @@
             <input formControlName="fullname" matInput placeholder="Họ và Tên">
           </mat-form-field>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <app-datepicker [control]="formControlBirthDay"
                           name="Ngày sinh"></app-datepicker>
         </div>
         <div class="col-md-4">
-          <!--          <mat-form-field class="example-full-width">-->
-          <!--            <input matInput placeholder="Giói tính" type="email">-->
-          <!--          </mat-form-field>-->
           <label>Giói tính: </label>
           <mat-radio-group formControlName="gender">
             <mat-radio-button [value]="false">Nữ</mat-radio-button>
@@ -37,117 +38,71 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <mat-label>Loại đơn vị</mat-label>
-            <mat-select formControlName="unitTypeID">
+            <mat-label>Quốc tịch</mat-label>
+            <mat-select formControlName="countryID">
               <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (unitType$ | async)" [value]="val.id">{{val.name}}</mat-option>
+              <mat-option *ngFor="let val of (countries$ | async)" [value]="val.id">{{val.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <mat-label>Nơi làm việc</mat-label>
-            <mat-select formControlName="workUnitID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (workUnit$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
+            <input formControlName="religion" matInput placeholder="Tôn giáo">
           </mat-form-field>
         </div>
         <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <mat-label>Phòng ban</mat-label>
-            <mat-select formControlName="departmentID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (department$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-2">
-          <mat-form-field class="example-full-width">
-            <mat-label>Chức vụ</mat-label>
-            <mat-select formControlName="positionID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (position$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
+            <input formControlName="occupation" matInput placeholder="Nghề nghiệp">
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <mat-label>Thành phố (nơi cứ chú)</mat-label>
-            <mat-select formControlName="cityProvinceID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (cityProvince$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <mat-label>Quận huyện (nơi cư chú)</mat-label>
-            <mat-select formControlName="districtID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (district$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <mat-label>Phường xã (nơi cư chú)</mat-label>
-            <mat-select formControlName="communeWardID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (communeWard$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-      <!--      <div class="row">-->
-      <!--        <div class="col-md-12">-->
-      <!--          <label>About Me</label>-->
-      <!--          <mat-form-field class="example-full-width">-->
-      <!--            <textarea matInput-->
-      <!--                      placeholder="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."></textarea>-->
-      <!--          </mat-form-field>-->
-      <!--          &lt;!&ndash; <div class="form-group">-->
-
-      <!--              <div class="form-group">-->
-      <!--                  <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>-->
-      <!--                  <textarea class="form-control" rows="5"></textarea>-->
-      <!--              </div>-->
-      <!--          </div> &ndash;&gt;-->
-      <!--        </div>-->
-      <!--      </div>-->
-
       <div class="row">
         <div class="col-md-12">
           <!--          <label>About Me</label>-->
           <mat-form-field class="example-full-width">
-            <textarea matInput formControlName="description"
-                      placeholder="Chi tiết thôn xóm nơi cư chú"></textarea>
+            <textarea matInput formControlName="permanentResidentialAddress"
+                      placeholder="Địa chỉ thường trú"></textarea>
           </mat-form-field>
-          <!-- <div class="form-group">
-
-              <div class="form-group">
-                  <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                  <textarea class="form-control" rows="5"></textarea>
-              </div>
-          </div> -->
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <input formControlName="phoneNumber" matInput placeholder="Số điện thoại" type="text">
+            <input formControlName="passportNumber" matInput placeholder="Số hộ chiếu">
           </mat-form-field>
         </div>
         <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <input formControlName="numberIdentityCard" matInput placeholder="Số căn cước công dân" type="text">
+            <input formControlName="phoneNumber" matInput placeholder="Số điện thoại">
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-4">
+          <app-datepicker [control]="formControlExpiryDate"
+                          name="Ngày hết hạn"></app-datepicker>
+        </div>
+        <div class="col-md-4">
+          <app-datepicker [control]="formControlDateOfEntry"
+                          name="Ngày nhập cảnh"></app-datepicker>
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input type="number"
+                   formControlName="lengthOfStay"
+                   matInput placeholder="Thời gian lưu trú">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <button mat-raised-button
+              type="button"
+              class="btn btn-danger float-left"
+              (click)="back()">Quay lại
+      </button>
       <button mat-raised-button
               type="submit"
               class="btn btn-danger float-right">Lưu
