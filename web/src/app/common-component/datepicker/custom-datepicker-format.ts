@@ -70,6 +70,14 @@ export class CustomDateAdapter extends NativeDateAdapter {
     return isNaN(timestamp) ? null : new Date(timestamp);
   }
 
+  format(date: Date, displayFormat: Object): string {
+
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(),
+      date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+
+    return moment(date).format("DD/MM/YYYY");
+  }
+
   // retirar quando for feito o merge da data por mmalerba
   // format(date: Date, displayFormat: Object): string {
   //
@@ -85,13 +93,7 @@ export class CustomDateAdapter extends NativeDateAdapter {
   // }
 
 
-  format(date: Date, displayFormat: Object): string {
 
-    date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(),
-      date.getMinutes(), date.getSeconds(), date.getMilliseconds());
-
-    return moment(date).format("DD/MM/YYYY");
-  }
 
 }
 

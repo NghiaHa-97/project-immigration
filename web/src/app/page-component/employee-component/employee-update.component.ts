@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
@@ -21,10 +21,10 @@ import {
 } from '../../store';
 import * as moment from 'moment';
 
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {getPrefixID} from '../../constans/prefix-id.const';
-import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
+import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
 
 @Component({
   selector: 'app-employee-update',
@@ -32,7 +32,7 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
   styleUrls: ['./employee-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmployeeUpdateComponent implements OnInit {
+export class EmployeeUpdateComponent implements OnInit, OnDestroy {
   formEmployee: FormGroup;
   formData: FormData = new FormData();
   entityEmployee: any;
@@ -46,9 +46,11 @@ export class EmployeeUpdateComponent implements OnInit {
   public position$!: Observable<any>;
   public entityUpdate$!: Observable<any>;
   private readonly initForm: any;
+  public linkImage$ = new BehaviorSubject<any>({name: ''});
 
   constructor(private fb: FormBuilder,
-              private store: Store<fromStore.FeatureState>) {
+              private store: Store<fromStore.FeatureState>,
+              private patternFormat: PatternFormat) {
     this.formEmployee = this.fb.group({
       code: [{value: '', disabled: true}],
       fullname: ['Dev Test'],
@@ -74,9 +76,9 @@ export class EmployeeUpdateComponent implements OnInit {
     return this.formEmployee.get('birthDay') as FormControl;
   }
 
-  get linkImage(): { name: string } {
-    return {name: this.formEmployee.value.avatar};
-  }
+  // get linkImage(): { name: string } {
+  //   return {name: this.formEmployee.value.avatar};
+  // }
 
 
   ngOnInit(): void {
@@ -87,6 +89,7 @@ export class EmployeeUpdateComponent implements OnInit {
             map(entities => entities[getPrefixID(data?.id)]),
             tap(entity => {
               this.entityEmployee = entity;
+              this.linkImage$.next({name: this.entityEmployee.avatar});
               this.formEmployee.patchValue({...entity});
             })
           );
@@ -110,23 +113,28 @@ export class EmployeeUpdateComponent implements OnInit {
     this.position$ = this.store.select(getArrayPositionState);
 
 
-    this.formEmployee.get('cityProvinceID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadDistrictByCityProvince(val)));
-    this.formEmployee.get('districtID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadCommuneWardByDistrict(val)));
+    this.formEmployee.get('cityProvinceID')?.valueChanges
+      .subscribe(val => this.store.dispatch(new LoadDistrictByCityProvince(val)));
+    this.formEmployee.get('districtID')?.valueChanges
+      .subscribe(val => this.store.dispatch(new LoadCommuneWardByDistrict(val)));
 
-    this.formEmployee.get('unitTypeID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadWorkUnitByUnitType(val)));
-    this.formEmployee.get('workUnitID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadDepartmentByWorkUnit(val)));
-    this.formEmployee.get('departmentID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadPositionByDepartment(val)));
+    this.formEmployee.get('unitTypeID')?.valueChanges
+      .subscribe(val => this.store.dispatch(new LoadWorkUnitByUnitType(val)));
+    this.formEmployee.get('workUnitID')?.valueChanges
+      .subscribe(val => this.store.dispatch(new LoadDepartmentByWorkUnit(val)));
+    this.formEmployee.get('departmentID')?.valueChanges
+      .subscribe(val => this.store.dispatch(new LoadPositionByDepartment(val)));
   }
 
 
   onSubmit(): void {
 
     let value = this.formEmployee.value;
-    value.birthDay = moment(value.birthDay).format(PATTERN_FORMAT_DATE.DATE_REQUEST);
+    value.birthDay = this.patternFormat.formatDateToDateRequest(value.birthDay);
     if (!!this.entityEmployee) {
       value = {...this.entityEmployee, ...value};
-      value.createDate = moment(value.createDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
-      value.updateDate = moment(value.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
+      value.createDate = this.patternFormat.formatDatetimeToDatetimeRequest(value.createDate);
+      value.updateDate = this.patternFormat.formatDatetimeToDatetimeRequest(value.updateDate);
     }
     if (this.formData.has('employee')) {
       this.formData.set('employee', JSON.stringify(value));
@@ -146,6 +154,7 @@ export class EmployeeUpdateComponent implements OnInit {
       ).subscribe(status => {
         if (status === '200') {
           this.formEmployee.reset(this.initForm);
+          this.linkImage$.next({name: ''});
         }
       });
     }
@@ -164,5 +173,9 @@ export class EmployeeUpdateComponent implements OnInit {
 
   back(): void {
     this.store.dispatch(new Go({path: ['nhan-vien']}));
+  }
+
+  ngOnDestroy(): void {
+    this.linkImage$.complete();
   }
 }

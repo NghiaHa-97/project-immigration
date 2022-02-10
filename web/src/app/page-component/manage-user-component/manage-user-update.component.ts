@@ -107,7 +107,7 @@ export class ManageUserUpdateComponent implements OnInit {
   openDialog(type: string): void {
 
     switch (type) {
-      case this.EMPLOYEE:
+      case this.EMPLOYEE: {
         const dialogEmployeeRef = this.dialog.open(EmployeeComponent, {
           width: '60%',
           height: '75%',
@@ -138,7 +138,9 @@ export class ManageUserUpdateComponent implements OnInit {
             }
           });
         break;
-      case this.ROLE:
+      }
+
+      case this.ROLE: {
         const dialogRoleRef = this.dialog.open(RoleComponent, {
           width: '60%',
           height: '75%',
@@ -168,25 +170,27 @@ export class ManageUserUpdateComponent implements OnInit {
             }
           });
         break;
+      }
     }
-
   }
 
   removeValue(type: string): void {
     switch (type) {
-      case this.EMPLOYEE:
+      case this.EMPLOYEE: {
         this.formUserCustomer.patchValue({
           employeeFullName: [''],
           employeeCode: [''],
           employeeID: ['']
         });
         break;
-      case this.ROLE:
+      }
+      case this.ROLE: {
         this.formUserCustomer.patchValue({
           roleName: [''],
           roleID: [0]
         });
         break;
+      }
     }
   }
 

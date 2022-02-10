@@ -1,6 +1,7 @@
 package com.nghiahd.server.api.customer;
 
 import com.nghiahd.server.common.*;
+import com.nghiahd.server.common.mapper.ObjectMapperUtils;
 import com.nghiahd.server.domain.Experts;
 import com.nghiahd.server.model.ExpertsDTO;
 import com.nghiahd.server.service.ExpertsService;
@@ -11,8 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,14 +33,58 @@ public class ExpertsController {
         this.messageUtils = messageUtils;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<BodyResponseDTO<Object>> createExperts(@RequestBody Experts ex) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, expertsService.saveExperts(ex));
+    @PostMapping(value = "/create",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<BodyResponseDTO<Experts>> createExperts(
+            @RequestPart("expert") String ex,
+            @RequestPart(value = "passportImage", required = false) MultipartFile passportImage,
+            @RequestPart(value = "portraitPhotography", required = false) MultipartFile portraitPhotography) {
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        Experts experts = ObjectMapperUtils.convertJsonToObject(ex, Experts.class);
+        Experts expertsSaved = null;
+        if (experts != null) {
+            expertsSaved = this.expertsService.createExperts(experts, passportImage, portraitPhotography);
+        } else {
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+
+        if (expertsSaved == null) {
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+        return RestResponseWrapper.getResponse(
+                apiResponseCode.getStatus(),
+                apiResponseCode,
+                this.messageUtils,
+                experts);
     }
 
-    @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> editExperts(@RequestBody Experts experts, @PathVariable UUID id) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, expertsService.editExperts(experts, id));
+    @PutMapping(value = "/edit/{id}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<BodyResponseDTO<Object>> editExperts(
+            @RequestPart("expert") String ex,
+            @RequestPart(value = "passportImage", required = false) MultipartFile passportImage,
+            @RequestPart(value = "portraitPhotography", required = false) MultipartFile portraitPhotography,
+            @PathVariable UUID id
+    ) {
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        Experts experts = ObjectMapperUtils.convertJsonToObject(ex, Experts.class);
+        Experts expertsSaved = null;
+        if (experts != null) {
+            expertsSaved = this.expertsService.editExperts(experts, passportImage, portraitPhotography, id);
+        } else {
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+
+        if (expertsSaved == null) {
+            apiResponseCode = ApiResponseCode.BAD_REQUEST;
+        }
+
+        return RestResponseWrapper.getResponse(
+                apiResponseCode.getStatus(),
+                apiResponseCode,
+                this.messageUtils,
+                expertsSaved
+        );
     }
 
     @DeleteMapping(value = "/delete/{id}")

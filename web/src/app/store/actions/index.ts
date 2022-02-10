@@ -17,6 +17,7 @@ export * from './work-unit.action';
 export * from './vehicle.action';
 export * from './role.action';
 export * from './module.action';
+export * from './country.action';
 
 export * from './manage-user.action';
 export * from './status-profile.action';

@@ -26,8 +26,6 @@ public class ProfileDTO {
     private String employeeCreateName;
     private UUID approverID;
     private String approverName;
-    private Integer unitCreateProfileID;
-    private String unitCreateProfileName;
     private Integer quantityEmployee;
     private Integer quantityExperts;
 
@@ -40,7 +38,8 @@ public class ProfileDTO {
     public ProfileDTO() {
     }
 
-    public ProfileDTO(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate, UUID employeeCreateID, String employeeCreateName, UUID approverID, String approverName, Integer unitCreateProfileID, String unitCreateProfileName, Integer quantityEmployee, Integer quantityExperts, String projectMissionName, String workUnitName, String departmentName, String vehicleName, String statusProfileName) {
+    public ProfileDTO(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate, UUID employeeCreateID, String employeeCreateName, UUID approverID, String approverName,
+                      Integer quantityEmployee, Integer quantityExperts, String projectMissionName, String workUnitName, String departmentName, String vehicleName, String statusProfileName) {
         this.id = id;
         this.code = code;
         this.projectMissionID = projectMissionID;
@@ -56,8 +55,6 @@ public class ProfileDTO {
         this.employeeCreateName = employeeCreateName;
         this.approverID = approverID;
         this.approverName = approverName;
-        this.unitCreateProfileID = unitCreateProfileID;
-        this.unitCreateProfileName = unitCreateProfileName;
         this.quantityEmployee = quantityEmployee;
         this.quantityExperts = quantityExperts;
         this.projectMissionName = projectMissionName;

@@ -40,4 +40,13 @@ public class SaveFileUtils {
         return newName.replace(":", "-") + "." + postfix;
     }
 
+    public static String createNameFile(String newName, String oldNameFile, String prefix) {
+        String[] arr = oldNameFile.split("\\.");
+        String postfix = "PNG";
+        if (arr.length > 1) {
+            postfix = arr[arr.length - 1];
+        }
+        return prefix + newName.replace(":", "-") + "." + postfix;
+    }
+
 }

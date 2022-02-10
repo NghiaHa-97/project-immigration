@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nghiahd.server.model.ProfileDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "profile")
 @SqlResultSetMappings({
@@ -48,8 +52,8 @@ import java.util.UUID;
                                         @ColumnResult(name = "employeeCreateName", type = String.class),
                                         @ColumnResult(name = "approverID", type = UUID.class),
                                         @ColumnResult(name = "approverName", type = String.class),
-                                        @ColumnResult(name = "unitCreateProfileID", type = Integer.class),
-                                        @ColumnResult(name = "unitCreateProfileName", type = String.class),
+//                                        @ColumnResult(name = "unitCreateProfileID", type = Integer.class),
+//                                        @ColumnResult(name = "unitCreateProfileName", type = String.class),
                                         @ColumnResult(name = "quantityEmployee", type = Integer.class),
                                         @ColumnResult(name = "quantityExperts", type = Integer.class),
 
@@ -106,23 +110,15 @@ public class Profile implements Serializable {
     @Column(name = "approverid")
     private UUID approverID;
 
-    @Column(name = "unitcreateprofileid")
-    private Integer unitCreateProfileID;
-
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "profileID",
-            cascade = {CascadeType.ALL})
-    private Set<ExpertsInProfile> expertsInProfiles;
-
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "profileID",
-            cascade = {CascadeType.ALL})
-    private Set<EmployeeInProfile> employeeInProfiles;
-
     public Profile() {
     }
 
-    public Profile(UUID id, String code, Integer projectMissionID, Integer workUnitID, Integer departmentID, Integer vehicleID, Integer statusProfileID, String description, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime expirationDate, UUID employeeCreateID, UUID approverID, Integer unitCreateProfileID) {
+    public Profile(UUID id, String code, Integer projectMissionID,
+                   Integer workUnitID, Integer departmentID,
+                   Integer vehicleID, Integer statusProfileID,
+                   String description, LocalDateTime createDate,
+                   LocalDateTime updateDate, LocalDateTime expirationDate,
+                   UUID employeeCreateID, UUID approverID) {
         this.id = id;
         this.code = code;
         this.projectMissionID = projectMissionID;
@@ -136,134 +132,5 @@ public class Profile implements Serializable {
         this.expirationDate = expirationDate;
         this.employeeCreateID = employeeCreateID;
         this.approverID = approverID;
-        this.unitCreateProfileID = unitCreateProfileID;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Integer getProjectMissionID() {
-        return projectMissionID;
-    }
-
-    public void setProjectMissionID(Integer projectMissionID) {
-        this.projectMissionID = projectMissionID;
-    }
-
-    public Integer getWorkUnitID() {
-        return workUnitID;
-    }
-
-    public void setWorkUnitID(Integer workUnitID) {
-        this.workUnitID = workUnitID;
-    }
-
-    public Integer getDepartmentID() {
-        return departmentID;
-    }
-
-    public void setDepartmentID(Integer departmentID) {
-        this.departmentID = departmentID;
-    }
-
-    public Integer getVehicleID() {
-        return vehicleID;
-    }
-
-    public void setVehicleID(Integer vehicleID) {
-        this.vehicleID = vehicleID;
-    }
-
-    public Integer getStatusProfileID() {
-        return statusProfileID;
-    }
-
-    public void setStatusProfileID(Integer statusProfileID) {
-        this.statusProfileID = statusProfileID;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public UUID getEmployeeCreateID() {
-        return employeeCreateID;
-    }
-
-    public void setEmployeeCreateID(UUID employeeCreateID) {
-        this.employeeCreateID = employeeCreateID;
-    }
-
-    public UUID getApproverID() {
-        return approverID;
-    }
-
-    public void setApproverID(UUID approverID) {
-        this.approverID = approverID;
-    }
-
-    public Integer getUnitCreateProfileID() {
-        return unitCreateProfileID;
-    }
-
-    public void setUnitCreateProfileID(Integer unitCreateProfileID) {
-        this.unitCreateProfileID = unitCreateProfileID;
-    }
-
-    public Set<ExpertsInProfile> getExpertsInProfiles() {
-        return expertsInProfiles;
-    }
-
-    public void setExpertsInProfiles(Set<ExpertsInProfile> expertsInProfiles) {
-        this.expertsInProfiles = expertsInProfiles;
-    }
-
-    public Set<EmployeeInProfile> getEmployeeInProfiles() {
-        return employeeInProfiles;
-    }
-
-    public void setEmployeeInProfiles(Set<EmployeeInProfile> employeeInProfiles) {
-        this.employeeInProfiles = employeeInProfiles;
     }
 }

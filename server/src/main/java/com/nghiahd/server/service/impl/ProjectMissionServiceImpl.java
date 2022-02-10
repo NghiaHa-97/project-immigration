@@ -1,6 +1,7 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.common.ApiResponseCode;
+import com.nghiahd.server.common.AuthenticationCommon;
 import com.nghiahd.server.domain.ProjectMission;
 import com.nghiahd.server.model.ProjectMissionDTO;
 import com.nghiahd.server.model.UserLogin;
@@ -33,16 +34,13 @@ public class ProjectMissionServiceImpl implements ProjectMissionService {
 
     @Override
     public boolean checkNotNullWorkUnitIDAndEmployeeID() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserLogin userLogin = ((UserLogin) authentication.getPrincipal());
+        UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
         return userLogin != null && userLogin.getWorkUnitID() != null && userLogin.getEmployeeID() != null;
     }
 
     @Override
     public ProjectMission saveProjectMission(ProjectMission projectMission) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserLogin userLogin = ((UserLogin) authentication.getPrincipal());
-
+        UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
         projectMission.setWorkUnitCreateID(userLogin.getWorkUnitID());
         projectMission.setEmployeeID(userLogin.getEmployeeID());
         projectMission.setCreateDate(LocalDateTime.now());

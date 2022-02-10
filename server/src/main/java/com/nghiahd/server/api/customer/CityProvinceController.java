@@ -28,6 +28,9 @@ public class CityProvinceController {
 
     @GetMapping()
     public ResponseEntity<BodyResponseDTO<List<CityProvince>>> getAllCityProvince() {
-        return RestResponseWrapper.getResponse(HttpStatus.OK, ApiResponseCode.SUCCESS, this.messageUtils, cityProvinceService.getAllCityProvince());
+        return RestResponseWrapper.getResponse(HttpStatus.OK,
+                ApiResponseCode.SUCCESS,
+                this.messageUtils,
+                cityProvinceService.getAllCityProvince());
     }
 }

@@ -1,8 +1,13 @@
 package com.nghiahd.server.service.impl;
 
+import com.nghiahd.server.common.AuthenticationCommon;
 import com.nghiahd.server.domain.Profile;
+import com.nghiahd.server.domain.StatusProfile;
+import com.nghiahd.server.domain.custom.EmployeeQuery;
+import com.nghiahd.server.domain.custom.ProfileQuery;
 import com.nghiahd.server.model.ProfileDTO;
-import com.nghiahd.server.repository.ProfileCustomRepository;
+import com.nghiahd.server.model.UserLogin;
+import com.nghiahd.server.repository.ProfileQueryRepository;
 import com.nghiahd.server.repository.ProfileRepository;
 import com.nghiahd.server.service.ProfileService;
 import org.springframework.data.domain.Page;
@@ -19,27 +24,35 @@ import java.util.UUID;
 @Transactional
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
-    private final ProfileCustomRepository profileCustomRepository;
+    private final ProfileQueryRepository profileQueryRepository;
 
     public ProfileServiceImpl(ProfileRepository profileRepository,
-                              ProfileCustomRepository profileCustomRepository) {
+                              ProfileQueryRepository profileQueryRepository) {
         this.profileRepository = profileRepository;
-        this.profileCustomRepository = profileCustomRepository;
+        this.profileQueryRepository = profileQueryRepository;
     }
 
     @Override
-    public Profile saveProfile(Profile profile) {
+    public ProfileQuery saveProfile(ProfileQuery profile) {
         profile.setCreateDate(LocalDateTime.now());
         profile.setUpdateDate(LocalDateTime.now());
-        return profileRepository.save(profile);
+        UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
+        profile.setEmployeeCreate(new EmployeeQuery(userLogin.getEmployeeID()));
+        profile.setId(UUID.randomUUID());
+        return profileQueryRepository.save(profile);
     }
 
     @Override
-    public Profile editProfile(Profile profile, UUID id) {
+    public ProfileQuery editProfile(ProfileQuery profile, UUID id) {
         profile.setUpdateDate(LocalDateTime.now());
+//        Optional<Profile> pro = profileRepository.findById(id);
         Optional<Profile> pro = profileRepository.findById(id);
         if (pro.isPresent()) {
-            return profileRepository.save(profile);
+            profile.setStatusProfile(new StatusProfile(1));
+            profile.setCreateDate(pro.get().getCreateDate());
+            UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
+            profile.setEmployeeCreate(new EmployeeQuery(userLogin.getEmployeeID()));
+            return profileQueryRepository.save(profile);
         }
         return null;
     }
@@ -68,15 +81,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile getProfileByID(UUID id) {
-
-        Profile op = profileRepository.findById(id).orElse(null);
-//        lazy load
-//        if (op != null) {
-
-//            op.setExpertsInProfiles(null);
-//            op.setEmployeeInProfiles(null);
-//        }
+    public ProfileQuery getProfileByID(UUID id) {
+        ProfileQuery op = profileQueryRepository.findById(id).orElse(null);
         return op;
     }
 }

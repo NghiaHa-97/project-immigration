@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
-    <mat-card-title>{{!!(entityUpdate$ | async) ? 'Chi tiết' : 'Thêm mới'}}</mat-card-title>
-    <form [formGroup]="formEmployee" (ngSubmit)="onSubmit()">
+    <mat-card-title>{{!isCreate ? 'Chi tiết' : 'Thêm mới'}}</mat-card-title>
+    <form [formGroup]="formProfile" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-md-4 col-sm-4">
           <mat-form-field class="example-full-width">
@@ -10,45 +10,68 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <input formControlName="fullname" matInput placeholder="Họ và Tên">
-          </mat-form-field>
+        <div class="col-md-10">
+          <label>Nhiệm vụ</label>
+          <button (click)="openDialog(PROJECT_MISSION)"
+                  mat-mini-fab
+                  color="accent"
+                  type="button"
+                  style="margin-left: 5px">
+            <mat-icon>add</mat-icon>
+          </button>
+          <mat-accordion class="example-headers-align">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <!--                <mat-panel-title>-->
+                <!--                  Thông tin nhiệm vụ-->
+                <!--                </mat-panel-title>-->
+                <mat-panel-description>
+                  {{entityProfile?.projectMission ? "Xem thông tin nhiệm vụ" : "Chưa có nhiệm vụ nào"}}
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <mat-list>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Tên nhiệm vụ </h3>
+                      <p matLine>
+                        <span> {{getProjectMissionName}} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Ngày tạo </h3>
+                      <p matLine>
+                        <span> {{getProjectMissionCreateDate}} </span>
+                      </p>
+                    </mat-list-item>
+                    <mat-list-item>
+                      <h3 matLine>Ngày sửa </h3>
+                      <p matLine>
+                        <span> {{getProjectMissionUpdateDate}}</span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+              </mat-list>
+
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
-        <div class="col-md-3">
-          <app-datepicker [control]="formControlBirthDay"
-                          name="Ngày sinh"></app-datepicker>
-        </div>
+      </div>
+      <div class="row" style="margin-top: 10px">
+
         <div class="col-md-4">
-          <!--          <mat-form-field class="example-full-width">-->
-          <!--            <input matInput placeholder="Giói tính" type="email">-->
-          <!--          </mat-form-field>-->
-          <label>Giói tính: </label>
-          <mat-radio-group formControlName="gender">
-            <mat-radio-button [value]="false">Nữ</mat-radio-button>
-            <mat-radio-button [value]="true">Nam</mat-radio-button>
-          </mat-radio-group>
+          <label>Đơn vị công tác</label>
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip>{{getWorkUnitName}}</mat-chip>
+          </mat-chip-list>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-2">
-          <mat-form-field class="example-full-width">
-            <mat-label>Loại đơn vị</mat-label>
-            <mat-select formControlName="unitTypeID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (unitType$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <mat-label>Nơi làm việc</mat-label>
-            <mat-select formControlName="workUnitID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (workUnit$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
         <div class="col-md-4">
           <mat-form-field class="example-full-width">
             <mat-label>Phòng ban</mat-label>
@@ -58,102 +81,314 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-md-2">
-          <mat-form-field class="example-full-width">
-            <mat-label>Chức vụ</mat-label>
-            <mat-select formControlName="positionID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (position$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Trạng thái</label>
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip color="primary"
+                      selected>{{entityProfile?.statusProfile?.name ?? 'Không có trạng thái'}}</mat-chip>
+          </mat-chip-list>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <mat-form-field class="example-full-width">
-            <mat-label>Thành phố (nơi cứ chú)</mat-label>
-            <mat-select formControlName="cityProvinceID">
+            <mat-label>Phương tiện đi lại</mat-label>
+            <mat-select formControlName="vehicleID">
               <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (cityProvince$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <mat-label>Quận huyện (nơi cư chú)</mat-label>
-            <mat-select formControlName="districtID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (district$ | async)" [value]="val.id">{{val.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <mat-label>Phường xã (nơi cư chú)</mat-label>
-            <mat-select formControlName="communeWardID">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let val of (communeWard$ | async)" [value]="val.id">{{val.name}}</mat-option>
+              <mat-option *ngFor="let val of (vehicles$ | async)" [value]="val.id">{{val.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </div>
-      <!--      <div class="row">-->
-      <!--        <div class="col-md-12">-->
-      <!--          <label>About Me</label>-->
-      <!--          <mat-form-field class="example-full-width">-->
-      <!--            <textarea matInput-->
-      <!--                      placeholder="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."></textarea>-->
-      <!--          </mat-form-field>-->
-      <!--          &lt;!&ndash; <div class="form-group">-->
-
-      <!--              <div class="form-group">-->
-      <!--                  <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>-->
-      <!--                  <textarea class="form-control" rows="5"></textarea>-->
-      <!--              </div>-->
-      <!--          </div> &ndash;&gt;-->
-      <!--        </div>-->
-      <!--      </div>-->
-
       <div class="row">
+        <div class="col-md-10">
+          <app-rich-text-editor label="Mô tả hồ sơ" [description]="description">
+          </app-rich-text-editor>
+        </div>
+
+        <!--        <div [innerHTML]="richTextForm.value.description | safeHtml"></div>-->
+      </div>
+      <div class="row" style="margin-top: 15px">
         <div class="col-md-12">
-          <!--          <label>About Me</label>-->
-          <mat-form-field class="example-full-width">
-            <textarea matInput formControlName="description"
-                      placeholder="Chi tiết thôn xóm nơi cư chú"></textarea>
-          </mat-form-field>
-          <!-- <div class="form-group">
+          <label>Chuyên gia tham gia</label>
+          <button mat-mini-fab
+                  (click)="openDialog(EXPERT)"
+                  color="accent"
+                  type="button"
+                  style="margin-left: 5px">
+            <mat-icon>add</mat-icon>
+          </button>
+          <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel *ngFor="let item of getExperts; let i = index">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{i + 1 + ' : ' + (item?.code ?? '') + ' - ' + (item?.fullname ?? '')}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-list>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Mã: </h3>
+                      <p matLine>
+                        <span> {{item?.code ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Tên: </h3>
+                      <p matLine>
+                        <span> {{item?.fullname ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Ngày sinh: </h3>
+                      <p matLine>
+                        <span> {{formatDateToString(item?.birthDay, item?.isFormatDate)}}</span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Quốc tịch: </h3>
+                      <p matLine>
+                        <span> {{item?.country?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+              </mat-list>
 
-              <div class="form-group">
-                  <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                  <textarea class="form-control" rows="5"></textarea>
-              </div>
-          </div> -->
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <input formControlName="phoneNumber" matInput placeholder="Số điện thoại" type="text">
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <input formControlName="numberIdentityCard" matInput placeholder="Số căn cước công dân" type="text">
-          </mat-form-field>
+      <div class="row" style="margin-top: 15px">
+        <div class="col-md-12">
+          <label>Nhân viên tham gia</label>
+          <button mat-mini-fab (click)="openDialog(EMPLOYEE)"
+                  color="accent"
+                  type="button"
+                  style="margin-left: 5px">
+            <mat-icon>add</mat-icon>
+          </button>
+          <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel *ngFor="let item of getEmployees; let i = index">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{i + 1 + ' : ' + (item?.code || '') + ' - ' + (item?.fullname || '')}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-list>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Mã: </h3>
+                      <p matLine>
+                        <span> {{item?.code ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Tên: </h3>
+                      <p matLine>
+                        <span> {{item?.fullname ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Ngày sinh: </h3>
+                      <p matLine>
+                        <span> {{formatDateToString(item?.birthDay, item?.isFormatDate)}}</span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Phòng ban: </h3>
+                      <p matLine>
+                        <span> {{item?.department?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Chức vụ: </h3>
+                      <p matLine>
+                        <span> {{item?.position?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+              </mat-list>
+            </mat-expansion-panel>
+
+          </mat-accordion>
         </div>
       </div>
-      <div class="row">
-<!--        <div class="col-md-12">-->
-<!--          <app-rich-text-editor [richTextForm]="richTextForm"></app-rich-text-editor>-->
-<!--          <div class="alert alert-info">-->
-<!--            {{ richTextForm.value | json }}-->
-<!--          </div>-->
-<!--          <div [innerHTML]="richTextForm.value.description | safeHtml"></div>-->
-<!--        </div>-->
+      <div class="row" style="margin-top: 15px">
+        <div class="col-md-12">
+          <label>Nhân viên tạo</label>
+          <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+<!--                <mat-panel-title>-->
+<!--                  Personal data-->
+<!--                </mat-panel-title>-->
+                <mat-panel-description>
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-list *ngIf="!!getEmployeeCreate">
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Mã: </h3>
+                      <p matLine>
+                        <span> {{getEmployeeCreate?.code ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Tên: </h3>
+                      <p matLine>
+                        <span> {{getEmployeeCreate?.fullname ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Ngày sinh: </h3>
+                      <p matLine>
+                        <span> {{formatDateToString(getEmployeeCreate?.birthDay)}}</span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Phòng ban: </h3>
+                      <p matLine>
+                        <span> {{getEmployeeCreate?.department?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Chức vụ: </h3>
+                      <p matLine>
+                        <span> {{getEmployeeCreate?.position?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+              </mat-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 15px">
+        <div class="col-md-12">
+          <label>Nhân viên gửi</label>
+          <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+<!--                <mat-panel-title>-->
+<!--                  Personal data-->
+<!--                </mat-panel-title>-->
+                <mat-panel-description>
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-list *ngIf="!!getApprover">
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Mã: </h3>
+                      <p matLine>
+                        <span> {{getApprover?.code ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Tên: </h3>
+                      <p matLine>
+                        <span> {{getApprover?.fullname ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Ngày sinh: </h3>
+                      <p matLine>
+                        <span> {{formatDateToString(getApprover?.birthDay)}}</span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Phòng ban: </h3>
+                      <p matLine>
+                        <span> {{getApprover?.department?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Chức vụ: </h3>
+                      <p matLine>
+                        <span> {{getApprover?.position?.name ?? '' }} </span>
+                      </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+              </mat-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
       </div>
       <button mat-raised-button
+              type="button"
+              class="btn btn-danger float-left"
+              (click)="back()"
+              style="margin-top: 10px">Quay lại
+      </button>
+      <button mat-raised-button
               type="submit"
-              class="btn btn-danger float-right">Lưu
+              class="btn btn-danger float-right"
+              style="margin-top: 10px">Lưu
       </button>
       <div class="clearfix"></div>
     </form>

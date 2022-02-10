@@ -83,10 +83,15 @@ public class EmployeeController {
         if (employeeSaved == null) {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, employee);
+        return RestResponseWrapper.getResponse(
+                apiResponseCode.getStatus(),
+                apiResponseCode,
+                this.messageUtils,
+                employee);
     }
 
-    @PutMapping(value = "/edit/{id}")
+    @PutMapping(value = "/edit/{id}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<BodyResponseDTO<Employee>> editEmployee(@RequestPart("employee") String em,
                                                                   @RequestPart(value = "file", required = false) MultipartFile file,
                                                                   @PathVariable UUID id) {
@@ -102,7 +107,11 @@ public class EmployeeController {
         if (employeeSaved == null) {
             apiResponseCode = ApiResponseCode.BAD_REQUEST;
         }
-        return RestResponseWrapper.getResponse(apiResponseCode.getStatus(), apiResponseCode, this.messageUtils, employeeSaved);
+        return RestResponseWrapper.getResponse(
+                apiResponseCode.getStatus(),
+                apiResponseCode,
+                this.messageUtils,
+                employeeSaved);
     }
 
     @DeleteMapping(value = "/delete/{id}")

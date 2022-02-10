@@ -13,6 +13,7 @@ import * as fromWorkUnit from './feature/work-unit.reducer';
 import * as fromStatusProfile from './feature/status-profile.reducer';
 
 import * as fromVehicle from './feature/vehicle.reducer';
+import * as fromCountry from './feature/country.reducer';
 import * as fromRole from './feature/role.reducer';
 import * as fromModule from './feature/module.reducer';
 
@@ -39,6 +40,7 @@ export interface FeatureState {
   module: fromModule.ModuleState;
   manageUser: fromManageUser.ManageUserState;
   projectMission: fromProjectMission.ProjectMissionState;
+  country: fromCountry.CountryState;
 }
 
 export const featuresReducers: ActionReducerMap<FeatureState, any> = {
@@ -59,6 +61,7 @@ export const featuresReducers: ActionReducerMap<FeatureState, any> = {
   module: fromModule.reducer,
   manageUser: fromManageUser.reducer,
   projectMission: fromProjectMission.reducer,
+  country: fromCountry.reducer,
 };
 
 export const getFeaturesState = createFeatureSelector<FeatureState>(
@@ -86,3 +89,4 @@ export const getModule = (state: FeatureState) => state.module;
 
 export const getManageUser = (state: FeatureState) => state.manageUser;
 export const getProjectMission = (state: FeatureState) => state.projectMission;
+export const getCountry = (state: FeatureState) => state.country;

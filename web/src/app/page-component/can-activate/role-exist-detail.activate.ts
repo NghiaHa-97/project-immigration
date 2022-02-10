@@ -25,7 +25,7 @@ export class RoleExistDetailActivate implements CanActivate {
       .pipe(
         map((entities: { [key: string]: any }) => entities[getPrefixID(id)]?.isDetail),
         take(1),
-        tap(data => console.log('++++++', data))
+        // tap(data => console.log('++++++', data))
       );
   }
 
@@ -39,7 +39,7 @@ export class RoleExistDetailActivate implements CanActivate {
       }),
       filter(loaded => loaded),
       take(1),
-      tap(data => console.log(data))
+      // tap(data => console.log(data))
     );
   }
 

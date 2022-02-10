@@ -1,30 +1,20 @@
-import {ChangeDetectionStrategy, Component, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import * as moment from 'moment';
-import {map, switchMap, take, tap} from 'rxjs/operators';
+import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
-  CreateEmployee,
-  getArrayCityProvinceState,
-  getArrayCommuneWardState,
-  getArrayDepartmentState,
-  getArrayDistrictState,
-  getArrayPositionState,
-  getArrayUnitTypeState,
-  getArrayWorkUnitState,
-  getEmployeeEntitiesState,
-  LoadCityProvince,
-  LoadCommuneWardByDistrict,
-  LoadDepartmentByWorkUnit,
-  LoadDistrictByCityProvince,
-  LoadPositionByDepartment,
-  LoadUnitType,
-  LoadWorkUnitByUnitType, UpdateEmployee
+  CreateExperts,
+  getArrayCountryState,
+  getCountryLoadedState, getExpertsEntitiesState,
+  Go,
+  LoadCountry,
+  UpdateExperts
 } from '../../store';
 import {getPrefixID} from '../../constans/prefix-id.const';
-import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
+import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
 
 @Component({
   selector: 'app-experts-update',
@@ -32,70 +22,62 @@ import {PATTERN_FORMAT_DATE} from '../../constans/pattern-format-date.const';
   styleUrls: ['./experts-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpertsUpdateComponent implements OnInit{
-  formEmployee: FormGroup;
+export class ExpertsUpdateComponent implements OnInit {
+  formExpert: FormGroup;
   formData: FormData = new FormData();
-  entityEmployee: any;
-  public cityProvince$!: Observable<any>;
-  public district$!: Observable<any>;
-  public communeWard$!: Observable<any>;
-
-  public unitType$!: Observable<any>;
-  public workUnit$!: Observable<any>;
-  public department$!: Observable<any>;
-  public position$!: Observable<any>;
+  entityExpert: any = null;
+  public countries$!: Observable<any>;
   public entityUpdate$!: Observable<any>;
+  private readonly initForm: any;
+  public linkPortraitImage$ = new BehaviorSubject({name: ''});
+  public linkPassportImage$ = new BehaviorSubject({name: ''});
 
   constructor(private fb: FormBuilder,
-              private store: Store<fromStore.FeatureState>) {
-    this.formEmployee = this.fb.group({
-      code: [{value: '', disabled: true}],
+              private store: Store<fromStore.FeatureState>,
+              private patternFormat: PatternFormat) {
+    this.formExpert = this.fb.group({
+      code: [{value: null, disabled: true}],
       fullname: ['Dev Test'],
-      avatar: [null],
-      gender: [0],
+      gender: [true],
       birthDay: [moment().format()],
-      workUnitID: [null],
-      departmentID: [null],
-      positionID: [null],
-      cityProvinceID: [null],
-      districtID: [null],
-      communeWardID: [null],
-      description: ['description'],
-      phoneNumber: ['phoneNumber'],
-      numberIdentityCard: ['numberIdentityCard'],
-      unitTypeID: [null]
-      // createDate: [moment().format(PATTERN_FORMAT_DATE.DATETIME_REQUEST)]
+      countryID: [null],
+      religion: [null],
+      occupation: [null],
+      permanentResidentialAddress: [null],
+      phoneNumber: [null],
+      passportNumber: [null],
+      expiryDate: [moment().format()],
+      dateOfEntry: [moment().format()],
+      lengthOfStay: [null],
+      passportImage: [null],
+      portraitPhotography: [null]
     });
+    this.initForm = this.formExpert.value;
   }
 
   get formControlBirthDay(): FormControl {
-    return this.formEmployee.get('birthDay') as FormControl;
+    return this.formExpert.get('birthDay') as FormControl;
   }
 
-  get linkImage(): string {
-    return this.formEmployee.value.avatar;
+  get formControlExpiryDate(): FormControl {
+    return this.formExpert.get('expiryDate') as FormControl;
   }
 
+  get formControlDateOfEntry(): FormControl {
+    return this.formExpert.get('dateOfEntry') as FormControl;
+  }
 
   ngOnInit(): void {
-    // this.formEmployee.patchValue({
-    //   code: 'NV'
-    // });
     this.entityUpdate$ = this.store.select(fromStore.getRouterParamsState).pipe(
-      tap((data: any) => {
-        console.log('select', data);
-      }),
-      take(1),
       switchMap((data: any) => {
-        console.log(data);
         if (data?.id) {
-          return this.store.select(getEmployeeEntitiesState).pipe(
+          return this.store.select(getExpertsEntitiesState).pipe(
             map(entities => entities[getPrefixID(data?.id)]),
-            take(1),
             tap(entity => {
-              // console.log('entity', entity);
-              this.entityEmployee = entity;
-              this.formEmployee.patchValue({...entity});
+              this.entityExpert = entity;
+              this.linkPortraitImage$.next({name: this.entityExpert.portraitPhotography});
+              this.linkPassportImage$.next({name: this.entityExpert.passportImage});
+              this.formExpert.patchValue({...entity});
             })
           );
         }
@@ -103,59 +85,75 @@ export class ExpertsUpdateComponent implements OnInit{
       }),
       map(entity => entity)
     );
-
-    // console.log(moment(new Date()).format("DD/MM/YYYY"));
-    this.store.dispatch(new LoadUnitType(null));
-    this.store.dispatch(new LoadCityProvince(null));
-
-    this.cityProvince$ = this.store.select(getArrayCityProvinceState);
-    this.district$ = this.store.select(getArrayDistrictState);
-    this.communeWard$ = this.store.select(getArrayCommuneWardState);
-
-    this.unitType$ = this.store.select(getArrayUnitTypeState);
-    this.workUnit$ = this.store.select(getArrayWorkUnitState);
-    this.department$ = this.store.select(getArrayDepartmentState);
-    this.position$ = this.store.select(getArrayPositionState);
-
-
-    this.formEmployee.get('cityProvinceID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadDistrictByCityProvince(val)));
-    this.formEmployee.get('districtID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadCommuneWardByDistrict(val)));
-
-    this.formEmployee.get('unitTypeID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadWorkUnitByUnitType(val)));
-    this.formEmployee.get('workUnitID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadDepartmentByWorkUnit(val)));
-    this.formEmployee.get('departmentID')?.valueChanges.subscribe(val => this.store.dispatch(new LoadPositionByDepartment(val)));
+    this.store.select(getCountryLoadedState)
+      .pipe(take(1))
+      .subscribe(isLoaded => {
+        if (!isLoaded) {
+          this.store.dispatch(new LoadCountry(null));
+        }
+      });
+    this.countries$ = this.store.select(getArrayCountryState);
   }
 
 
   onSubmit(): void {
 
-    let value = this.formEmployee.value;
-    value.birthDay = moment(this.formEmployee.value.birthDay).format(PATTERN_FORMAT_DATE.DATE_REQUEST);
-    if (!!this.entityEmployee) {
-      value = {...this.entityEmployee, ...value};
-      value.createDate = moment(value.createDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
-      value.updateDate = moment(value.updateDate).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST);
+    let value = this.formExpert.value;
+    value.birthDay = this.patternFormat.formatDateToDateRequest(value.birthDay);
+    value.expiryDate = this.patternFormat.formatDateToDateRequest(value.expiryDate);
+    value.dateOfEntry = this.patternFormat.formatDateToDateRequest(value.dateOfEntry);
+
+    console.log(value);
+    if (!!this.entityExpert) {
+      value = {...this.entityExpert, ...value};
+      value.createDate = this.patternFormat.formatDatetimeToDatetimeRequest(value.createDate);
+      value.updateDate = this.patternFormat.formatDatetimeToDatetimeRequest(value.updateDate);
     }
-    if (this.formData.has('employee')) {
-      this.formData.set('employee', JSON.stringify(value));
+    if (this.formData.has('expert')) {
+      this.formData.set('expert', JSON.stringify(value));
     } else {
-      this.formData.append('employee', JSON.stringify(value));
+      this.formData.append('expert', JSON.stringify(value));
     }
-    if (!!this.entityEmployee) {
-      this.store.dispatch(new UpdateEmployee({form: this.formData, id: value.id}));
+    if (!!this.entityExpert) {
+      this.store.dispatch(new UpdateExperts({form: this.formData, id: value.id}));
     } else {
-      this.store.dispatch(new CreateEmployee(this.formData));
+      this.store.dispatch(new CreateExperts(this.formData));
+      // reset form
+      this.store.select(fromStore.getExpertsResponseStatusState).pipe(
+        skip(1),
+        map(({status}) => status),
+        filter(isNotNull => !!isNotNull),
+        take(1)
+      ).subscribe(status => {
+        if (status === '200') {
+          this.formExpert.reset(this.initForm);
+          this.linkPortraitImage$.next({name: ''});
+          this.linkPassportImage$.next({name: ''});
+        }
+      });
     }
 
     // console.log(moment(this.formEmployee.value.birthDay).format(PATTERN_FORMAT_DATE.DATETIME_REQUEST));
     // this.store.dispatch(new CreateEmployee(this.formData));
   }
 
-  setFileImageControl(file: any): void {
-    if (this.formData.has('file')) {
-      this.formData.set('file', file);
+  setFilePassportImageControl(file: any): void {
+    if (this.formData.has('passportImage')) {
+      this.formData.set('passportImage', file);
     } else {
-      this.formData.append('file', file);
+      this.formData.append('passportImage', file);
     }
+  }
+
+  setFilePortraitImageControl(file: any): void {
+    if (this.formData.has('portraitPhotography')) {
+      this.formData.set('portraitPhotography', file);
+    } else {
+      this.formData.append('portraitPhotography', file);
+    }
+  }
+
+  back(): void {
+    this.store.dispatch(new Go({path: ['chuyen-gia']}));
   }
 }
