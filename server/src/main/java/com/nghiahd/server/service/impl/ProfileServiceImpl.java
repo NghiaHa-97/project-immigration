@@ -37,6 +37,7 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setCreateDate(LocalDateTime.now());
         profile.setUpdateDate(LocalDateTime.now());
         UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
+        profile.setStatusProfile(new StatusProfile(1));
         profile.setEmployeeCreate(new EmployeeQuery(userLogin.getEmployeeID()));
         profile.setId(UUID.randomUUID());
         return profileQueryRepository.save(profile);

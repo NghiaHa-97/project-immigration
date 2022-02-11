@@ -9,4 +9,8 @@ public class AuthenticationCommon {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ((UserLogin) authentication.getPrincipal());
     }
+    public static boolean checkNotNullWorkUnitIDAndEmployeeID() {
+        UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
+        return userLogin != null && userLogin.getWorkUnitID() != null && userLogin.getEmployeeID() != null;
+    }
 }

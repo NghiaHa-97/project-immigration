@@ -114,7 +114,7 @@ export class ProfileUpdateComponent implements OnInit {
     return this.entityProfile?.workUnit?.name ?? 'Không có đơn vị';
   }
 
-  formatDateToString(date: any, isFormatDate: any): string {
+  formatDateToString(date: any, isFormatDate?: any): string {
     if (!isFormatDate) {
       return this.patternFormat.formatDateToString(date) ?? '';
     }

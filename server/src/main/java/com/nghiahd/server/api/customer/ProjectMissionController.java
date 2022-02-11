@@ -32,7 +32,7 @@ public class ProjectMissionController {
     public ResponseEntity<BodyResponseDTO<ProjectMission>> createProfile(@RequestBody ProjectMission projectMission) {
         ProjectMission entity = null;
         ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
-        if (this.projectMissionService.checkNotNullWorkUnitIDAndEmployeeID()) {
+        if (AuthenticationCommon.checkNotNullWorkUnitIDAndEmployeeID()) {
             entity = this.projectMissionService.saveProjectMission(projectMission);
         } else {
             apiResponseCode = ApiResponseCode.WORK_UNIT_OR_EMPLOYEE_NULL;
@@ -50,7 +50,7 @@ public class ProjectMissionController {
         ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
 
         if (id != null) {
-            if(this.projectMissionService.checkNotNullWorkUnitIDAndEmployeeID()){
+            if(AuthenticationCommon.checkNotNullWorkUnitIDAndEmployeeID()){
                 entity = this.projectMissionService.editProjectMission(projectMission, id);
             }else {
                 apiResponseCode = ApiResponseCode.WORK_UNIT_OR_EMPLOYEE_NULL;

@@ -11,8 +11,6 @@ import java.util.List;
 public interface ProjectMissionService {
     List<ProjectMission> findProjectMissionByWorkUnitCreateID(int workUnitCreateID);
 
-    boolean checkNotNullWorkUnitIDAndEmployeeID();
-
     ProjectMission saveProjectMission(ProjectMission projectMission);
 
     ProjectMission editProjectMission(ProjectMission projectMission, Integer id);
