@@ -1,6 +1,7 @@
 package com.nghiahd.server.service.impl;
 
 import com.nghiahd.server.common.ApiResponseCode;
+import com.nghiahd.server.common.ExceptionApiCustom;
 import com.nghiahd.server.common.SaveFileUtils;
 import com.nghiahd.server.config.ReadEnvironment;
 import com.nghiahd.server.domain.Employee;
@@ -63,7 +64,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             boolean isSaved = SaveFileUtils.saveFile(fileDir, fileName, fileImage);
             if (isSaved) {
                 em.setAvatar(fileDir + "/" + fileName);
-                em = employeeRepository.save(em);
+                em = employeeRepository.saveAndFlush(em);
+                this.employeeRepository.refresh(em);
             } else {
                 em = null;
             }

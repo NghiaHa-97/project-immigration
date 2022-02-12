@@ -1,6 +1,7 @@
 package com.nghiahd.server.repository.impl;
 
 import com.nghiahd.server.common.PageUtilsCommon;
+import com.nghiahd.server.domain.Employee;
 import com.nghiahd.server.domain.Role;
 import com.nghiahd.server.model.EmployeeDTO;
 import com.nghiahd.server.repository.EmployeeRepositoryCustom;
@@ -112,5 +113,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void refresh(Employee e) {
+        this.entityManager.refresh(e);
     }
 }

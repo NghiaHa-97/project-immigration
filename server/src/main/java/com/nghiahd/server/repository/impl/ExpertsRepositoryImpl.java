@@ -1,6 +1,7 @@
 package com.nghiahd.server.repository.impl;
 
 import com.nghiahd.server.common.PageUtilsCommon;
+import com.nghiahd.server.domain.Experts;
 import com.nghiahd.server.model.ExpertsDTO;
 import com.nghiahd.server.repository.ExpertsRepositoryCustom;
 import org.apache.logging.log4j.util.Strings;
@@ -98,6 +99,11 @@ public class ExpertsRepositoryImpl implements ExpertsRepositoryCustom {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void refresh(Experts ex) {
+        this.entityManager.refresh(ex);
     }
 
 

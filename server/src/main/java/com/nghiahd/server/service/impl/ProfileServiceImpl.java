@@ -40,7 +40,9 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setStatusProfile(new StatusProfile(1));
         profile.setEmployeeCreate(new EmployeeQuery(userLogin.getEmployeeID()));
         profile.setId(UUID.randomUUID());
-        return profileQueryRepository.save(profile);
+        ProfileQuery profileSaved = profileQueryRepository.saveAndFlush(profile);
+        this.profileQueryRepository.refresh(profileSaved);
+        return profileSaved;
     }
 
     @Override

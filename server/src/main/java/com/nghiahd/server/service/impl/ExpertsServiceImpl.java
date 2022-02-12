@@ -136,7 +136,8 @@ public class ExpertsServiceImpl implements ExpertsService {
             if (isSaved1 && isSaved2) {
                 ex.setPassportImage(fileDir + "/" + passportImageFileName);
                 ex.setPortraitPhotography(fileDir + "/" + portraitPhotographyFileName);
-                ex = this.expertsRepository.save(ex);
+                ex = this.expertsRepository.saveAndFlush(ex);
+                this.expertsRepository.refresh(ex);
             } else {
                 ex = null;
             }
