@@ -1,8 +1,13 @@
 package com.nghiahd.server.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class TaskForAssistantDTO {
     private UUID id;
     private UUID employeeID;
@@ -32,102 +37,6 @@ public class TaskForAssistantDTO {
         this.employeeFullName = employeeFullName;
         this.profileCode = profileCode;
         this.statusProfileID = statusProfileID;
-        this.statusProfileName = statusProfileName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getEmployeeID() {
-        return employeeID;
-    }
-
-    public void setEmployeeID(UUID employeeID) {
-        this.employeeID = employeeID;
-    }
-
-    public UUID getProfileID() {
-        return profileID;
-    }
-
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getEmployeeCode() {
-        return employeeCode;
-    }
-
-    public void setEmployeeCode(String employeeCode) {
-        this.employeeCode = employeeCode;
-    }
-
-    public String getEmployeeFullName() {
-        return employeeFullName;
-    }
-
-    public void setEmployeeFullName(String employeeFullName) {
-        this.employeeFullName = employeeFullName;
-    }
-
-    public String getProfileCode() {
-        return profileCode;
-    }
-
-    public void setProfileCode(String profileCode) {
-        this.profileCode = profileCode;
-    }
-
-    public UUID getStatusProfileID() {
-        return statusProfileID;
-    }
-
-    public void setStatusProfileID(UUID statusProfileID) {
-        this.statusProfileID = statusProfileID;
-    }
-
-    public String getStatusProfileName() {
-        return statusProfileName;
-    }
-
-    public void setStatusProfileName(String statusProfileName) {
         this.statusProfileName = statusProfileName;
     }
 }

@@ -1,13 +1,43 @@
 package com.nghiahd.server.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.nghiahd.server.model.AssignTasksDTO;
+import com.nghiahd.server.model.CommentDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "comment")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "CommentDTO",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = CommentDTO.class,
+                                columns = {
+                                        @ColumnResult(name = "id", type = UUID.class),
+                                        @ColumnResult(name = "employeeID", type = UUID.class),
+                                        @ColumnResult(name = "employeeCode", type = String.class),
+                                        @ColumnResult(name = "employeeFullname", type = String.class),
+                                        @ColumnResult(name = "workUnitName", type = String.class),
+                                        @ColumnResult(name = "profileID", type = UUID.class),
+                                        @ColumnResult(name = "profileCode", type = String.class),
+                                        @ColumnResult(name = "status", type = Boolean.class),
+                                        @ColumnResult(name = "reason", type = String.class),
+                                }
+                        )
+                }
+        )
+})
 public class Comment {
     @Id
     private UUID id;
@@ -18,72 +48,9 @@ public class Comment {
     @Column(name = "profileid")
     private UUID profileID;
 
-    @Column(name = "workunitid")
-    private Integer workUnitID;
-
     @Column(name = "status")
     private Boolean status;
 
     @Column(name = "reason")
     private String reason;
-
-    public Comment() {
-    }
-
-    public Comment(UUID id, UUID employeeID, UUID profileID, Integer workUnitID, Boolean status, String reason) {
-        this.id = id;
-        this.employeeID = employeeID;
-        this.profileID = profileID;
-        this.workUnitID = workUnitID;
-        this.status = status;
-        this.reason = reason;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getEmployeeID() {
-        return employeeID;
-    }
-
-    public void setEmployeeID(UUID employeeID) {
-        this.employeeID = employeeID;
-    }
-
-    public UUID getProfileID() {
-        return profileID;
-    }
-
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
-
-    public Integer getWorkUnitID() {
-        return workUnitID;
-    }
-
-    public void setWorkUnitID(Integer workUnitID) {
-        this.workUnitID = workUnitID;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 }

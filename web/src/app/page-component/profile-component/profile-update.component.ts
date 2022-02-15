@@ -100,21 +100,21 @@ export class ProfileUpdateComponent implements OnInit {
   }
 
   get getExperts(): any[] {
-    return this.entityProfile?.experts ?? [];
+    return this.entityProfile?.expertsInProfileQueries ?? [];
   }
 
   set setExperts(data: any[]) {
     if (!this.entityProfile) {
       this.entityProfile = {};
     }
-    this.entityProfile.experts = data;
+    this.entityProfile.expertsInProfileQueries = data;
   }
 
   get getWorkUnitName(): string {
     return this.entityProfile?.workUnit?.name ?? 'Không có đơn vị';
   }
 
-  formatDateToString(date: any, isFormatDate: any): string {
+  formatDateToString(date: any, isFormatDate?: any): string {
     if (!isFormatDate) {
       return this.patternFormat.formatDateToString(date) ?? '';
     }
@@ -256,7 +256,7 @@ export class ProfileUpdateComponent implements OnInit {
           height: '75%',
           data: {
             isSelectMulti: true,
-            itemSelected: this.entityProfile?.experts?.map((item: any) => item.id) ?? []
+            itemSelected: this.entityProfile?.expertsInProfileQueries?.map((item: any) => item.expert.id) ?? []
           }
         });
 
@@ -275,17 +275,19 @@ export class ProfileUpdateComponent implements OnInit {
                 const value = result.get(item.value);
                 if (value) {
                   arrExperts.push({
-                    id: value.id,
-                    code: value.code,
-                    fullname: value.fullname,
-                    birthDay: value.birthDay,
-                    country: {
-                      name: value.countryName
-                    },
-                    isFormatDate: true
+                    expert: {
+                      id: value.id,
+                      code: value.code,
+                      fullname: value.fullname,
+                      birthDay: value.birthDay,
+                      country: {
+                        name: value.countryName
+                      },
+                      isFormatDate: true
+                    }
                   });
                 } else {
-                  const i = this.getExperts.find(v => v.id === item.value);
+                  const i = this.getExperts.find(v => v.expert.id === item.value);
                   arrExperts.push(i);
                 }
                 item = it.next();
@@ -352,7 +354,7 @@ export class ProfileUpdateComponent implements OnInit {
         break;
       }
       case this.EXPERT: {
-        if (this.entityProfile?.experts) {
+        if (this.entityProfile?.expertsInProfileQueries) {
           this.setExperts = [];
         }
         break;

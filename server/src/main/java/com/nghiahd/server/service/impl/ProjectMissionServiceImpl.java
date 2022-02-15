@@ -33,12 +33,6 @@ public class ProjectMissionServiceImpl implements ProjectMissionService {
     }
 
     @Override
-    public boolean checkNotNullWorkUnitIDAndEmployeeID() {
-        UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
-        return userLogin != null && userLogin.getWorkUnitID() != null && userLogin.getEmployeeID() != null;
-    }
-
-    @Override
     public ProjectMission saveProjectMission(ProjectMission projectMission) {
         UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
         projectMission.setWorkUnitCreateID(userLogin.getWorkUnitID());

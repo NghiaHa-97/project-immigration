@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface ProfileQueryRepository extends JpaRepository<ProfileQuery, UUID> {
+public interface ProfileQueryRepository extends JpaRepository<ProfileQuery, UUID>, ProfileQueryRepositoryCustom {
 }

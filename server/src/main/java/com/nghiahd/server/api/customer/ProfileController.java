@@ -2,6 +2,7 @@ package com.nghiahd.server.api.customer;
 
 import com.nghiahd.server.common.*;
 import com.nghiahd.server.domain.Profile;
+import com.nghiahd.server.domain.ProjectMission;
 import com.nghiahd.server.domain.custom.ProfileQuery;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.service.ProfileService;
@@ -34,18 +35,34 @@ public class ProfileController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<BodyResponseDTO<ProfileQuery>> createProfile(@RequestBody ProfileQuery profile) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK,
-                ApiResponseCode.SUCCESS,
+        ProfileQuery entity = null;
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        if(AuthenticationCommon.checkNotNullWorkUnitIDAndEmployeeID()){
+            entity = this.profileService.saveProfile(profile);
+        }else {
+            apiResponseCode = ApiResponseCode.WORK_UNIT_OR_EMPLOYEE_NULL;
+        }
+        return RestResponseWrapper.getResponse(
+                apiResponseCode.getStatus(),
+                apiResponseCode,
                 this.messageUtils,
-                profileService.saveProfile(profile));
+                entity);
     }
 
     @PutMapping(value = "/edit/{id}")
     public ResponseEntity<BodyResponseDTO<ProfileQuery>> editProfile(@RequestBody ProfileQuery profile, @PathVariable UUID id) {
-        return RestResponseWrapper.getResponse(HttpStatus.OK,
-                ApiResponseCode.SUCCESS,
+        ProfileQuery entity = null;
+        ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
+        if(AuthenticationCommon.checkNotNullWorkUnitIDAndEmployeeID()){
+            entity = this.profileService.editProfile(profile, id);
+        }else {
+            apiResponseCode = ApiResponseCode.WORK_UNIT_OR_EMPLOYEE_NULL;
+        }
+        return RestResponseWrapper.getResponse(
+                apiResponseCode.getStatus(),
+                apiResponseCode,
                 this.messageUtils,
-                profileService.editProfile(profile, id));
+                entity);
     }
 
     @DeleteMapping(value = "/delete/{id}")
