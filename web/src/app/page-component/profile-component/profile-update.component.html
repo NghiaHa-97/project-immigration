@@ -125,7 +125,7 @@
             <mat-expansion-panel *ngFor="let item of getExperts; let i = index">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  {{i + 1 + ' : ' + (item?.code ?? '') + ' - ' + (item?.fullname ?? '')}}
+                  {{i + 1 + ' : ' + (item?.expert?.code ?? '') + ' - ' + (item?.expert?.fullname ?? '')}}
                 </mat-panel-title>
                 <mat-panel-description>
                   <mat-icon>account_circle</mat-icon>
@@ -137,7 +137,7 @@
                     <mat-list-item>
                       <h3 matLine>Mã: </h3>
                       <p matLine>
-                        <span> {{item?.code ?? '' }} </span>
+                        <span> {{item?.expert?.code ?? '' }} </span>
                       </p>
                     </mat-list-item>
                   </div>
@@ -145,7 +145,7 @@
                     <mat-list-item>
                       <h3 matLine>Tên: </h3>
                       <p matLine>
-                        <span> {{item?.fullname ?? '' }} </span>
+                        <span> {{item?.expert?.fullname ?? '' }} </span>
                       </p>
                     </mat-list-item>
                   </div>
@@ -155,7 +155,7 @@
                     <mat-list-item>
                       <h3 matLine>Ngày sinh: </h3>
                       <p matLine>
-                        <span> {{formatDateToString(item?.birthDay, item?.isFormatDate)}}</span>
+                        <span> {{formatDateToString(item?.expert?.birthDay, item?.expert?.isFormatDate)}}</span>
                       </p>
                     </mat-list-item>
                   </div>
@@ -163,7 +163,7 @@
                     <mat-list-item>
                       <h3 matLine>Quốc tịch: </h3>
                       <p matLine>
-                        <span> {{item?.country?.name ?? '' }} </span>
+                        <span> {{item?.expert?.country?.name ?? '' }} </span>
                       </p>
                     </mat-list-item>
                   </div>
