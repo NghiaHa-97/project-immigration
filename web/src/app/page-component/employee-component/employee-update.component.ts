@@ -24,7 +24,7 @@ import * as moment from 'moment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {getPrefixID} from '../../constans/prefix-id.const';
-import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
+import { PatternFormat} from '../../constans/pattern-format-date.const';
 
 @Component({
   selector: 'app-employee-update',

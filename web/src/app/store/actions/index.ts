@@ -22,3 +22,5 @@ export * from './country.action';
 export * from './manage-user.action';
 export * from './status-profile.action';
 export * from './project-mission.action';
+export * from './location.action';
+export * from './object-type.action';

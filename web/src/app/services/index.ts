@@ -16,6 +16,8 @@ import {ManageUserService} from './manage-user.service';
 import {StatusProfileService} from './status-profile.service';
 import {ProjectMissionService} from './project-mission.service';
 import {CountryService} from './country.service';
+import {LocationService} from './location.service';
+import {ObjectTypeService} from './object-type.service';
 
 export * from './auth.service';
 export * from './profile.service';
@@ -38,6 +40,9 @@ export * from './status-profile.service';
 export * from './project-mission.service';
 export * from './country.service';
 
+export * from './location.service';
+export * from './object-type.service';
+
 export const pageComponentService = [
   EmployeeService,
   ExpertsService,
@@ -55,6 +60,8 @@ export const pageComponentService = [
   ManageUserService,
   StatusProfileService,
   ProjectMissionService,
-  CountryService
+  CountryService,
+  LocationService,
+  ObjectTypeService
 ];
 export const appComponentService = [AuthService];

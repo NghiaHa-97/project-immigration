@@ -81,8 +81,7 @@ export class EmployeeComponent implements OnInit, AfterViewInit {
         const dialogRef = this.dialog.open(this.dialogDelete, {
           width: '20%'
         });
-        dialogRef.afterClosed()
-          .pipe(take(1))
+        dialogRef.afterClosed().pipe(take(1))
           .subscribe(result => {
             if (result) {
               this.onDeleteEmployee(x);

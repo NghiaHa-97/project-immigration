@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
@@ -14,7 +14,7 @@ import {
   getStatusProfileLoadedState,
   getVehicleLoadedState,
   Go,
-  LoadDepartmentByWorkUnit,
+  LoadDepartmentByWorkUnit, LoadObjectType,
   LoadStatusProfile,
   LoadVehicle, UpdateProfile,
 } from '../../store';
@@ -24,6 +24,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {EmployeeComponent} from '../employee-component/employee.component';
 import {ExpertsComponent} from '../experts-component/experts.component';
 import {ProjectMissionComponent} from '../project-mission-component/project-mission.component';
+import {PositionAndLocation} from '../../models/PositionAndLocation.model';
+import {MapComponent} from '../map-component/map.component';
 
 @Component({
   selector: 'app-profile-update',
@@ -43,6 +45,7 @@ export class ProfileUpdateComponent implements OnInit {
   public readonly EXPERT = 'EXPERT';
   public readonly PROJECT_MISSION = 'PROJECT_MISSION';
   public department$!: Observable<any>;
+  private mapPositionAndLocation = new Map<string, PositionAndLocation>();
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
@@ -53,9 +56,60 @@ export class ProfileUpdateComponent implements OnInit {
       code: [{value: null, disabled: true}],
       departmentID: [null],
       vehicleID: [null],
-      description: [null]
+      description: [null],
+      positionAndLocation: this.fb.array([])
     });
     this.initForm = this.formProfile.value;
+    this.store.dispatch(new LoadObjectType(null));
+  }
+
+  createPositionAndLocation(payload: PositionAndLocation | undefined): FormGroup {
+    return this.fb.group({
+      ...payload,
+      location: [{value: payload?.location, disabled: true}]
+    });
+  }
+
+  addPositionAndLocation(payload: PositionAndLocation | undefined): void {
+    const control = this.positionAndLocation;
+    control.push(this.createPositionAndLocation(payload));
+  }
+
+  get positionAndLocation(): FormArray {
+    return this.formProfile.get('positionAndLocation') as FormArray;
+  }
+
+  initPositionAndLocation(payload: any): void {
+    const entities = payload?.expertsInProfileQueries;
+    entities?.forEach((data: any) => {
+      this.addPositionAndLocation({
+        location: data?.location?.name,
+        locationID: data?.location?.id,
+        position: data?.position,
+        expertID: data?.expert?.id
+      });
+    });
+  }
+
+  saveMap(): void {
+    this.positionAndLocation.value.forEach((data: PositionAndLocation) => {
+      if (data?.expertID) {
+        this.mapPositionAndLocation.set(data.expertID, data);
+      }
+    });
+  }
+
+  setControl(id: string): void {
+    if (this.mapPositionAndLocation.has(id)) {
+      this.addPositionAndLocation(this.mapPositionAndLocation.get(id));
+    } else {
+      this.addPositionAndLocation({
+        location: null,
+        locationID: null,
+        position: null,
+        expertID: id
+      });
+    }
   }
 
   get description(): FormControl {
@@ -142,6 +196,7 @@ export class ProfileUpdateComponent implements OnInit {
             map(entities => entities[getPrefixID(data?.id)]),
             tap(entity => {
               this.entityProfile = {...entity};
+              this.initPositionAndLocation(this.entityProfile);
               this.isCreate = false;
               const workUnitID = entity?.workUnit?.id;
               if (workUnitID) {
@@ -179,6 +234,15 @@ export class ProfileUpdateComponent implements OnInit {
 
     const value = this.formProfile.value;
     const dataRequest = {...this.entityProfile, ...value};
+    this.saveMap();
+    dataRequest.expertsInProfileQueries = dataRequest?.expertsInProfileQueries?.map((data: any) => {
+      return {
+        ...data,
+        location: {id: this.mapPositionAndLocation.get(data.expert.id)?.locationID},
+        position: this.mapPositionAndLocation.get(data.expert.id)?.position
+      };
+    });
+    this.mapPositionAndLocation.clear();
     console.log(dataRequest);
     if (!this.isCreate) {
       this.store.dispatch(new UpdateProfile(dataRequest));
@@ -199,7 +263,6 @@ export class ProfileUpdateComponent implements OnInit {
   }
 
   openDialog(type: string): void {
-
     switch (type) {
       case this.EMPLOYEE: {
         const dialogEmployeeRef = this.dialog.open(EmployeeComponent, {
@@ -262,10 +325,13 @@ export class ProfileUpdateComponent implements OnInit {
 
         dialogRoleRef.afterClosed()
           .pipe(take(1))
-          .subscribe((result: Map<number | string, any>) => {
+          .subscribe((result: Map<string, any>) => {
             if (!!result) {
+              this.saveMap();
+              this.positionAndLocation.clear();
               if (result.size === 0) {
                 this.removeValue(this.EXPERT);
+                this.mapPositionAndLocation.clear();
                 return;
               }
               const arrExperts: any[] = [];
@@ -273,6 +339,7 @@ export class ProfileUpdateComponent implements OnInit {
               let item = it.next();
               while (!item.done) {
                 const value = result.get(item.value);
+                this.setControl(item.value);
                 if (value) {
                   arrExperts.push({
                     expert: {
@@ -292,6 +359,7 @@ export class ProfileUpdateComponent implements OnInit {
                 }
                 item = it.next();
               }
+              this.mapPositionAndLocation.clear();
               this.setExperts = arrExperts;
               this.changeDetectorRef.detectChanges();
             }
@@ -367,5 +435,27 @@ export class ProfileUpdateComponent implements OnInit {
       }
     }
     this.changeDetectorRef.detectChanges();
+  }
+
+  test() {
+    console.log(this.positionAndLocation.value);
+  }
+
+  openDialogMap(i: number, id: string | null): void {
+    const dialogRoleRef = this.dialog.open(MapComponent, {
+      width: '80%',
+      height: '80%',
+      data: {
+        locationID: this.positionAndLocation.get(`${i}`)?.get('locationID')?.value
+      }
+    });
+
+    dialogRoleRef.afterClosed()
+      .pipe(take(1))
+      .subscribe((result: any) => {
+        if (result?.locationID) {
+          this.positionAndLocation.get(`${i}`)?.patchValue({...result});
+        }
+      });
   }
 }

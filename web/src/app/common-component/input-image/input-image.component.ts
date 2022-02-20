@@ -7,7 +7,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {DOMAIN_SERVER} from '../../constans/url-api.const';
 
 @Component({
@@ -24,23 +24,28 @@ export class InputImageComponent implements OnInit {
     }else{
       this.imagePath = {name: ''};
     }
+    this.formImage.reset();
   }
 
   @Output() changeFileImage: EventEmitter<any>;
+  formImage: FormGroup;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              private fb: FormBuilder) {
     this.changeFileImage = new EventEmitter<any>();
+    this.formImage = this.fb.group({
+      image: [null]
+    });
   }
 
   ngOnInit(): void {
   }
 
   changeFileInput(event: any): void {
-    event.preventDefault();
+    event?.preventDefault();
     const file = event?.target?.files[0];
     if (file) {
       this.changeFileImage.emit(file);
-
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePath = {name: reader.result as string};
@@ -54,6 +59,7 @@ export class InputImageComponent implements OnInit {
 
   removeImage(): void {
     this.imagePath = {name: ''};
+    this.formImage.reset();
     this.changeFileImage.emit(null);
   }
 }

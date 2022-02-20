@@ -16,6 +16,8 @@ import * as fromVehicle from './feature/vehicle.reducer';
 import * as fromCountry from './feature/country.reducer';
 import * as fromRole from './feature/role.reducer';
 import * as fromModule from './feature/module.reducer';
+import * as fromLocation from './feature/location.reducer';
+import * as fromObjectType from './feature/object-type.reducer';
 
 import * as fromManageUser from './feature/manage-user.reducer';
 import * as fromProjectMission from './feature/project-mission.reducer';
@@ -41,6 +43,8 @@ export interface FeatureState {
   manageUser: fromManageUser.ManageUserState;
   projectMission: fromProjectMission.ProjectMissionState;
   country: fromCountry.CountryState;
+  location: fromLocation.LocationState;
+  objectType: fromObjectType.ObjectTypeState;
 }
 
 export const featuresReducers: ActionReducerMap<FeatureState, any> = {
@@ -62,6 +66,8 @@ export const featuresReducers: ActionReducerMap<FeatureState, any> = {
   manageUser: fromManageUser.reducer,
   projectMission: fromProjectMission.reducer,
   country: fromCountry.reducer,
+  location: fromLocation.reducer,
+  objectType: fromObjectType.reducer,
 };
 
 export const getFeaturesState = createFeatureSelector<FeatureState>(
@@ -90,3 +96,5 @@ export const getModule = (state: FeatureState) => state.module;
 export const getManageUser = (state: FeatureState) => state.manageUser;
 export const getProjectMission = (state: FeatureState) => state.projectMission;
 export const getCountry = (state: FeatureState) => state.country;
+export const getLocation = (state: FeatureState) => state.location;
+export const getObjectType = (state: FeatureState) => state.objectType;

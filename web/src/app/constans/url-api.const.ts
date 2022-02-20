@@ -64,6 +64,18 @@ export const PUBLIC_API = {
     DELETE_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission/delete/`,       //    /delete/{id}
     GET_DETAIL_PROJECT_MISSION: `${DOMAIN_SERVER}/api/public/project-mission/detail/`,     //     /detail/{id}
   },
+  LOCATION: {
+    GET_PAGE: `${DOMAIN_SERVER}/api/public/location`,
+    VIEW: `${DOMAIN_SERVER}/api/public/location/view`,
+    DETAIL: `${DOMAIN_SERVER}/api/public/location/detail/`,      // /detail/{id}
+    SAVE: `${DOMAIN_SERVER}/api/public/location/save`,
+    DELETE: `${DOMAIN_SERVER}/api/public/location/delete/`,    // /delete/{id}
+  },
+  OBJECT_TYPE: {
+    GET_ALL: `${DOMAIN_SERVER}/api/public/object-type`,
+    SAVE: `${DOMAIN_SERVER}/api/public/object-type/save`,
+    DELETE: `${DOMAIN_SERVER}/api/public/object-type/delete/`,    // /delete/{id}
+  },
 };
 
 
