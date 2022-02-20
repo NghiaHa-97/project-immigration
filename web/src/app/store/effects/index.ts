@@ -17,6 +17,8 @@ import {ManageUserEffect} from './manage-user.effect';
 import {StatusProfileEffect} from './status-profile.effect';
 import {ProjectMissionEffect} from './project-mission.effect';
 import {CountryEffect} from './country.effect';
+import {LocationEffect} from './location.effect';
+import {ObjectTypeEffect} from './object-type.effect';
 
 
 // export {VehicleEffect} from './vehicle.effect';
@@ -41,7 +43,9 @@ export const effectsFeatures: any[] = [
   ManageUserEffect,
   StatusProfileEffect,
   ProjectMissionEffect,
-  CountryEffect
+  CountryEffect,
+  LocationEffect,
+  ObjectTypeEffect
 ];
 
 export * from './router.effect';

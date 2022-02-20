@@ -111,7 +111,14 @@
 
         <!--        <div [innerHTML]="richTextForm.value.description | safeHtml"></div>-->
       </div>
-      <div class="row" style="margin-top: 15px">
+      <button mat-mini-fab
+              (click)="test()"
+              color="accent"
+              type="button"
+              style="margin-left: 5px">
+        Test
+      </button>
+      <div class="row" style="margin-top: 15px" formArrayName="positionAndLocation">
         <div class="col-md-12">
           <label>Chuyên gia tham gia</label>
           <button mat-mini-fab
@@ -122,7 +129,7 @@
             <mat-icon>add</mat-icon>
           </button>
           <mat-accordion class="example-headers-align" multi>
-            <mat-expansion-panel *ngFor="let item of getExperts; let i = index">
+            <mat-expansion-panel *ngFor="let item of getExperts; let i = index" [formGroupName]="i">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   {{i + 1 + ' : ' + (item?.expert?.code ?? '') + ' - ' + (item?.expert?.fullname ?? '')}}
@@ -165,6 +172,30 @@
                       <p matLine>
                         <span> {{item?.expert?.country?.name ?? '' }} </span>
                       </p>
+                    </mat-list-item>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Vai trò trong dự án: </h3>
+                      <mat-form-field matLine class="example-full-width">
+                        <input matInput formControlName="position">
+                      </mat-form-field>
+                    </mat-list-item>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-list-item>
+                      <h3 matLine>Nơi tạm trú: </h3>
+                      <mat-form-field matLine class="example-full-width">
+                        <input matInput
+                               formControlName="location">
+                      </mat-form-field>
+                      <button mat-raised-button
+                              type="button"
+                              (click)="openDialogMap(i, item?.expert?.id)"
+                              color="primary">Thêm vị trí
+                      </button>
                     </mat-list-item>
                   </div>
                 </div>
@@ -253,9 +284,9 @@
           <mat-accordion class="example-headers-align" multi>
             <mat-expansion-panel>
               <mat-expansion-panel-header>
-<!--                <mat-panel-title>-->
-<!--                  Personal data-->
-<!--                </mat-panel-title>-->
+                <!--                <mat-panel-title>-->
+                <!--                  Personal data-->
+                <!--                </mat-panel-title>-->
                 <mat-panel-description>
                   <mat-icon>account_circle</mat-icon>
                 </mat-panel-description>
@@ -319,9 +350,9 @@
           <mat-accordion class="example-headers-align" multi>
             <mat-expansion-panel>
               <mat-expansion-panel-header>
-<!--                <mat-panel-title>-->
-<!--                  Personal data-->
-<!--                </mat-panel-title>-->
+                <!--                <mat-panel-title>-->
+                <!--                  Personal data-->
+                <!--                </mat-panel-title>-->
                 <mat-panel-description>
                   <mat-icon>account_circle</mat-icon>
                 </mat-panel-description>

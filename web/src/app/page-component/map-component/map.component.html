@@ -2,58 +2,192 @@
   <mat-card-content>
     <mat-card-title>Map</mat-card-title>
 
-    <div id='map' style='height: 1000px'>
+    <div id='map' style='height: 750px'>
 
-      <div class="leaflet-control-container" (click)="$event.stopPropagation()">
+      <div class="leaflet-control-container"
+           (dblclick)="$event.stopPropagation()"
+           (click)="$event.stopPropagation()">
         <div class="leaflet-top leaflet-left">
-            <div class="leaflet-control opacity">
-              <div class="card-content" style="max-height: 900px">
-                <div class="card border-success mb-3">
-                  <div class="card-header bg-transparent border-success">
-                    <form [formGroup]="formSearch">
+          <div class="leaflet-control opacity">
+            <div class="card-content" style="max-height: 650px">
+              <div class="card border-success mb-3" style="width: 400px">
+                <mat-tab-group>
+                  <mat-tab label="Tìm kiếm">
+                    <ng-template matTabContent>
+                      <div class="card-header bg-transparent border-success">
+                        <form [formGroup]="formSearch" (ngSubmit)="handlerSearch($event)">
 
-                      <div class="form-group">
-                        <input id="search" class="form-control" formControlName="search" type="text"
-                               placeholder="Nhập địa chỉ cần tìm ...">
+                          <div class="form-group">
+                            <input id="search" class="form-control" formControlName="name" type="text"
+                                   placeholder="Nhập địa chỉ cần tìm ...">
+                          </div>
+                          <button id="submitSearch"
+                                  type="submit"
+                                  class="btn btn-primary">
+                            Tìm kiếm
+                          </button>
+                        </form>
                       </div>
-                      <button id="submitSearch"
-                              type="submit"
-                              (click)="handlerSearch($event)"
-                              class="btn btn-primary">
-                        Tìm kiếm
-                      </button>
-                    </form>
-                  </div>
-                  <div class="card-body text-success">
-                    <div class="list-group" style="max-height: 700px; overflow: scroll">
 
-                      <!--                    <a *ngfor=" let item of locationSearch;let i = index"-->
-                      <!--                       (click)="viewMap(item.latitude,item.longitude)"-->
-                      <!--                       class="list-group-item list-group-item-action flex-column align-items-start">-->
-                      <!--                      <div class="d-flex w-100 justify-content-between">-->
-                      <!--                        <h5 class="mb-1">{{item.name}}</h5>-->
-                      <!--                        <small>{{i * page + 1}}</small>-->
-                      <!--                      </div>-->
-                      <!--                      <p-->
-                      <!--                        class="mb-1">{{(item.communeWardName || "") + "  " + (item.districtName || "") + "  " + (item.cityProvinceName || "")}}</p>-->
-                      <!--                      <small>{{item.description || ""}}</small>-->
-                      <!--                    </a>-->
-                      <!--                      <button *ngFor=' let item of locationSearch' type="button" class="list-group-item list-group-item-action ">-->
-                      <!--                        <span>{{item.name}}</span>-->
-                      <!--                        <br>-->
-                      <!--                        <span>{{item.locationSearch}}-{{item.locationSearch}}-{{item.locationSearch}}</span>-->
-                      <!--                        <br>-->
-                      <!--                        <span>{{item.Description}}</span>-->
-                      <!--                      </button>-->
+                      <mat-accordion class="example-headers-align" multi>
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              Kết quả
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
+                          <mat-selection-list #matSelectionLocation
+                                              (selectionChange)="selectionChange($event, LOCATION)"
+                                              [multiple]="false"
+                                              style="max-height: 360px; overflow: scroll">
+                            <mat-list-option *ngFor="let val of resultSearch$ | async" [value]="val.id">
+                              {{val.name + '/' + val.districtName + '/' + val.cityProvinceName}}
+                            </mat-list-option>
+                          </mat-selection-list>
 
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent border-success">
-                    <!--                  <nz-pagination [nzpageindex]="page" [nztotal]="totalItems" (onpageindexchange)="onChangPage($event)"-->
-                    <!--                                 nzsize="small"></nz-pagination>-->
-                  </div>
-                </div>
+                          <div class="card-footer bg-transparent border-success">
+                            <mat-paginator #paginator="matPaginator"
+                                           [pageSizeOptions]="pageSizeOptions"
+                                           [pageSize]="pageSize"
+                                           [length]="totalRecord"
+                                           (page)="handlerPage($event)"
+                                           showFirstLastButtons
+                                           aria-label="Select page of users"></mat-paginator>
+                          </div>
+                        </mat-expansion-panel>
+                      </mat-accordion>
+                    </ng-template>
+                  </mat-tab>
+                  <mat-tab label="Cập nhật - Thêm mới">
+                    <ng-template matTabContent>
+                      <form [formGroup]="formLocation" (ngSubmit)="save(LOCATION)">
+                        <div class="row">
+                          <div class="col-auto mr-auto">
+                            <h3>{{(isNewLocation$ | async) ? 'Thêm mới' : 'Chi tiết'}}</h3>
+                          </div>
+                          <div class="col-auto">
+                            <button mat-button
+                                    type="button"
+                                    (click)="onNewLocation()">Tạo mới
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <input formControlName="name" matInput placeholder="Tên địa chỉ">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Choose an option</mat-label>
+                              <mat-select formControlName="objectTypeID">
+                                <mat-select-trigger>
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2"><img src="{{(valueSelector | async)?.image}}" alt="user" class="profile-pic">
+                                    </div>
+                                    <div class="p-2">{{(valueSelector | async)?.name}}</div>
+                                  </div>
+                                </mat-select-trigger>
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let val of typeObject"
+                                  [value]="val.id">
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2"><img src="{{val?.image}}" alt="user"
+                                                          class="profile-pic"></div>
+                                    <div class="p-2">{{val.name}}</div>
+                                  </div>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <button mat-raised-button type="button"
+                                    (click)="openDialogObjectType()">Thêm mới - Chỉnh sửa loại
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <input formControlName="latitude" matInput placeholder="Vĩ độ">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <input formControlName="longitude" matInput placeholder="Kinh đọ">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Tỉnh - Thành phố</mat-label>
+                              <mat-select formControlName="cityProvinceID">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let val of (cityProvince$ | async)"
+                                            [value]="val.id">{{val.name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Quận huyện)</mat-label>
+                              <mat-select formControlName="districtID">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let val of (district$ | async)"
+                                            [value]="val.id">{{val.name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Phường xã</mat-label>
+                              <mat-select formControlName="communeWardID">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let val of (communeWard$ | async)"
+                                            [value]="val.id">{{val.name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-10">
+                            <mat-form-field class="example-full-width">
+                                <textarea matInput formControlName="description"
+                                          placeholder="Chi tiết, mô tả">
+                                </textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <button mat-raised-button
+                                type="submit"
+                                color="primary"
+                                class="float-right">Lưu
+                        </button>
+                        <button mat-raised-button
+                                type="button"
+                                color="warn"
+                                class="float-left"
+                                (click)="delete(LOCATION)">Xóa
+                        </button>
+                        <div class="clearfix"></div>
+                      </form>
+                    </ng-template>
+                  </mat-tab>
+                </mat-tab-group>
+
               </div>
+            </div>
           </div>
 
 
@@ -79,9 +213,94 @@
   </mat-card-content>
 </mat-card>
 
-<ng-template #btnTest>
-  <div>
-    <button type='button' (click)="btnClick($event)" class="btn btn-primary">btnClick</button>
-    <button type='button' class="btn btn-primary">btnTestTemplate</button>
+<ng-template #dialogObjectType>
+  <h2 mat-dialog-title>Loại đối tượng</h2>
+  <mat-dialog-content class="mat-typography">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row">
+          <mat-selection-list #matSelectionObjectType
+                              (selectionChange)="selectionChange($event, OBJECT_TYPE)"
+                              [multiple]="false"
+                              style="max-height: 360px;
+                              overflow: scroll;
+                              width: 100%">
+            <mat-list-option *ngIf="!typeObject?.length" [value]="null">
+              Không có dữ liệu
+            </mat-list-option>
+            <mat-list-option *ngFor="let val of typeObject" [value]="val.id">
+              <div class="d-flex flex-row">
+                <div class="p-2">
+                  <img src="{{val?.image}}"
+                       class="profile-pic">
+                </div>
+                <div class="p-2">{{val?.name}}</div>
+              </div>
+            </mat-list-option>
+          </mat-selection-list>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <h3>{{(isNewObjectType$ | async) ? 'Thêm mới' : 'Chi tiết'}}</h3>
+          </div>
+          <div class="col-auto">
+            <button mat-button
+                    type="button"
+                    (click)="onNewObjectType()">Tạo mới
+            </button>
+          </div>
+        </div>
+        <form [formGroup]="formObjectType" (ngSubmit)="save(OBJECT_TYPE)">
+          <div class="row">
+            <div class="col-md-10">
+              <label>Ảnh</label>
+              <app-input-image (changeFileImage)="setFileImageControl($event)"
+                               [dataNameImage]="linkImage$ | async">
+              </app-input-image>
+            </div>
+          </div>
+          <div class="row">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="name" placeholder="Tên loại">
+            </mat-form-field>
+          </div>
+          <button mat-raised-button
+                  type="submit"
+                  color="primary"
+                  class="float-right">Lưu
+          </button>
+          <button *ngIf="!(isNewObjectType$ | async)"
+                  mat-raised-button
+                  color="warn"
+                  type="button"
+                  class="float-left"
+                  (click)="delete(OBJECT_TYPE)">Xóa
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions class="float-right">
+    <button mat-button mat-dialog-close>Đóng</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #dialogDelete>
+  <h1 mat-dialog-title>Xóa</h1>
+  <div mat-dialog-content>
+    <p>Bạn có chắc muốn xóa?</p>
+  </div>
+  <div mat-dialog-actions class="float-right">
+    <button mat-button [mat-dialog-close]="true">Đồng ý</button>
+    <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Hủy</button>
   </div>
 </ng-template>
+
+
+<div mat-dialog-actions *ngIf="isDialog" class="float-right">
+  <button mat-button [mat-dialog-close]="null">Hủy</button>
+  <button mat-button [mat-dialog-close]="outputData">Đồng ý</button>
+</div>
