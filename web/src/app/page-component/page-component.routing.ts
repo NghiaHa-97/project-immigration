@@ -19,6 +19,8 @@ import {ProjectMissionUpdateComponent} from './project-mission-component/project
 import {ProjectMissionExistDetailActivate} from './can-activate/project-mission-exist-detail.activate';
 import {ExpertExistDetailActivate} from './can-activate/expert-exist-detail.activate';
 import {ProfileExistDetailActivate} from './can-activate/profile-exist-detail.activate';
+import {AssignTasksComponent} from './assign-tasks-component/assign-tasks.component';
+import {AssignTasksUpdateComponent} from './assign-tasks-component/assign-tasks-update.component';
 
 
 export const PageRoutes: Routes = [
@@ -136,4 +138,22 @@ export const PageRoutes: Routes = [
       }
     ]
   },
+  {
+    path: 'nhiem-vu',
+    children: [
+      {
+        path: '',
+        component: AssignTasksComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        component: AssignTasksUpdateComponent,
+        // canActivate: [ProjectMissionExistDetailActivate]
+      },
+      {
+        path: 'them-moi',
+        component: AssignTasksUpdateComponent
+      }
+    ]
+  }
 ];

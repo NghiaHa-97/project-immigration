@@ -100,7 +100,8 @@ public class AssignTasksController {
 
         return RestResponseWrapper.getResponse(apiResponseCode.getStatus(),
                 apiResponseCode,
-                this.messageUtils);
+                this.messageUtils,
+                id);
     }
 
     @GetMapping()
@@ -118,7 +119,7 @@ public class AssignTasksController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public ResponseEntity<BodyResponseDTO<Object>> getDetailByTaskForAssistant(@PathVariable UUID id) {
+    public ResponseEntity<BodyResponseDTO<AssignTasksDTO>> getDetailByTaskForAssistant(@PathVariable UUID id) {
         ApiResponseCode apiResponseCode = ApiResponseCode.SUCCESS;
         AssignTasksDTO assignTasksDTO = this.assignTasksService.getDetailByID(id);
 

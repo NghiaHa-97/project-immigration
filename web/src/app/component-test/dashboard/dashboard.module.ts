@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { DemoMaterialModule } from '../demo-material-module';
+import { DemoMaterialModule } from '../../demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutes } from './dashboard.routing';
@@ -12,8 +12,8 @@ import { StickerComponent } from './dashboard-components/sticker/sticker.compone
 import { ContactsComponent } from './dashboard-components/contacts/contacts.component';
 import { ActivityComponent } from './dashboard-components/activity/activity.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonComponentModule} from '../common-component/common-component.module';
-import {PatternFormat} from '../constans/pattern-format-date.const';
+import {CommonComponentModule} from '../../common-component/common-component.module';
+import {PatternFormat} from '../../constans/pattern-format-date.const';
 
 
 @NgModule({

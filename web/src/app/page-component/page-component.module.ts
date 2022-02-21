@@ -30,6 +30,8 @@ import {RoleUpdateComponent} from './role-component/role-update.component';
 import {canDeactivate, DialogCanDeactivateComponent} from './can-deactivate';
 import {ProjectMissionComponent} from './project-mission-component/project-mission.component';
 import {ProjectMissionUpdateComponent} from './project-mission-component/project-mission-update.component';
+import {AssignTasksComponent} from './assign-tasks-component/assign-tasks.component';
+import {AssignTasksUpdateComponent} from './assign-tasks-component/assign-tasks-update.component';
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import {ProjectMissionUpdateComponent} from './project-mission-component/project
     RoleUpdateComponent,
     DialogCanDeactivateComponent,
     ProjectMissionComponent,
-    ProjectMissionUpdateComponent
+    ProjectMissionUpdateComponent,
+    AssignTasksComponent,
+    AssignTasksUpdateComponent
   ],
   providers: [
     ...pageComponentService,

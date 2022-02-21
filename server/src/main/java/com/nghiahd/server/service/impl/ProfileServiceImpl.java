@@ -4,9 +4,12 @@ import com.nghiahd.server.common.AuthenticationCommon;
 import com.nghiahd.server.domain.Profile;
 import com.nghiahd.server.domain.StatusProfile;
 import com.nghiahd.server.domain.custom.EmployeeQuery;
+import com.nghiahd.server.domain.custom.ExpertsInProfileKey;
+import com.nghiahd.server.domain.custom.ExpertsInProfileQuery;
 import com.nghiahd.server.domain.custom.ProfileQuery;
 import com.nghiahd.server.model.ProfileDTO;
 import com.nghiahd.server.model.UserLogin;
+import com.nghiahd.server.repository.ExpertsInProfileRepository;
 import com.nghiahd.server.repository.ProfileQueryRepository;
 import com.nghiahd.server.repository.ProfileRepository;
 import com.nghiahd.server.service.ProfileService;
@@ -25,11 +28,14 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
     private final ProfileQueryRepository profileQueryRepository;
+    private final ExpertsInProfileRepository expertsInProfileRepository;
 
     public ProfileServiceImpl(ProfileRepository profileRepository,
-                              ProfileQueryRepository profileQueryRepository) {
+                              ProfileQueryRepository profileQueryRepository,
+                              ExpertsInProfileRepository expertsInProfileRepository) {
         this.profileRepository = profileRepository;
         this.profileQueryRepository = profileQueryRepository;
+        this.expertsInProfileRepository = expertsInProfileRepository;
     }
 
     @Override
@@ -40,6 +46,12 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setStatusProfile(new StatusProfile(1));
         profile.setEmployeeCreate(new EmployeeQuery(userLogin.getEmployeeID()));
         profile.setId(UUID.randomUUID());
+
+        for (ExpertsInProfileQuery item : profile.getExpertsInProfileQueries()) {
+            item.getId().setProfileID(profile.getId());
+            item.getId().setExpertsID(item.getExpert().getId());
+            item.setProfile(new ProfileQuery(profile.getId()));
+        }
         ProfileQuery profileSaved = profileQueryRepository.saveAndFlush(profile);
         this.profileQueryRepository.refresh(profileSaved);
         return profileSaved;
@@ -48,13 +60,20 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileQuery editProfile(ProfileQuery profile, UUID id) {
         profile.setUpdateDate(LocalDateTime.now());
-//        Optional<Profile> pro = profileRepository.findById(id);
         Optional<Profile> pro = profileRepository.findById(id);
+
         if (pro.isPresent()) {
             profile.setStatusProfile(new StatusProfile(1));
             profile.setCreateDate(pro.get().getCreateDate());
             UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
             profile.setEmployeeCreate(new EmployeeQuery(userLogin.getEmployeeID()));
+
+            for (ExpertsInProfileQuery item : profile.getExpertsInProfileQueries()) {
+                item.getId().setProfileID(profile.getId());
+                item.getId().setExpertsID(item.getExpert().getId());
+                item.setProfile(new ProfileQuery(profile.getId()));
+            }
+
             return profileQueryRepository.save(profile);
         }
         return null;

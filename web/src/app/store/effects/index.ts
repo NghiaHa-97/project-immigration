@@ -19,6 +19,8 @@ import {ProjectMissionEffect} from './project-mission.effect';
 import {CountryEffect} from './country.effect';
 import {LocationEffect} from './location.effect';
 import {ObjectTypeEffect} from './object-type.effect';
+import {CommentEffect} from './comment.effect';
+import {AssignTasksService} from '../../services';
 
 
 // export {VehicleEffect} from './vehicle.effect';
@@ -45,7 +47,9 @@ export const effectsFeatures: any[] = [
   ProjectMissionEffect,
   CountryEffect,
   LocationEffect,
-  ObjectTypeEffect
+  ObjectTypeEffect,
+  CommentEffect,
+  AssignTasksService
 ];
 
 export * from './router.effect';

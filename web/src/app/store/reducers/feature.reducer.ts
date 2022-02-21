@@ -22,6 +22,8 @@ import * as fromObjectType from './feature/object-type.reducer';
 import * as fromManageUser from './feature/manage-user.reducer';
 import * as fromProjectMission from './feature/project-mission.reducer';
 
+import * as fromComment from './feature/comment.reducer';
+import * as fromAssignTasks from './feature/assign-tasks.reducer';
 
 
 export interface FeatureState {
@@ -45,6 +47,8 @@ export interface FeatureState {
   country: fromCountry.CountryState;
   location: fromLocation.LocationState;
   objectType: fromObjectType.ObjectTypeState;
+  comment: fromComment.CommentState;
+  assignTasks: fromAssignTasks.AssignTasksState;
 }
 
 export const featuresReducers: ActionReducerMap<FeatureState, any> = {
@@ -68,6 +72,8 @@ export const featuresReducers: ActionReducerMap<FeatureState, any> = {
   country: fromCountry.reducer,
   location: fromLocation.reducer,
   objectType: fromObjectType.reducer,
+  comment: fromComment.reducer,
+  assignTasks: fromAssignTasks.reducer,
 };
 
 export const getFeaturesState = createFeatureSelector<FeatureState>(
@@ -98,3 +104,5 @@ export const getProjectMission = (state: FeatureState) => state.projectMission;
 export const getCountry = (state: FeatureState) => state.country;
 export const getLocation = (state: FeatureState) => state.location;
 export const getObjectType = (state: FeatureState) => state.objectType;
+export const getComment = (state: FeatureState) => state.comment;
+export const getAssignTasks = (state: FeatureState) => state.assignTasks;
