@@ -24,3 +24,6 @@ export * from './status-profile.action';
 export * from './project-mission.action';
 export * from './location.action';
 export * from './object-type.action';
+
+export * from './assign-tasks.action';
+export * from './comment.action';

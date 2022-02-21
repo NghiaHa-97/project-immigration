@@ -76,6 +76,19 @@ export const PUBLIC_API = {
     SAVE: `${DOMAIN_SERVER}/api/public/object-type/save`,
     DELETE: `${DOMAIN_SERVER}/api/public/object-type/delete/`,    // /delete/{id}
   },
+  ASSIGN_TASKS: {
+    GET_PAGE: `${DOMAIN_SERVER}/api/public/assign-tasks`,
+    GET_DETAIL: `${DOMAIN_SERVER}/api/public/assign-tasks/detail/`,   // id
+    CREATE: `${DOMAIN_SERVER}/api/public/assign-tasks/create`,
+    EDIT: `${DOMAIN_SERVER}/api/public/assign-tasks/edit/`,       // id
+    DELETE: `${DOMAIN_SERVER}/api/public/assign-tasks/delete/`,    // /delete/{id}
+  },
+  COMMENT: {
+    GET_ALL_BY_PROFILE_ID: `${DOMAIN_SERVER}/api/public/comment/get-all/profile-id`,
+    GET_DETAIL: `${DOMAIN_SERVER}/api/public/comment/detail/`,    // id
+    GET_DETAIL_BY_PROFILE_EMPLOYEE: `${DOMAIN_SERVER}/api/public/comment/detail/by-profile-and-employee`,
+    CREATE: `${DOMAIN_SERVER}/api/public/comment/create`,
+  },
 };
 
 

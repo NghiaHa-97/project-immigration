@@ -26,3 +26,6 @@ export * from './project-mission.selector';
 export * from './country.selector';
 export * from './location.selector';
 export * from './object-type.selector';
+
+export * from './comment.selector';
+export * from './assign-tasks.selector';

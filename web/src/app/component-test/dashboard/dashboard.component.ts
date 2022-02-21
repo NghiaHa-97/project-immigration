@@ -12,19 +12,19 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import * as _moment from 'moment';
-import {ColumnAndStyleModel} from "../models/columns-and-styles.model";
+import {ColumnAndStyleModel} from "../../models/columns-and-styles.model";
 import {PageEvent} from "@angular/material/paginator";
-import {STATUS_COLOR_STYLE} from "../constans/status-color-style.const";
+import {STATUS_COLOR_STYLE} from "../../constans/status-color-style.const";
 import {ThemePalette} from '@angular/material/core';
 import {Store} from '@ngrx/store';
-import * as fromStore from '../store';
-import {LoadAllRole, LoadModule} from '../store';
+import * as fromStore from '../../store';
+import {LoadAllRole, LoadModule} from '../../store';
 import {BehaviorSubject, interval, Observable, of} from 'rxjs';
-import {TodoItemFlatNode, TodoItemNode} from '../common-component/tree-checkbox/tree-checkbox.component';
-import {COLOR_SNACK_BAR, NotificationSnackBar} from '../notification/notification-snack-bar';
+import {TodoItemFlatNode, TodoItemNode} from '../../common-component/tree-checkbox/tree-checkbox.component';
+import {COLOR_SNACK_BAR, NotificationSnackBar} from '../../notification/notification-snack-bar';
 import {tap} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import {EmployeeComponent} from '../page-component/employee-component/employee.component';
+import {EmployeeComponent} from '../../page-component/employee-component/employee.component';
 
 @Component({
   selector: 'app-dashboard',

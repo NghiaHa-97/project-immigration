@@ -2,7 +2,7 @@
   <mat-card-content>
     <mat-card-title>Hồ sơ</mat-card-title>
 
-    <app-toolbar-action-table  (handlerSearch)= "handlerSearch()">
+    <app-toolbar-action-table (handlerSearch)="handlerSearch()">
       <ng-container left [formGroup]="formSearch">
         <div class="row">
           <div class="col-md-4">
@@ -41,7 +41,7 @@
             </mat-form-field>
           </div>
           <div class="col-md-4">
-              <app-datepicker name="Ngày hết hạn" [control]="expirationDate"></app-datepicker>
+            <app-datepicker name="Ngày hết hạn" [control]="expirationDate"></app-datepicker>
           </div>
         </div>
       </ng-container>
@@ -61,7 +61,7 @@
                  [hiddenCheckBoxCheckAll]="true"
                  [stickyEnd]="true"
                  [stickyStart]="true"
-                 [isSelection]="false"
+                 [isSelection]="!!selection"
                  [isAction]="true"
                  [dataSource]="profiles$ | async"
                  [columnsAndStyles]="columnsAndStyles"
@@ -77,10 +77,14 @@
       <mat-icon>details</mat-icon>
       <span>Chi Tiết</span>
     </button>
-<!--    <button #btnUpdate mat-menu-item>-->
-<!--      <mat-icon>update</mat-icon>-->
-<!--      <span>Sửa</span>-->
-<!--    </button>-->
+    <button #addComment mat-menu-item>
+      <mat-icon>update</mat-icon>
+      <span>Thêm nhận xét</span>
+    </button>
+    <button #viewComment mat-menu-item>
+      <mat-icon>update</mat-icon>
+      <span>Xem nhận xét</span>
+    </button>
     <button #btnDelete mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
@@ -97,5 +101,108 @@
   <div mat-dialog-actions class="float-right">
     <button mat-button [mat-dialog-close]="true">Đồng ý</button>
     <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Hủy</button>
+  </div>
+</ng-template>
+
+<div mat-dialog-actions *ngIf="isDialog" class="float-right">
+  <button mat-button mat-dialog-close>Hủy</button>
+  <button mat-button [mat-dialog-close]="appTable.resultSelected">Đồng ý</button>
+</div>
+
+<ng-template #dialogAddComment>
+  <h1 mat-dialog-title>Thêm nhận xét {{(profileComment$ | async)?.code}}</h1>
+  <div mat-dialog-content [formGroup]="formComment">
+    <div class="row">
+      <div class="col-md-4">
+        <!--          <mat-form-field class="example-full-width">-->
+        <!--            <input matInput placeholder="Giói tính" type="email">-->
+        <!--          </mat-form-field>-->
+        <label>Thông qua hặc không thông qua </label>
+        <mat-radio-group formControlName="status">
+          <mat-radio-button [value]="false">Không thông qua</mat-radio-button>
+          <mat-radio-button [value]="true">Thông qua</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10">
+        <app-rich-text-editor label="Chi tiết" [description]="reason">
+        </app-rich-text-editor>
+      </div>
+    </div>
+
+  </div>
+  <div mat-dialog-actions class="float-right">
+    <button mat-button (click)="saveComment()">Đồng ý</button>
+    <button mat-button type="button" [mat-dialog-close]="false" cdkFocusInitial>Hủy</button>
+  </div>
+</ng-template>
+
+<ng-template #dialogViewComment>
+  <h1 mat-dialog-title>Xem nhận xét {{(profileComment$ | async)?.code}}</h1>
+  <div mat-dialog-content>
+    <div class="row">
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel *ngFor="let item of listComment$ | async; let i = index">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{i + 1 + ' : ' + (item?.workUnitName || '') + ' - Trạng thái ' + (item?.status ? 'Đồng ý' : 'Không đồng ý')}}
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-list>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-list-item>
+                  <h3 matLine>Mã Hồ sơ </h3>
+                  <p matLine>
+                    <span> {{item?.profileCode ?? '' }} </span>
+                  </p>
+                </mat-list-item>
+              </div>
+
+              <div class="col-md-6">
+                <mat-list-item>
+                  <h3 matLine>Tên đơn vị: </h3>
+                  <p matLine>
+                    <span> {{item?.workUnitName ?? '' }} </span>
+                  </p>
+                </mat-list-item>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-list-item>
+                  <h3 matLine>Mã người nhận xét: </h3>
+                  <p matLine>
+                    <span> {{item?.employeeCode ?? ''}}</span>
+                  </p>
+                </mat-list-item>
+              </div>
+              <div class="col-md-6">
+                <mat-list-item>
+                  <h3 matLine>Tên người nhận xét: </h3>
+                  <p matLine>
+                    <span> {{item?.employeeFullname ?? ''}}</span>
+                  </p>
+                </mat-list-item>
+              </div>
+            </div>
+            <div class="row">
+              <mat-list-item>
+                <h3 matLine>Ly do: </h3>
+                <div matLine [innerHTML]="item?.reason | safeHtml"></div>
+              </mat-list-item>
+            </div>
+          </mat-list>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </div>
+  </div>
+  <div mat-dialog-actions class="float-right">
+    <button mat-button mat-dialog-close cdkFocusInitial>Đóng</button>
   </div>
 </ng-template>

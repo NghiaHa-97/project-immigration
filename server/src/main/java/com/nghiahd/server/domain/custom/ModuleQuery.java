@@ -1,6 +1,5 @@
 package com.nghiahd.server.domain.custom;
 
-import com.nghiahd.server.domain.ExpertsInProfile;
 import com.nghiahd.server.domain.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

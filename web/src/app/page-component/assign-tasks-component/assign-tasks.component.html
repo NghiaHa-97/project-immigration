@@ -1,0 +1,108 @@
+<mat-card class="example-card">
+  <mat-card-content>
+    <mat-card-title>Công việc nhiệm vụ</mat-card-title>
+
+    <app-toolbar-action-table (handlerSearch)= "handlerSearch()">
+      <ng-container left [formGroup]="formSearch">
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="title" placeholder="Tiêu đề nhiệm vụ">
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="employeeCode" placeholder="Mã nhân viên nhận">
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="employeeFullname" placeholder="Tên nhân viên nhận">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="departmentName" placeholder="Tên phòng ban">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="profileCode" placeholder="Mã hồ sơ">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <mat-label>Trạng thái</mat-label>
+              <mat-select formControlName="statusProfileID">
+                <mat-option [value]="null">None</mat-option>
+                <mat-option *ngFor="let val of (listStatusProfile$ | async)"
+                            [value]="val.id">
+                  {{val.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <app-datepicker name="Ngày hết hạn" [control]="expirationDate"></app-datepicker>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container right>
+        <button *appHasPermission="12; andCondition:[!isDialog]"
+                mat-raised-button color="primary"
+                (click)="onNewTask()">
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>Thêm mới</span>
+        </button>
+      </ng-container>
+    </app-toolbar-action-table>
+
+
+    <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
+      <app-table #appTable [menuAction]="menu"
+                 [hiddenCheckBoxCheckAll]="true"
+                 [stickyEnd]="true"
+                 [stickyStart]="true"
+                 [isSelection]="false"
+                 [isAction]="true"
+                 [dataSource]="tasks$ | async"
+                 [columnsAndStyles]="columnsAndStyles"
+                 [selection]="null"
+                 (handlerChangePage)="handlerChangePage($event)"
+                 [totalRecord]="totalItems$ | async">
+      </app-table>
+    </div>
+
+  </mat-card-content>
+  <mat-menu #menu="matMenu">
+    <button #btnDetail mat-menu-item *appHasPermission="12; andCondition:[!isDialog]">
+      <mat-icon>details</mat-icon>
+      <span>Chi Tiết</span>
+    </button>
+    <!--    <button #btnUpdate mat-menu-item>-->
+    <!--      <mat-icon>update</mat-icon>-->
+    <!--      <span>Sửa</span>-->
+    <!--    </button>-->
+    <button #btnDelete mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Xóa</span>
+    </button>
+  </mat-menu>
+
+</mat-card>
+
+<ng-template #dialogDelete>
+  <h1 mat-dialog-title>Xóa nhiệm vụ đã giao</h1>
+  <div mat-dialog-content>
+    <p>Bạn có chắc muốn xóa?</p>
+  </div>
+  <div mat-dialog-actions class="float-right">
+    <button mat-button [mat-dialog-close]="true">Đồng ý</button>
+    <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Hủy</button>
+  </div>
+</ng-template>

@@ -16,4 +16,10 @@ public class ProfileQueryRepositoryImpl implements ProfileQueryRepositoryCustom 
     public void refresh(ProfileQuery profileSaved) {
         this.entityManager.refresh(profileSaved);
     }
+
+    @Override
+    public ProfileQuery create(ProfileQuery profileQuery) {
+        entityManager.persist(profileQuery);
+        return profileQuery;
+    }
 }

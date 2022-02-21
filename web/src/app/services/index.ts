@@ -18,6 +18,8 @@ import {ProjectMissionService} from './project-mission.service';
 import {CountryService} from './country.service';
 import {LocationService} from './location.service';
 import {ObjectTypeService} from './object-type.service';
+import {AssignTasksService} from './assign-tasks.service';
+import {CommentService} from './comment.service';
 
 export * from './auth.service';
 export * from './profile.service';
@@ -43,6 +45,9 @@ export * from './country.service';
 export * from './location.service';
 export * from './object-type.service';
 
+export * from './assign-tasks.service';
+export * from './comment.service';
+
 export const pageComponentService = [
   EmployeeService,
   ExpertsService,
@@ -62,6 +67,8 @@ export const pageComponentService = [
   ProjectMissionService,
   CountryService,
   LocationService,
-  ObjectTypeService
+  ObjectTypeService,
+  AssignTasksService,
+  CommentService
 ];
 export const appComponentService = [AuthService];
