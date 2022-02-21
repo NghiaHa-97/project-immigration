@@ -7,14 +7,16 @@ import * as _ from 'lodash';
 
 import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
+  CreateAssignTasks,
   getArrayDepartmentState, getUserDetailState,
-  Go, LoadDepartmentByWorkUnit,
+  Go, LoadDepartmentByWorkUnit, UpdateAssignTasks,
 } from '../../store';
 import {getPrefixID} from '../../constans/prefix-id.const';
 
 import {MatDialog} from '@angular/material/dialog';
 import {EmployeeComponent} from '../employee-component/employee.component';
 import {ProfileComponent} from '../profile-component/profile.component';
+import {PatternFormat} from '../../constans/pattern-format-date.const';
 
 
 @Component({
@@ -39,6 +41,7 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
+              private patterFormat: PatternFormat,
               private dialog: MatDialog) {
     this.formTask = this.fb.group({
       title: ['', Validators.required],
@@ -67,6 +70,7 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
   get expirationDateDate(): FormControl {
     return this.formTask.get('expirationDate.date') as FormControl;
   }
+
   get expirationDateTime(): FormControl {
     return this.formTask.get('expirationDate.time') as FormControl;
   }
@@ -102,7 +106,7 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
 
     this.isDetail$ = this.entityDetail$.pipe(
       tap(entity => {
-        this.formTask.patchValue({ ...entity});
+        this.formTask.patchValue({...entity});
       }),
       map(entity => !!entity)
     );
@@ -119,40 +123,52 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
     if (this.formTask.valid) {
       if (!!this.entityTask) {
         // update
-        // console.log('update', {
-        //   ...this.entityProjectMission,
-        //   ...this.formProjectMission.value
-        // });
-        // const dialogRef = this.dialog.open(this.dialogUpdate, {
-        //   width: '20%'
-        // });
-        // dialogRef.afterClosed()
-        //   .pipe(take(1))
-        //   .subscribe(result => {
-        //     if (result) {
-        //       this.store.dispatch(
-        //         new UpdateProjectMission({
-        //             ...this.entityProjectMission,
-        //             ...this.formProjectMission.value
-        //           }
-        //         ));
-        //     }
-        //   });
+        console.log('update');
+        const data = {
+          ...this.entityTask,
+          ...this.formTask.value,
+          expirationDate: this.patterFormat
+            .combineDateAndTimeToDateTimeRequest(
+              this.formTask.value?.expirationDate?.date,
+              this.formTask.value?.expirationDate?.time
+            )
+        };
+        console.log(data);
+        const dialogRef = this.dialog.open(this.dialogUpdate, {
+          width: '20%'
+        });
+        dialogRef.afterClosed()
+          .pipe(take(1))
+          .subscribe(result => {
+            if (result) {
+              this.store.dispatch(
+                new UpdateAssignTasks(data));
+            }
+          });
       } else {
         // create
         // console.log('create', {...this.formProjectMission.value});
-        // this.store.dispatch(new CreateProjectMission({...this.formProjectMission.value}));
-        // this.store.select(fromStore.getProjectMissionResponseStatusState).pipe(
-        //   skip(1),
-        //   map(({status}) => status),
-        //   filter(isNotNull => !!isNotNull),
-        //   take(1)
-        // ).subscribe(status => {
-        //   console.log(status);
-        //   if (status === '200') {
-        //     this.formProjectMission.reset(this.initForm);
-        //   }
-        // });
+        const data = {
+          ...this.formTask.value,
+          expirationDate: this.patterFormat
+            .combineDateAndTimeToDateTimeRequest(
+              this.formTask.value?.expirationDate?.date,
+              this.formTask.value?.expirationDate?.time
+            )
+        };
+        console.log(data);
+        this.store.dispatch(new CreateAssignTasks(data));
+        this.store.select(fromStore.getAssignTasksResponseStatusState).pipe(
+          skip(1),
+          map((status) => status?.status),
+          filter(isNotNull => !!isNotNull),
+          take(1)
+        ).subscribe(status => {
+          console.log(status);
+          if (status === '200') {
+            this.formTask.reset(this.initForm);
+          }
+        });
       }
     }
   }
