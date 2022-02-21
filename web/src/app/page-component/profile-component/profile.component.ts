@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  ElementRef, Inject,
   OnInit,
   TemplateRef,
   ViewChild
@@ -10,23 +10,27 @@ import {
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PageEvent} from '@angular/material/paginator';
 import {fromEvent, Observable} from 'rxjs';
 import {TableComponent} from '../../common-component/table/table.component';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import {
-  Go, LoadDetailProfile,
+  CreateComment, getArrayCommentState,
+  getProfileEntitiesState,
+  Go, LoadCommentByProfIle, LoadDetailProfile,
   LoadProfile,
   LoadStatusProfile,
   RemoveProfile
 } from '../../store';
-import {map, take, withLatestFrom} from 'rxjs/operators';
+import {map, skip, take, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {getPrefixID} from '../../constans/prefix-id.const';
-import {MatDialog} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import * as _ from 'lodash';
+import {EmployeeComponent} from '../employee-component/employee.component';
 
 @Component({
   selector: 'app-profile',
@@ -35,16 +39,22 @@ import {MatDialog} from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
+  isDialog = false;
   profiles$!: Observable<any[]>;
   params: any = {};
   codeProfileDel$!: Observable<string>;
   totalItems$!: Observable<number>;
   listStatusProfile$!: Observable<any>;
+  profileComment$!: Observable<any>;
+  listComment$!: Observable<any[]>;
 
   @ViewChild('appTable') appTable!: TableComponent;
+  @ViewChild('dialogAddComment', {static: true}) dialogAddComment!: TemplateRef<any>;
+  @ViewChild('dialogViewComment', {static: true}) dialogViewComment!: TemplateRef<any>;
   @ViewChild('dialogDelete', {
     static: true
   }) dialogDelete!: TemplateRef<any>;
+  formComment: FormGroup;
 
   @ViewChild('btnDetail', {
     static: false,
@@ -61,10 +71,62 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // @ViewChild('btnUpdate', {
-  //   static: true,
-  //   read: ElementRef
-  // }) btnUpdate!: ElementRef;
+  @ViewChild('viewComment', {
+    static: false,
+    read: ElementRef
+  }) set viewComment(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDetails$ = fromEvent(btn?.nativeElement, 'click').pipe(map(e => 'viewComment'));
+      this.eventClickDetails$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([data1, data2]) => data2)
+      ).subscribe(x => {
+        // this.onDetailProfile(x);
+        this.profileComment$ = this.store.select(getProfileEntitiesState).pipe(
+          map(entities => entities[getPrefixID(x)])
+        );
+        const dialogEmployeeRef = this.dialog.open(this.dialogViewComment, {
+          width: '60%',
+          height: '75%',
+        });
+        this.listComment$ = this.store.select(getArrayCommentState).pipe(
+          skip(1)
+        );
+        this.store.dispatch(new LoadCommentByProfIle({profileID: x}));
+      });
+    }
+  }
+
+  @ViewChild('addComment', {
+    static: false,
+    read: ElementRef
+  }) set addComment(btn: ElementRef) {
+    if (btn?.nativeElement) {
+      this.eventClickDetails$ = fromEvent(btn?.nativeElement, 'click').pipe(map(e => 'addComment'));
+      this.eventClickDetails$.pipe(
+        withLatestFrom(this.appTable.selectAction),
+        map(([data1, data2]) => data2)
+      ).subscribe(x => {
+        this.formComment.patchValue({
+          profileID: x
+        });
+        this.profileComment$ = this.store.select(getProfileEntitiesState).pipe(
+          map(entities => entities[getPrefixID(x)])
+        );
+
+        const dialogEmployeeRef = this.dialog.open(this.dialogAddComment, {
+          width: '60%',
+          height: '75%',
+        });
+
+        dialogEmployeeRef.afterClosed()
+          .pipe(take(1))
+          .subscribe(() => {
+            this.formComment.reset();
+          });
+      });
+    }
+  }
 
   @ViewChild('btnDelete', {
     static: false,
@@ -109,7 +171,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
               private patternFormat: PatternFormat,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public dataDialog: any) {
+    this.isDialog = !_.isEmpty(dataDialog);
+    if (this.isDialog) {
+      this.selection = new SelectionModel<number | string>(dataDialog.isSelectMulti, dataDialog.itemSelected);
+    }
     this.formSearch = this.fb.group({
       code: [''],
       projectMissionName: [''],
@@ -118,10 +185,19 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       approver: [''],
       expirationDate: [moment().format()]
     });
+
+    this.formComment = this.fb.group({
+      status: ['', Validators.required],
+      reason: ['', Validators.required]
+    });
   }
 
   get expirationDate(): FormControl {
     return this.formSearch.get('expirationDate') as FormControl;
+  }
+
+  get reason(): FormControl {
+    return this.formComment.get('reason') as FormControl;
   }
 
 
@@ -130,10 +206,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.store.select(fromStore.getStatusProfileLoadedState)
       .pipe(take(1))
       .subscribe(isLoaded => {
-      if (!isLoaded) {
-        this.store.dispatch(new LoadStatusProfile(null));
-      }
-    });
+        if (!isLoaded) {
+          this.store.dispatch(new LoadStatusProfile(null));
+        }
+      });
 
     this.store.dispatch(new LoadProfile(null));
     this.profiles$ = this.store.select(fromStore.getArrayProfileState).pipe(
@@ -203,6 +279,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       expirationDate: this.patternFormat.formatDateToDateRequest(this.formSearch.value.expirationDate)
     };
     this.store.dispatch(new LoadProfile(this.params));
+  }
+
+  saveComment(): void {
+    console.log(11111);
+    if (this.formComment.valid) {
+      this.store.dispatch(new CreateComment({
+        ...this.formComment.value
+      }));
+      this.formComment.reset();
+    }
   }
 }
 

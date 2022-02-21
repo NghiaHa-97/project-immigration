@@ -21,6 +21,7 @@ import {ExpertExistDetailActivate} from './can-activate/expert-exist-detail.acti
 import {ProfileExistDetailActivate} from './can-activate/profile-exist-detail.activate';
 import {AssignTasksComponent} from './assign-tasks-component/assign-tasks.component';
 import {AssignTasksUpdateComponent} from './assign-tasks-component/assign-tasks-update.component';
+import {AssignTasksExistDetailActivate} from './can-activate/assign-tasks-exist-detail.activate';
 
 
 export const PageRoutes: Routes = [
@@ -148,7 +149,7 @@ export const PageRoutes: Routes = [
       {
         path: 'chi-tiet/:id',
         component: AssignTasksUpdateComponent,
-        // canActivate: [ProjectMissionExistDetailActivate]
+        canActivate: [AssignTasksExistDetailActivate]
       },
       {
         path: 'them-moi',

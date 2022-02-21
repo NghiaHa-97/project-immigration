@@ -20,7 +20,7 @@ import {CountryEffect} from './country.effect';
 import {LocationEffect} from './location.effect';
 import {ObjectTypeEffect} from './object-type.effect';
 import {CommentEffect} from './comment.effect';
-import {AssignTasksService} from '../../services';
+import {AssignTasksEffect} from './assign-tasks.effect';
 
 
 // export {VehicleEffect} from './vehicle.effect';
@@ -49,7 +49,7 @@ export const effectsFeatures: any[] = [
   LocationEffect,
   ObjectTypeEffect,
   CommentEffect,
-  AssignTasksService
+  AssignTasksEffect
 ];
 
 export * from './router.effect';

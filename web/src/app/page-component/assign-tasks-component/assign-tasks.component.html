@@ -5,27 +5,49 @@
     <app-toolbar-action-table (handlerSearch)= "handlerSearch()">
       <ng-container left [formGroup]="formSearch">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <mat-form-field class="example-full-width">
-              <input matInput formControlName="name" placeholder="Tên dự án">
+              <input matInput formControlName="title" placeholder="Tiêu đề nhiệm vụ">
             </mat-form-field>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <mat-form-field class="example-full-width">
-              <input matInput formControlName="workUnitCreateName" placeholder="Tên đơn vị">
+              <input matInput formControlName="employeeCode" placeholder="Mã nhân viên nhận">
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput formControlName="employeeFullname" placeholder="Tên nhân viên nhận">
             </mat-form-field>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
             <mat-form-field class="example-full-width">
-              <input matInput formControlName="employeeName" placeholder="Tên nhân viên">
+              <input matInput formControlName="departmentName" placeholder="Tên phòng ban">
             </mat-form-field>
           </div>
           <div class="col-md-6">
             <mat-form-field class="example-full-width">
-              <input matInput formControlName="employeeCode" placeholder="Mã nhân viên">
+              <input matInput formControlName="profileCode" placeholder="Mã hồ sơ">
             </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <mat-label>Trạng thái</mat-label>
+              <mat-select formControlName="statusProfileID">
+                <mat-option [value]="null">None</mat-option>
+                <mat-option *ngFor="let val of (listStatusProfile$ | async)"
+                            [value]="val.id">
+                  {{val.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <app-datepicker name="Ngày hết hạn" [control]="expirationDate"></app-datepicker>
           </div>
         </div>
       </ng-container>
@@ -33,7 +55,7 @@
       <ng-container right>
         <button *appHasPermission="12; andCondition:[!isDialog]"
                 mat-raised-button color="primary"
-                (click)="onNewProjectMission()">
+                (click)="onNewTask()">
           <mat-icon>add_circle_outline</mat-icon>
           <span>Thêm mới</span>
         </button>
@@ -46,11 +68,11 @@
                  [hiddenCheckBoxCheckAll]="true"
                  [stickyEnd]="true"
                  [stickyStart]="true"
-                 [isSelection]="!!selection"
+                 [isSelection]="false"
                  [isAction]="true"
-                 [dataSource]="projectMissions$ | async"
+                 [dataSource]="tasks$ | async"
                  [columnsAndStyles]="columnsAndStyles"
-                 [selection]="selection"
+                 [selection]="null"
                  (handlerChangePage)="handlerChangePage($event)"
                  [totalRecord]="totalItems$ | async">
       </app-table>
@@ -75,7 +97,7 @@
 </mat-card>
 
 <ng-template #dialogDelete>
-  <h1 mat-dialog-title>Xóa dự án, nhiệm vụ {{nameProjectMissionDel$ | async}}</h1>
+  <h1 mat-dialog-title>Xóa nhiệm vụ đã giao</h1>
   <div mat-dialog-content>
     <p>Bạn có chắc muốn xóa?</p>
   </div>
@@ -84,8 +106,3 @@
     <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Hủy</button>
   </div>
 </ng-template>
-
-<div mat-dialog-actions *ngIf="isDialog" class="float-right">
-  <button mat-button mat-dialog-close>Hủy</button>
-  <button mat-button [mat-dialog-close]="appTable.resultSelected">Đồng ý</button>
-</div>

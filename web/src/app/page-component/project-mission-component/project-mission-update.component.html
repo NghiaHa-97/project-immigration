@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-content>
-    <mat-card-title>{{!!(isDetail$ | async) ? 'Chi tiết công việc, nhiệm vụ' : 'Thêm mới công việc, nhiệm vụ'}}</mat-card-title>
+    <mat-card-title>{{!!(isDetail$ | async) ? 'Chi tiết dự án, đề án, nhiệm vụ' : 'Thêm mới dự án, đề án, nhiệm vụ'}}</mat-card-title>
     <form [formGroup]="formProjectMission" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-md-5">

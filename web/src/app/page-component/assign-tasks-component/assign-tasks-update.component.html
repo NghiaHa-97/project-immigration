@@ -1,12 +1,65 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>{{!!(isDetail$ | async) ? 'Chi tiết công việc, nhiệm vụ' : 'Thêm mới công việc, nhiệm vụ'}}</mat-card-title>
-    <form [formGroup]="formProjectMission" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formTask" (ngSubmit)="onSubmit()">
+      <mat-slide-toggle formControlName="isEmployee">
+        {{formTask.value.isEmployee ? 'Nhân viên' : 'Phòng ban'}}
+      </mat-slide-toggle>
+      <div class="row" *ngIf="!formTask.value.isEmployee">
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <mat-label>Phòng ban</mat-label>
+            <mat-select formControlName="departmentID">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let val of (department$ | async)" [value]="val.id">{{val.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="formTask.value.isEmployee">
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input formControlName="employeeCode" matInput placeholder="Mã nhân viên">
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input formControlName="employeeFullName" matInput placeholder="Tên nhân viên">
+          </mat-form-field>
+        </div>
+        <div class="button-row">
+          <button type="button" mat-fab color="primary" (click)="openDialog(EMPLOYEE)">Thêm</button>
+          <button type="button" mat-fab color="warn" (click)="removeValue(EMPLOYEE)">Xóa</button>
+        </div>
+      </div>
+
       <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input formControlName="profileCode" matInput placeholder="Mã hồ sơ">
+          </mat-form-field>
+        </div>
+        <div class="button-row">
+          <button type="button" mat-fab color="primary" (click)="openDialog(PROFILE)">Thêm</button>
+          <button type="button" mat-fab color="warn" (click)="removeValue(PROFILE)">Xóa</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <app-datepicker name="Ngày hết hạn" [control]="expirationDateDate"></app-datepicker>
+        </div>
+        <div class="col-md-2">
+          <mat-form-field class="example-full-width">
+            <input matInput id="appt-time" [formControl]="expirationDateTime" type="time" name="appt-time">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
           <mat-form-field class="example-full-width">
             <mat-label>Tên công việc, nhiệm vụ</mat-label>
-            <input formControlName="name" matInput type="text">
+            <input formControlName="title" matInput type="text">
           </mat-form-field>
         </div>
       </div>
@@ -18,14 +71,24 @@
 
         <!--        <div [innerHTML]="richTextForm.value.description | safeHtml"></div>-->
       </div>
+      <div class="row">
+        <div class="col-md-10">
+          <app-rich-text-editor label="Báo cáo" [description]="resultReport">
+          </app-rich-text-editor>
+        </div>
+
+        <!--        <div [innerHTML]="richTextForm.value.description | safeHtml"></div>-->
+      </div>
 
       <button mat-raised-button
               type="submit"
-              class="btn btn-danger float-right">Lưu</button>
+              class="btn btn-danger float-right">Lưu
+      </button>
       <button mat-raised-button
               type="button"
               class="btn btn-danger float-left"
-              (click)="back()">Quay lại</button>
+              (click)="back()">Quay lại
+      </button>
       <div class="clearfix"></div>
     </form>
 

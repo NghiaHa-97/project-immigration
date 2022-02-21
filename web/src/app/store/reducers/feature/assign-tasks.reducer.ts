@@ -23,7 +23,7 @@ export function reducer(
         (result: { [id: string]: any }, item: any) => {
           return {
             ...result,
-            [getPrefixID(item.id)]: {...item},
+            [getPrefixID(item.id)]: {...item, isDetail: false},
           };
         },
         {}
@@ -42,7 +42,7 @@ export function reducer(
       const entity = action.payload?.data;
       const entities = {
         ...state.entities,
-        [getPrefixID(entity.id)]: {...entity},
+        [getPrefixID(entity.id)]: {...entity, isDetail: true},
       };
 
       return {

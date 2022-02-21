@@ -7,13 +7,14 @@ import * as _ from 'lodash';
 
 import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
-  CreateProjectMission,
-  Go,
-  UpdateProjectMission
+  getArrayDepartmentState, getUserDetailState,
+  Go, LoadDepartmentByWorkUnit,
 } from '../../store';
 import {getPrefixID} from '../../constans/prefix-id.const';
 
 import {MatDialog} from '@angular/material/dialog';
+import {EmployeeComponent} from '../employee-component/employee.component';
+import {ProfileComponent} from '../profile-component/profile.component';
 
 
 @Component({
@@ -24,35 +25,67 @@ import {MatDialog} from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
+  public readonly EMPLOYEE = 'EMPLOYEE';
+  public readonly PROFILE = 'PROFILE';
   @ViewChild('dialogUpdate', {
     static: true
   }) dialogUpdate!: TemplateRef<any>;
-  formProjectMission: FormGroup;
+  formTask: FormGroup;
   initForm: any;
   entityDetail$ = new BehaviorSubject<any>(null);
   isDetail$!: Observable<boolean>;
-  entityProjectMission: any;
+  entityTask: any;
+  department$!: Observable<any[]>;
 
   constructor(private fb: FormBuilder,
               private store: Store<fromStore.FeatureState>,
               private dialog: MatDialog) {
-    this.formProjectMission = this.fb.group({
-      name: ['', Validators.required],
-      description: ['']
+    this.formTask = this.fb.group({
+      title: ['', Validators.required],
+      employeeID: [''],
+      employeeCode: [''],
+      employeeFullName: [''],
+      profileID: [''],
+      profileCode: [''],
+      expirationDate: this.fb.group({
+        date: [null],
+        time: [null]
+      }),
+      description: [''],
+      result: [''],
+      departmentID: [null],
+      isEmployee: [true]
     });
-    this.initForm = this.formProjectMission.value;
+    this.initForm = this.formTask.value;
 
   }
 
   get description(): FormControl {
-    return this.formProjectMission.get('description') as FormControl;
+    return this.formTask.get('description') as FormControl;
+  }
+
+  get expirationDateDate(): FormControl {
+    return this.formTask.get('expirationDate.date') as FormControl;
+  }
+  get expirationDateTime(): FormControl {
+    return this.formTask.get('expirationDate.time') as FormControl;
+  }
+
+  get resultReport(): FormControl {
+    return this.formTask.get('result') as FormControl;
   }
 
   ngOnInit(): void {
+    this.department$ = this.store.select(getArrayDepartmentState);
+    this.store.select(getUserDetailState).subscribe(user => {
+      if (user?.principal?.workUnitID) {
+        this.store.dispatch(new LoadDepartmentByWorkUnit(user?.principal?.workUnitID));
+      }
+    });
     this.store.select(fromStore.getRouterParamsState).pipe(
       switchMap((data: any) => {
         if (data?.id) {
-          return this.store.select(fromStore.getProjectMissionEntitiesState).pipe(
+          return this.store.select(fromStore.getAssignTasksEntitiesState).pipe(
             map(entities => entities[getPrefixID(data?.id)])
           );
         }
@@ -62,17 +95,14 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
       // map(entity => entity)
     ).subscribe(entity => {
       if (!!entity) {
-        this.entityProjectMission = entity;
+        this.entityTask = entity;
         this.entityDetail$.next(entity);
       }
     });
 
     this.isDetail$ = this.entityDetail$.pipe(
       tap(entity => {
-        this.formProjectMission.patchValue({
-          name: entity?.name ?? '',
-          description: entity?.description ?? '',
-        });
+        this.formTask.patchValue({ ...entity});
       }),
       map(entity => !!entity)
     );
@@ -85,50 +115,141 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
 
 
   onSubmit(): void {
-    if (this.formProjectMission.valid) {
-      if (!!this.entityProjectMission) {
+    console.log(this.formTask);
+    if (this.formTask.valid) {
+      if (!!this.entityTask) {
         // update
-        console.log('update', {
-          ...this.entityProjectMission,
-          ...this.formProjectMission.value
-        });
-        const dialogRef = this.dialog.open(this.dialogUpdate, {
-          width: '20%'
-        });
-        dialogRef.afterClosed()
-          .pipe(take(1))
-          .subscribe(result => {
-            if (result) {
-              this.store.dispatch(
-                new UpdateProjectMission({
-                    ...this.entityProjectMission,
-                    ...this.formProjectMission.value
-                  }
-                ));
-            }
-          });
+        // console.log('update', {
+        //   ...this.entityProjectMission,
+        //   ...this.formProjectMission.value
+        // });
+        // const dialogRef = this.dialog.open(this.dialogUpdate, {
+        //   width: '20%'
+        // });
+        // dialogRef.afterClosed()
+        //   .pipe(take(1))
+        //   .subscribe(result => {
+        //     if (result) {
+        //       this.store.dispatch(
+        //         new UpdateProjectMission({
+        //             ...this.entityProjectMission,
+        //             ...this.formProjectMission.value
+        //           }
+        //         ));
+        //     }
+        //   });
       } else {
         // create
-        console.log('create', {...this.formProjectMission.value});
-        this.store.dispatch(new CreateProjectMission({...this.formProjectMission.value}));
-        this.store.select(fromStore.getProjectMissionResponseStatusState).pipe(
-          skip(1),
-          map(({status}) => status),
-          filter(isNotNull => !!isNotNull),
-          take(1)
-        ).subscribe(status => {
-          console.log(status);
-          if (status === '200') {
-            this.formProjectMission.reset(this.initForm);
+        // console.log('create', {...this.formProjectMission.value});
+        // this.store.dispatch(new CreateProjectMission({...this.formProjectMission.value}));
+        // this.store.select(fromStore.getProjectMissionResponseStatusState).pipe(
+        //   skip(1),
+        //   map(({status}) => status),
+        //   filter(isNotNull => !!isNotNull),
+        //   take(1)
+        // ).subscribe(status => {
+        //   console.log(status);
+        //   if (status === '200') {
+        //     this.formProjectMission.reset(this.initForm);
+        //   }
+        // });
+      }
+    }
+  }
+
+  openDialog(type: string): void {
+
+    switch (type) {
+      case this.EMPLOYEE: {
+        const dialogEmployeeRef = this.dialog.open(EmployeeComponent, {
+          width: '60%',
+          height: '75%',
+          data: {
+            isSelectMulti: false,
+            itemSelected: this.formTask.value.employeeID === '' ? [] : [this.formTask.value.employeeID]
           }
         });
+
+        dialogEmployeeRef.afterClosed()
+          .pipe(take(1))
+          .subscribe((result: Map<number | string, any>) => {
+            if (!!result) {
+              if (result.size === 0) {
+                this.removeValue(this.EMPLOYEE);
+                return;
+              }
+              const it = result.values();
+              let item = it.next();
+              while (!item.done) {
+                this.formTask.patchValue({
+                  employeeCode: item.value.code,
+                  employeeFullName: item.value.fullname,
+                  employeeID: item.value.id
+                });
+                item = it.next();
+              }
+            }
+          });
+        break;
+      }
+
+      case this.PROFILE: {
+        const dialogRoleRef = this.dialog.open(ProfileComponent, {
+          width: '60%',
+          height: '75%',
+          data: {
+            isSelectMulti: false,
+            itemSelected: this.formTask.value.profileID ? [] : [this.formTask.value.profileID]
+          }
+        });
+
+        dialogRoleRef.afterClosed()
+          .pipe(take(1))
+          .subscribe((result: Map<number | string, any>) => {
+            if (!!result) {
+              if (result.size === 0) {
+                this.removeValue(this.PROFILE);
+                return;
+              }
+              const it = result.values();
+              let item = it.next();
+              while (!item.done) {
+                this.formTask.patchValue({
+                  profileCode: item.value.code,
+                  profileID: item.value.id
+                });
+                item = it.next();
+              }
+            }
+          });
+        break;
+      }
+    }
+  }
+
+  removeValue(type: string): void {
+    switch (type) {
+      case this.EMPLOYEE: {
+        this.formTask.patchValue({
+          employeeFullName: [''],
+          employeeCode: [''],
+          employeeID: ['']
+        });
+        break;
+      }
+      case this.PROFILE: {
+        this.formTask.patchValue({
+          profileCode: [''],
+          profileID: ['']
+        });
+        break;
       }
     }
   }
 
 
   back(): void {
-    this.store.dispatch(new Go({path: ['nhiem-vu-cong-viec']}));
+    this.store.dispatch(new Go({path: ['nhiem-vu']}));
   }
 
   ngOnDestroy(): void {
