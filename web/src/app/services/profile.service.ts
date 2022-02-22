@@ -42,7 +42,7 @@ export class ProfileService {
 
   editStatus(payload: any): Observable<any> {
     return this.http
-      .put(`${PUBLIC_API.PROFILE.EDIT_STATUS}${payload.id}`,
+      .put(`${PUBLIC_API.PROFILE.EDIT_STATUS}${payload.profileID}`,
         payload,
         {observe: 'response', withCredentials: true});
   }
