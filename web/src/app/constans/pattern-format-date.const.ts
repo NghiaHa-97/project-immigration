@@ -31,7 +31,7 @@ export class PatternFormat {
 
   splitDateTimeResponseToDateAndTime(datetimeResponse: any): { date: string, time: string } {
     return {
-      date: moment(datetimeResponse).format(PATTERN_FORMAT_DATE.DATE_RESPONSE),
+      date: moment(datetimeResponse).format(PATTERN_FORMAT_DATE.DATE_REQUEST),
       time: moment(datetimeResponse).format(PATTERN_FORMAT_DATE.TIME)
     };
   }
