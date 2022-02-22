@@ -29,12 +29,13 @@ public class CommentServiceImpl implements CommentService {
         if (userLogin.getWorkUnitID() == null) {
             throw new ExceptionApiCustom(ApiResponseCode.WORK_UNIT_NULL);
         }
-        int count = this.commentRepository.checkExistCommentWithWorkUnit(userLogin.getWorkUnitID());
+        int count = this.commentRepository.checkExistCommentWithWorkUnitAndProfileID(cm.getProfileID(), userLogin.getWorkUnitID());
         if (count > 0) {
             throw new ExceptionApiCustom(ApiResponseCode.COMMENT_EXIST);
         }
         cm.setId(UUID.randomUUID());
-        Comment comment = this.commentRepository.save(cm);
+        cm.setEmployeeID(userLogin.getEmployeeID());
+        Comment comment = this.commentRepository.saveAndFlush(cm);
         return this.commentRepository.getDetailCommentByID(comment.getId());
     }
 

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -26,8 +27,22 @@ public class AssignTasksServiceImpl implements AssignTasksService {
     }
 
     @Override
-    public Page<AssignTasksDTO> getPageAssignTasks(Pageable pageable) {
-        return this.assignTasksRepository.getPageAssignTasks(pageable);
+    public Page<AssignTasksDTO> getPageAssignTasks(Pageable pageable,
+                                                   String title,
+                                                   String employeeCode,
+                                                   String employeeFullname,
+                                                   String departmentName,
+                                                   String profileCode,
+                                                   Integer statusProfileID,
+                                                   LocalDate expirationDate) {
+        return this.assignTasksRepository.getPageAssignTasks(pageable,
+                title,
+                employeeCode,
+                employeeFullname,
+                departmentName,
+                profileCode,
+                statusProfileID,
+                expirationDate);
     }
 
     @Override
@@ -46,6 +61,7 @@ public class AssignTasksServiceImpl implements AssignTasksService {
         assignTasks.setUpdateDate(LocalDateTime.now());
         UserLogin userLogin = AuthenticationCommon.getUserLoginContext();
         assignTasks.setEmployeeCreateID(userLogin.getEmployeeID());
+        assignTasks.setId(UUID.randomUUID());
         return this.assignTasksRepository.save(assignTasks);
     }
 
