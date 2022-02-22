@@ -16,7 +16,8 @@ import {getPrefixID} from '../../constans/prefix-id.const';
 import {MatDialog} from '@angular/material/dialog';
 import {EmployeeComponent} from '../employee-component/employee.component';
 import {ProfileComponent} from '../profile-component/profile.component';
-import {PatternFormat} from '../../constans/pattern-format-date.const';
+import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
+import * as moment from 'moment';
 
 
 @Component({
@@ -106,7 +107,11 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
 
     this.isDetail$ = this.entityDetail$.pipe(
       tap(entity => {
-        this.formTask.patchValue({...entity});
+        console.log(this.patterFormat.splitDateTimeResponseToDateAndTime(entity.expirationDate));
+        this.formTask.patchValue({
+          ...entity,
+          expirationDate: this.patterFormat.splitDateTimeResponseToDateAndTime(entity.expirationDate)
+        });
       }),
       map(entity => !!entity)
     );

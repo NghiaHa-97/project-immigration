@@ -187,6 +187,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     });
 
     this.formComment = this.fb.group({
+      profileID: [null],
       status: ['', Validators.required],
       reason: ['', Validators.required]
     });
