@@ -94,7 +94,7 @@ export class ProfileEffect {
       map((action: profileActions.UpdateProfileStatus) => action.payload),
       switchMap((payload) => {
         return this.profileService
-          .edit(payload)
+          .editStatus(payload)
           .pipe(
             map(response => {
               const {message} = response?.body;

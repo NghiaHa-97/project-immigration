@@ -215,7 +215,7 @@ export class ProfileUpdateComponent implements OnInit {
               take(1)
             )
             .subscribe((id: any) => {
-              console.log('1111111111111111111111');
+              // console.log('1111111111111111111111');
               if (id) {
                 this.store.dispatch(new LoadDepartmentByWorkUnit(id));
               }
@@ -223,7 +223,7 @@ export class ProfileUpdateComponent implements OnInit {
         }
         return of(null);
       }),
-      shareReplay(),
+      // shareReplay(),
       take(1)
     );
     this.store.select(getStatusProfileLoadedState)
