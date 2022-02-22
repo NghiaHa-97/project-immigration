@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import * as fromStore from '../../store';
 import * as moment from 'moment';
-import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
+import {filter, map, share, shareReplay, skip, switchMap, take, tap} from 'rxjs/operators';
 import {
   CreateProfile,
   getArrayDepartmentState,
@@ -223,6 +223,7 @@ export class ProfileUpdateComponent implements OnInit {
         }
         return of(null);
       }),
+      shareReplay(),
       take(1)
     );
     this.store.select(getStatusProfileLoadedState)
