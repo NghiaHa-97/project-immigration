@@ -26,11 +26,16 @@ export const STATUS_COLOR_STYLE = {
 export function getStyleBody(id: any): any{
   switch (id) {
     case 1:
-    case 2:
     case 3:
+      return STATUS_COLOR_STYLE.GREEN;
+    case 2:
+      return STATUS_COLOR_STYLE.RED;
     case false:
       return STATUS_COLOR_STYLE.RED;
     case 4:
+      return STATUS_COLOR_STYLE.GEEK_BLUE;
+    case 5:
+      return STATUS_COLOR_STYLE.VOLCANO;
     case true:
       return STATUS_COLOR_STYLE.GREEN;
     default:

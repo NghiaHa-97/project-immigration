@@ -105,6 +105,33 @@ export class UpdateProfileSuccess implements Action {
   }
 }
 
+// =========================== Update Status
+export const UPDATE_PROFILE_STATUS = '[PROFILE] Update status Profile';
+export const UPDATE_PROFILE_STATUS_FAIL = '[PROFILE] Update status Profile Fail';
+export const UPDATE_PROFILE_STATUS_SUCCESS = '[PROFILE] Update status Profile Success';
+
+export class UpdateProfileStatus implements Action {
+  readonly type = UPDATE_PROFILE_STATUS;
+
+  constructor(public payload: any) {
+  }
+}
+
+export class UpdateProfileStatusFail implements Action {
+  readonly type = UPDATE_PROFILE_STATUS_FAIL;
+
+  constructor(public payload: any) {
+  }
+}
+
+export class UpdateProfileStatusSuccess implements Action {
+  readonly type = UPDATE_PROFILE_STATUS_SUCCESS;
+
+  constructor(public payload: any) {
+  }
+}
+
+
 // =========================== Remove
 export const REMOVE_PROFILE = '[PROFILE] Remove Profile';
 export const REMOVE_PROFILE_FAIL = '[PROFILE] Remove Profile Fail';
@@ -135,4 +162,5 @@ export type ActionProfile = LoadProfile | LoadProfileFail | LoadProfileSuccess
   | LoadDetailProfile | LoadDetailProfileFail | LoadDetailProfileSuccess
   | CreateProfile | CreateProfileFail | CreateProfileSuccess
   | UpdateProfile | UpdateProfileFail | UpdateProfileSuccess
+  | UpdateProfileStatus | UpdateProfileStatusFail | UpdateProfileStatusSuccess
   | RemoveProfile | RemoveProfileFail | RemoveProfileSuccess;
