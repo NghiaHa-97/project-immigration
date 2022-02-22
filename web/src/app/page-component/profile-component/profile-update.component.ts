@@ -211,12 +211,15 @@ export class ProfileUpdateComponent implements OnInit {
           this.store.select(getUserDetailState)
             .pipe(
               map(entity => entity?.principal?.workUnitID),
+              filter(e => e),
               take(1)
-            ).subscribe((id: any) => {
-            if (id) {
-              this.store.dispatch(new LoadDepartmentByWorkUnit(id));
-            }
-          });
+            )
+            .subscribe((id: any) => {
+              console.log('1111111111111111111111');
+              if (id) {
+                this.store.dispatch(new LoadDepartmentByWorkUnit(id));
+              }
+            });
         }
         return of(null);
       }),
