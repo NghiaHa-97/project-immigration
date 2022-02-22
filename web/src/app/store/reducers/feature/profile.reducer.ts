@@ -37,6 +37,7 @@ export function reducer(
     }
 
     case fromProfileAction.LOAD_DETAIL_PROFILE_SUCCESS:
+    case fromProfileAction.UPDATE_PROFILE_STATUS_SUCCESS:
     case fromProfileAction.UPDATE_PROFILE_SUCCESS: {
       const responseStatus: ResponseStatusModel = action.payload;
       const profile = action.payload.data;
@@ -81,6 +82,7 @@ export function reducer(
     case fromProfileAction.LOAD_DETAIL_PROFILE_FAIL:
     case fromProfileAction.CREATE_PROFILE_FAIL:
     case fromProfileAction.UPDATE_PROFILE_FAIL:
+    case fromProfileAction.UPDATE_PROFILE_STATUS_FAIL:
     case fromProfileAction.REMOVE_PROFILE_FAIL: {
       const responseStatus: ResponseStatusModel = action.payload;
       return {

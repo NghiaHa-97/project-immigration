@@ -162,7 +162,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   @ViewChild('sort') sort!: MatSort;
 
-  selection = new SelectionModel<any>(true, []);
+  selection!: SelectionModel<any>;
   columnsAndStyles = COLUMNS_AND_STYLES;
 
   formSearch!: FormGroup;
@@ -313,7 +313,7 @@ export const COLUMNS_AND_STYLES: ColumnAndStyleModel[] = [
   {
     columnName: 'statusProfileName',
     columnHeaderName: 'Trạng thái hồ sơ',
-    styleHeader: {width: '100px', minWidth: '100px'},
+    styleHeader: {width: '200px', minWidth: '100px'},
     isSort: true,
     styleBody: 'statusProfileID',
     isStatus: true

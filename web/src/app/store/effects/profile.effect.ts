@@ -88,6 +88,28 @@ export class ProfileEffect {
     )
   );
 
+  updateStatus$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(profileActions.UPDATE_PROFILE_STATUS),
+      map((action: profileActions.UpdateProfileStatus) => action.payload),
+      switchMap((payload) => {
+        return this.profileService
+          .edit(payload)
+          .pipe(
+            map(response => {
+              const {message} = response?.body;
+              this.notification.openSnackBar(message, COLOR_SNACK_BAR.GREEN);
+              return new profileActions.UpdateProfileStatusSuccess(response?.body);
+            }),
+            catchError(({error}) => {
+              this.notification.openSnackBar(error?.message, COLOR_SNACK_BAR.RED);
+              return of(new profileActions.UpdateProfileStatusFail(error));
+            })
+          );
+      })
+    )
+  );
+
   delete$ = createEffect(
     () => this.actions$.pipe(
       ofType(profileActions.REMOVE_PROFILE),

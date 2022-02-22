@@ -9,6 +9,7 @@ export const PUBLIC_API = {
     GET_PROFILE: `${DOMAIN_SERVER}/api/public/profile`,
     CREATE_PROFILE: `${DOMAIN_SERVER}/api/public/profile/create`,
     EDIT_PROFILE: `${DOMAIN_SERVER}/api/public/profile/edit/`,         //    /edit/{id}
+    EDIT_STATUS: `${DOMAIN_SERVER}/api/public/profile/edit-status/`,         //    /edit/{id}
     DELETE_PROFILE: `${DOMAIN_SERVER}/api/public/profile/delete/`,       //    /delete/{id}
     GET_DETAIL_PROFILE: `${DOMAIN_SERVER}/api/public/profile/detail/`,     //     /detail/{id}
   },

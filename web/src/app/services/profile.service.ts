@@ -40,6 +40,13 @@ export class ProfileService {
         {observe: 'response', withCredentials: true});
   }
 
+  editStatus(payload: any): Observable<any> {
+    return this.http
+      .put(`${PUBLIC_API.PROFILE.EDIT_STATUS}${payload.id}`,
+        payload,
+        {observe: 'response', withCredentials: true});
+  }
+
   remove(payload: any): Observable<any> {
     return this.http
       .delete(`${PUBLIC_API.PROFILE.DELETE_PROFILE}${payload}`,
