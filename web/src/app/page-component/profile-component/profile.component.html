@@ -141,66 +141,64 @@
 <ng-template #dialogViewComment>
   <h1 mat-dialog-title>Xem nhận xét {{(profileComment$ | async)?.code}}</h1>
   <div mat-dialog-content>
-    <div class="row">
-      <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel *ngFor="let item of listComment$ | async; let i = index">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{i + 1 + ' : ' + (item?.workUnitName || '') + ' - Trạng thái ' + (item?.status ? 'Đồng ý' : 'Không đồng ý')}}
-            </mat-panel-title>
-            <mat-panel-description>
-              <mat-icon>account_circle</mat-icon>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <mat-list>
-            <div class="row">
-              <div class="col-md-6">
-                <mat-list-item>
-                  <h3 matLine>Mã Hồ sơ </h3>
-                  <p matLine>
-                    <span> {{item?.profileCode ?? '' }} </span>
-                  </p>
-                </mat-list-item>
-              </div>
-
-              <div class="col-md-6">
-                <mat-list-item>
-                  <h3 matLine>Tên đơn vị: </h3>
-                  <p matLine>
-                    <span> {{item?.workUnitName ?? '' }} </span>
-                  </p>
-                </mat-list-item>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <mat-list-item>
-                  <h3 matLine>Mã người nhận xét: </h3>
-                  <p matLine>
-                    <span> {{item?.employeeCode ?? ''}}</span>
-                  </p>
-                </mat-list-item>
-              </div>
-              <div class="col-md-6">
-                <mat-list-item>
-                  <h3 matLine>Tên người nhận xét: </h3>
-                  <p matLine>
-                    <span> {{item?.employeeFullname ?? ''}}</span>
-                  </p>
-                </mat-list-item>
-              </div>
-            </div>
-            <div class="row">
+    <mat-accordion class="example-headers-align" multi>
+      <mat-expansion-panel *ngFor="let item of listComment$ | async; let i = index">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{i + 1 + ' : ' + (item?.workUnitName || '') + ' - Trạng thái ' + (item?.status ? 'Đồng ý' : 'Không đồng ý')}}
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon>account_circle</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <div class="row">
+            <div class="col-md-6">
               <mat-list-item>
-                <h3 matLine>Ly do: </h3>
-                <div matLine [innerHTML]="item?.reason | safeHtml"></div>
+                <h3 matLine>Mã Hồ sơ </h3>
+                <p matLine>
+                  <span> {{item?.profileCode ?? '' }} </span>
+                </p>
               </mat-list-item>
             </div>
-          </mat-list>
-        </mat-expansion-panel>
 
-      </mat-accordion>
-    </div>
+            <div class="col-md-6">
+              <mat-list-item>
+                <h3 matLine>Tên đơn vị: </h3>
+                <p matLine>
+                  <span> {{item?.workUnitName ?? '' }} </span>
+                </p>
+              </mat-list-item>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-list-item>
+                <h3 matLine>Mã người nhận xét: </h3>
+                <p matLine>
+                  <span> {{item?.employeeCode ?? ''}}</span>
+                </p>
+              </mat-list-item>
+            </div>
+            <div class="col-md-6">
+              <mat-list-item>
+                <h3 matLine>Tên người nhận xét: </h3>
+                <p matLine>
+                  <span> {{item?.employeeFullname ?? ''}}</span>
+                </p>
+              </mat-list-item>
+            </div>
+          </div>
+          <div class="row">
+            <mat-list-item>
+              <h3 matLine>Ly do: </h3>
+              <div matLine [innerHTML]="item?.reason | safeHtml"></div>
+            </mat-list-item>
+          </div>
+        </mat-list>
+      </mat-expansion-panel>
+
+    </mat-accordion>
   </div>
   <div mat-dialog-actions class="float-right">
     <button mat-button mat-dialog-close cdkFocusInitial>Đóng</button>

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,9 +110,26 @@ public class AssignTasksController {
             @PageableDefault(page = Constant.DEFAULT_PAGE_NUMBER)
             @SortDefault.SortDefaults({
                     @SortDefault(sort = "updateDate", direction = Sort.Direction.DESC)
-            }) Pageable pageable) {
+            }) Pageable pageable,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String employeeCode,
+            @RequestParam(required = false) String employeeFullname,
+            @RequestParam(required = false) String departmentName,
+            @RequestParam(required = false) String profileCode,
+            @RequestParam(required = false) Integer statusProfileID,
+            @RequestParam(required = false) LocalDate expirationDate
+    ) {
 
-        Page<AssignTasksDTO> dto = assignTasksService.getPageAssignTasks(PageUtilsCommon.createPageable(pageable));
+        Page<AssignTasksDTO> dto = assignTasksService.getPageAssignTasks(
+                PageUtilsCommon.createPageable(pageable),
+                title,
+                employeeCode,
+                employeeFullname,
+                departmentName,
+                profileCode,
+                statusProfileID,
+                expirationDate
+        );
         return RestResponseWrapper.getResponse(HttpStatus.OK,
                 ApiResponseCode.SUCCESS,
                 this.messageUtils,

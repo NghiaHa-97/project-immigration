@@ -10,7 +10,7 @@ public interface CommentRepository extends JpaRepository<Comment, UUID>, Comment
     @Query(value = "select count(1) " +
             "    from Comment c " +
             "    inner join Employee e on e.ID = c.EmployeeID " +
-            "    inner join Profile p on p.ID = c.ProfileID " +
-            "    inner join WorkUnit wu on e.WorkUnitID = wu.ID and wu.id = ?1 ", nativeQuery = true)
-    int checkExistCommentWithWorkUnit(int workUnitID);
+            "    inner join Profile p on p.ID = c.ProfileID and p.ID = ?1" +
+            "    inner join WorkUnit wu on e.WorkUnitID = wu.ID and wu.id = ?2 ", nativeQuery = true)
+    int checkExistCommentWithWorkUnitAndProfileID(UUID profileID ,int workUnitID);
 }

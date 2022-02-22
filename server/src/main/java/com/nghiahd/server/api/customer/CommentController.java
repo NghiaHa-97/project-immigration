@@ -31,7 +31,7 @@ public class CommentController {
         try {
             commentDTO = this.commentService.save(req);
             if (commentDTO == null) {
-                apiResponseCode = ApiResponseCode.SAVE_FAILED;
+               throw new ExceptionApiCustom(ApiResponseCode.SAVE_FAILED);
             }
         } catch (ExceptionApiCustom ex) {
             apiResponseCode = ex.getRestError();

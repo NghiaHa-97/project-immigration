@@ -1,5 +1,9 @@
 package com.nghiahd.server.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.nghiahd.server.common.mapper.LocalDateTimeDeserializer;
+import com.nghiahd.server.common.mapper.LocalDateTimeSerializer;
 import com.nghiahd.server.model.AssignTasksDTO;
 import com.nghiahd.server.model.TaskForAssistantDTO;
 import lombok.AllArgsConstructor;
@@ -72,12 +76,18 @@ public class AssignTasks {
     @Column(name = "result")
     private String result;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "expirationdate")
     private LocalDateTime expirationDate;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "createdate")
     private LocalDateTime createDate;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "updatedate")
     private LocalDateTime updateDate;
 
