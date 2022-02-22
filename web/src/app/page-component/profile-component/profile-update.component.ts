@@ -11,12 +11,12 @@ import {
   getArrayStatusProfileState,
   getArrayVehicleState,
   getProfileEntitiesState,
-  getStatusProfileLoadedState,
+  getStatusProfileLoadedState, getUserDetailState,
   getVehicleLoadedState,
   Go,
   LoadDepartmentByWorkUnit, LoadObjectType,
   LoadStatusProfile,
-  LoadVehicle, UpdateProfile,
+  LoadVehicle, UpdateProfile, UpdateProfileStatus,
 } from '../../store';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import {PatternFormat} from '../../constans/pattern-format-date.const';
@@ -34,6 +34,8 @@ import {MapComponent} from '../map-component/map.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileUpdateComponent implements OnInit {
+  public readonly HUY = 2;
+  public readonly CHUYEN_LEN_BO = 3;
   isCreate = true;
   formProfile: FormGroup;
   entityProfile: any = null;
@@ -205,6 +207,16 @@ export class ProfileUpdateComponent implements OnInit {
               this.formProfile.patchValue({...entity});
             })
           );
+        } else {
+          this.store.select(getUserDetailState)
+            .pipe(
+              map(entity => entity?.principal?.workUnitID),
+              take(1)
+            ).subscribe((id: any) => {
+            if (id) {
+              this.store.dispatch(new LoadDepartmentByWorkUnit(id));
+            }
+          });
         }
         return of(null);
       }),
@@ -437,10 +449,6 @@ export class ProfileUpdateComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  test() {
-    console.log(this.positionAndLocation.value);
-  }
-
   openDialogMap(i: number, id: string | null): void {
     const dialogRoleRef = this.dialog.open(MapComponent, {
       width: '80%',
@@ -457,5 +465,16 @@ export class ProfileUpdateComponent implements OnInit {
           this.positionAndLocation.get(`${i}`)?.patchValue({...result});
         }
       });
+  }
+
+  changeStatus(type: number): void {
+    switch (type) {
+      case this.HUY:
+        this.store.dispatch(new UpdateProfileStatus({id: this.HUY}));
+        break;
+      case this.CHUYEN_LEN_BO:
+        this.store.dispatch(new UpdateProfileStatus({id: this.CHUYEN_LEN_BO}));
+        break;
+    }
   }
 }
