@@ -473,10 +473,16 @@ export class ProfileUpdateComponent implements OnInit {
   changeStatus(type: number): void {
     switch (type) {
       case this.HUY:
-        this.store.dispatch(new UpdateProfileStatus({id: this.HUY}));
+        this.store.dispatch(new UpdateProfileStatus({
+          id: this.HUY,
+          profileID: this.entityProfile?.id
+        }));
         break;
       case this.CHUYEN_LEN_BO:
-        this.store.dispatch(new UpdateProfileStatus({id: this.CHUYEN_LEN_BO}));
+        this.store.dispatch(new UpdateProfileStatus({
+          id: this.CHUYEN_LEN_BO,
+          profileID: this.entityProfile?.id
+        }));
         break;
     }
   }
