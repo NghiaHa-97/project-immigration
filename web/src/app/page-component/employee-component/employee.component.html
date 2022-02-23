@@ -43,7 +43,9 @@
       </ng-container>
 
       <ng-container right>
-        <button mat-raised-button color="primary" (click)="onNewEmployee()">
+        <button mat-raised-button color="primary"
+                *appHasPermission="PermissionConst.NhanVien.Them; andCondition:[!isDialog]"
+                (click)="onNewEmployee()">
           <mat-icon>add_circle_outline</mat-icon>
           <span>Thêm mới</span>
         </button>
@@ -54,10 +56,10 @@
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
                  [hiddenCheckBoxCheckAll]="true"
-                 [stickyEnd]="true"
+                 [stickyEnd]="!isDialog"
                  [stickyStart]="true"
                  [isSelection]="!!selection"
-                 [isAction]="true"
+                 [isAction]="!isDialog"
                  [dataSource]="employees$ | async"
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
@@ -76,7 +78,9 @@
 <!--      <mat-icon>update</mat-icon>-->
 <!--      <span>Sửa</span>-->
 <!--    </button>-->
-    <button #btnDelete mat-menu-item>
+    <button #btnDelete
+            *appHasPermission="PermissionConst.NhanVien.Xoa; andCondition:[!isDialog]"
+            mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
     </button>

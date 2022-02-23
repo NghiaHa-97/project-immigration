@@ -41,7 +41,9 @@
       </ng-container>
 
       <ng-container right>
-        <button mat-raised-button color="primary" (click)="onNewExperts()">
+        <button mat-raised-button color="primary"
+                *appHasPermission="PermissionConst.ChuyenGia.Them; andCondition:[!isDialog]"
+                (click)="onNewExperts()">
           <mat-icon>add_circle_outline</mat-icon>
           <span>Thêm mới</span>
         </button>
@@ -52,10 +54,10 @@
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
                  [hiddenCheckBoxCheckAll]="true"
-                 [stickyEnd]="true"
+                 [stickyEnd]="!isDialog"
                  [stickyStart]="true"
                  [isSelection]="!!selection"
-                 [isAction]="true"
+                 [isAction]="!isDialog"
                  [dataSource]="experts$ | async"
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
@@ -66,7 +68,9 @@
 
   </mat-card-content>
   <mat-menu #menu="matMenu">
-    <button #btnDetail mat-menu-item>
+    <button #btnDetail
+            *appHasPermission="PermissionConst.ChuyenGia.Xem; andCondition:[!isDialog]"
+            mat-menu-item>
       <mat-icon>details</mat-icon>
       <span>Chi Tiết</span>
     </button>
@@ -74,7 +78,9 @@
 <!--      <mat-icon>update</mat-icon>-->
 <!--      <span>Sửa</span>-->
 <!--    </button>-->
-    <button #btnDelete mat-menu-item>
+    <button #btnDelete
+            *appHasPermission="PermissionConst.ChuyenGia.Xoa; andCondition:[!isDialog]"
+            mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
     </button>

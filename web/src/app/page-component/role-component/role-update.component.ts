@@ -17,6 +17,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {TodoItemFlatNode, TodoItemNode} from '../../common-component/tree-checkbox/tree-checkbox.component';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogCanDeactivateComponent, IDeactivate} from '../can-deactivate';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-role-update',
@@ -25,6 +26,7 @@ import {DialogCanDeactivateComponent, IDeactivate} from '../can-deactivate';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleUpdateComponent implements OnInit, IDeactivate, OnDestroy {
+  PermissionConst = PermissionConst;
   @ViewChild('dialogUpdate', {
     static: true
   }) dialogUpdate!: TemplateRef<any>;

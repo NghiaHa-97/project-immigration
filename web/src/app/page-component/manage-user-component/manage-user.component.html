@@ -29,7 +29,9 @@
       </ng-container>
 
       <ng-container right>
-        <button mat-raised-button color="primary" (click)="onNewUser()">
+        <button mat-raised-button color="primary"
+                *appHasPermission="PermissionConst.NguoiDung.Them;"
+                (click)="onNewUser()">
           <mat-icon>add_circle_outline</mat-icon>
           <span>Thêm mới</span>
         </button>
@@ -62,7 +64,9 @@
 <!--      <mat-icon>update</mat-icon>-->
 <!--      <span>Sửa</span>-->
 <!--    </button>-->
-    <button #btnDelete mat-menu-item>
+    <button #btnDelete
+            *appHasPermission="PermissionConst.NguoiDung.Xoa;"
+            mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
     </button>

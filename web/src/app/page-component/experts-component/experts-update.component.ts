@@ -15,6 +15,7 @@ import {
 } from '../../store';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-experts-update',
@@ -23,6 +24,7 @@ import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertsUpdateComponent implements OnInit {
+  PermissionConst = PermissionConst;
   formExpert: FormGroup;
   formData: FormData = new FormData();
   entityExpert: any = null;

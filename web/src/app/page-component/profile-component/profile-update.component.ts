@@ -26,6 +26,7 @@ import {ExpertsComponent} from '../experts-component/experts.component';
 import {ProjectMissionComponent} from '../project-mission-component/project-mission.component';
 import {PositionAndLocation} from '../../models/PositionAndLocation.model';
 import {MapComponent} from '../map-component/map.component';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-profile-update',
@@ -34,6 +35,7 @@ import {MapComponent} from '../map-component/map.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileUpdateComponent implements OnInit {
+  PermissionConst = PermissionConst;
   public readonly HUY = 2;
   public readonly CHUYEN_LEN_BO = 3;
   isCreate = true;

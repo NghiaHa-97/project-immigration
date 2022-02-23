@@ -22,6 +22,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import * as _ from 'lodash';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-role',
@@ -30,6 +31,7 @@ import * as _ from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleComponent implements OnInit, AfterViewInit {
+  PermissionConst = PermissionConst;
   isDialog = false;
   params: any = {};
   roles$!: Observable<any[]>;

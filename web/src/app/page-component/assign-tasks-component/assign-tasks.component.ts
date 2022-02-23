@@ -29,6 +29,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {ColumnAndStyleModel} from '../../models/columns-and-styles.model';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import * as _ from 'lodash';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-assign-tasks',
@@ -38,6 +39,7 @@ import * as _ from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssignTasksComponent implements OnInit, AfterViewInit {
+  PermissionConst = PermissionConst;
   isDialog = false;
   params: any = {};
   tasks$!: Observable<any[]>;

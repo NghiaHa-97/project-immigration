@@ -23,6 +23,7 @@ import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {getPrefixID} from '../../constans/prefix-id.const';
+import {PermissionConst} from '../../constans/Permission.const';
 
 
 @Component({
@@ -32,6 +33,7 @@ import {getPrefixID} from '../../constans/prefix-id.const';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeComponent implements OnInit, AfterViewInit {
+  PermissionConst = PermissionConst;
   isDialog = false;
   params: any = {};
   employees$!: Observable<any[]>;

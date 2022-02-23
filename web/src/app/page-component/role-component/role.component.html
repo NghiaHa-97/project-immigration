@@ -14,7 +14,7 @@
       </ng-container>
 
       <ng-container right>
-        <button *appHasPermission="12; andCondition:[!isDialog]"
+        <button *appHasPermission="PermissionConst.VaiTro.Them; andCondition:[!isDialog]"
                 mat-raised-button color="primary"
                 (click)="onNewRole()">
           <mat-icon>add_circle_outline</mat-icon>
@@ -27,10 +27,10 @@
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
                  [hiddenCheckBoxCheckAll]="true"
-                 [stickyEnd]="true"
+                 [stickyEnd]="!isDialog"
                  [stickyStart]="true"
                  [isSelection]="!!selection"
-                 [isAction]="true"
+                 [isAction]="!isDialog"
                  [dataSource]="roles$ | async"
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
@@ -41,7 +41,8 @@
 
   </mat-card-content>
   <mat-menu #menu="matMenu">
-    <button #btnDetail mat-menu-item *appHasPermission="12; andCondition:[!isDialog]">
+    <button #btnDetail mat-menu-item
+            *appHasPermission="PermissionConst.VaiTro.Xem; andCondition:[!isDialog]">
       <mat-icon>details</mat-icon>
       <span>Chi Tiết</span>
     </button>
@@ -49,7 +50,9 @@
 <!--      <mat-icon>update</mat-icon>-->
 <!--      <span>Sửa</span>-->
 <!--    </button>-->
-    <button #btnDelete mat-menu-item>
+    <button #btnDelete
+            *appHasPermission="PermissionConst.VaiTro.Xoa; andCondition:[!isDialog]"
+            mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
     </button>

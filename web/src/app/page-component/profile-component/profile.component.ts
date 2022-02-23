@@ -31,6 +31,7 @@ import {getPrefixID} from '../../constans/prefix-id.const';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {EmployeeComponent} from '../employee-component/employee.component';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +40,7 @@ import {EmployeeComponent} from '../employee-component/employee.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
+  PermissionConst = PermissionConst;
   isDialog = false;
   profiles$!: Observable<any[]>;
   params: any = {};
@@ -288,7 +290,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.store.dispatch(new CreateComment({
         ...this.formComment.value
       }));
-      this.formComment.reset();
+      this.store.dispatch(new LoadProfile(this.params));
+      // this.formComment.reset();
     }
   }
 }

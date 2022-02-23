@@ -14,6 +14,7 @@ import {
 import {getPrefixID} from '../../constans/prefix-id.const';
 
 import {MatDialog} from '@angular/material/dialog';
+import {PermissionConst} from '../../constans/Permission.const';
 
 
 @Component({
@@ -23,6 +24,7 @@ import {MatDialog} from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMissionUpdateComponent implements OnInit, OnDestroy {
+  PermissionConst = PermissionConst;
   @ViewChild('dialogUpdate', {
     static: true
   }) dialogUpdate!: TemplateRef<any>;

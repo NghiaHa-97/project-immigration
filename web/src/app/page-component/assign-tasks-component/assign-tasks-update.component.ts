@@ -18,6 +18,7 @@ import {EmployeeComponent} from '../employee-component/employee.component';
 import {ProfileComponent} from '../profile-component/profile.component';
 import {PATTERN_FORMAT_DATE, PatternFormat} from '../../constans/pattern-format-date.const';
 import * as moment from 'moment';
+import {PermissionConst} from '../../constans/Permission.const';
 
 
 @Component({
@@ -28,6 +29,7 @@ import * as moment from 'moment';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
+  PermissionConst = PermissionConst;
   public readonly EMPLOYEE = 'EMPLOYEE';
   public readonly PROFILE = 'PROFILE';
   @ViewChild('dialogUpdate', {
@@ -107,11 +109,13 @@ export class AssignTasksUpdateComponent implements OnInit, OnDestroy {
 
     this.isDetail$ = this.entityDetail$.pipe(
       tap(entity => {
-        console.log(this.patterFormat.splitDateTimeResponseToDateAndTime(entity.expirationDate));
-        this.formTask.patchValue({
-          ...entity,
-          expirationDate: this.patterFormat.splitDateTimeResponseToDateAndTime(entity.expirationDate)
-        });
+        if (entity) {
+          console.log(this.patterFormat.splitDateTimeResponseToDateAndTime(entity.expirationDate));
+          this.formTask.patchValue({
+            ...entity,
+            expirationDate: this.patterFormat.splitDateTimeResponseToDateAndTime(entity.expirationDate)
+          });
+        }
       }),
       map(entity => !!entity)
     );
