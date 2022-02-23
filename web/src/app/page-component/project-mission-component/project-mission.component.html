@@ -1,6 +1,6 @@
 <mat-card class="example-card">
   <mat-card-content>
-    <mat-card-title>Công việc nhiệm vụ</mat-card-title>
+    <mat-card-title>Dự án, đề án, nhiệm vụ </mat-card-title>
 
     <app-toolbar-action-table (handlerSearch)= "handlerSearch()">
       <ng-container left [formGroup]="formSearch">
@@ -31,7 +31,7 @@
       </ng-container>
 
       <ng-container right>
-        <button *appHasPermission="12; andCondition:[!isDialog]"
+        <button *appHasPermission="PermissionConst.DuAnDeAn.Them; andCondition:[!isDialog]"
                 mat-raised-button color="primary"
                 (click)="onNewProjectMission()">
           <mat-icon>add_circle_outline</mat-icon>
@@ -44,10 +44,10 @@
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
                  [hiddenCheckBoxCheckAll]="true"
-                 [stickyEnd]="true"
+                 [stickyEnd]="!isDialog"
                  [stickyStart]="true"
                  [isSelection]="!!selection"
-                 [isAction]="true"
+                 [isAction]="!isDialog"
                  [dataSource]="projectMissions$ | async"
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
@@ -58,7 +58,8 @@
 
   </mat-card-content>
   <mat-menu #menu="matMenu">
-    <button #btnDetail mat-menu-item *appHasPermission="12; andCondition:[!isDialog]">
+    <button #btnDetail mat-menu-item
+            *appHasPermission="PermissionConst.DuAnDeAn.Xem; andCondition:[!isDialog]">
       <mat-icon>details</mat-icon>
       <span>Chi Tiết</span>
     </button>
@@ -66,7 +67,9 @@
     <!--      <mat-icon>update</mat-icon>-->
     <!--      <span>Sửa</span>-->
     <!--    </button>-->
-    <button #btnDelete mat-menu-item>
+    <button #btnDelete
+            *appHasPermission="PermissionConst.DuAnDeAn.Xoa; andCondition:[!isDialog]"
+            mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
     </button>

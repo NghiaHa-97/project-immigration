@@ -12,6 +12,7 @@ import {getPrefixID} from '../../constans/prefix-id.const';
 import {MatDialog} from '@angular/material/dialog';
 import {EmployeeComponent} from '../employee-component/employee.component';
 import {RoleComponent} from '../role-component/role.component';
+import {PermissionConst} from '../../constans/Permission.const';
 
 
 @Component({
@@ -21,6 +22,7 @@ import {RoleComponent} from '../role-component/role.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageUserUpdateComponent implements OnInit {
+  PermissionConst = PermissionConst;
   formUserCustomer: FormGroup;
   ROLE = 'role';
   EMPLOYEE = 'employee';

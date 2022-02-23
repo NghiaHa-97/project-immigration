@@ -22,6 +22,7 @@ import {TableComponent} from '../../common-component/table/table.component';
 import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {MatDialog} from '@angular/material/dialog';
 import {getPrefixID} from '../../constans/prefix-id.const';
+import {PermissionConst} from '../../constans/Permission.const';
 
 
 @Component({
@@ -31,6 +32,7 @@ import {getPrefixID} from '../../constans/prefix-id.const';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageUserComponent implements OnInit, AfterViewInit {
+  PermissionConst = PermissionConst;
   usersCustomer$!: Observable<any[]>;
   params: any = {};
   usernameDialog$!: Observable<string>;

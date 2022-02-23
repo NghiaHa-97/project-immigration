@@ -412,20 +412,21 @@
       <button mat-raised-button
               type="submit"
               class="btn btn-danger float-right"
+              *appHasPermission="[PermissionConst.HoSo.Them, PermissionConst.HoSo.Sua];"
               style="margin-top: 10px">Lưu
       </button>
       <button mat-raised-button
-              *ngIf="!!(entityUpdate$ | async)"
-              type="button"
-              class="btn btn-danger float-right"
-              (click)="changeStatus(HUY)"
-              style="margin-top: 10px">CHuyển nên bộ
-      </button>
-      <button mat-raised-button
-              *ngIf="!!(entityUpdate$ | async)"
+              *appHasPermission="PermissionConst.HoSo.XetDuyetHoSo; andCondition:[!!(entityUpdate$ | async)]"
               type="button"
               class="btn btn-danger float-right"
               (click)="changeStatus(CHUYEN_LEN_BO)"
+              style="margin-top: 10px">CHuyển nên bộ
+      </button>
+      <button mat-raised-button
+              *appHasPermission="PermissionConst.HoSo.XetDuyetHoSo; andCondition:[!!(entityUpdate$ | async)]"
+              type="button"
+              class="btn btn-danger float-right"
+              (click)="changeStatus(HUY)"
               style="margin-top: 10px">Hủy Hồ sơ
       </button>
 

@@ -25,6 +25,7 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {filter, map, skip, switchMap, take, tap} from 'rxjs/operators';
 import {getPrefixID} from '../../constans/prefix-id.const';
 import { PatternFormat} from '../../constans/pattern-format-date.const';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-employee-update',
@@ -33,6 +34,7 @@ import { PatternFormat} from '../../constans/pattern-format-date.const';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeUpdateComponent implements OnInit, OnDestroy {
+  PermissionConst = PermissionConst;
   formEmployee: FormGroup;
   formData: FormData = new FormData();
   entityEmployee: any;

@@ -29,19 +29,30 @@ export class HasPermissionDirective implements OnDestroy, OnInit {
   }
 
   @Input()
-  set appHasPermission(perCode: number) {
+  set appHasPermission(perCodes: number[] | number) {
     // console.log('appHasPermission', perCode);
     this.permissions$
       .subscribe(per => {
-          if (!!per && per.hasOwnProperty(perCode)) {
+        if (typeof perCodes === 'number') {
+          if (!!per && per.hasOwnProperty(perCodes)) {
             // console.log('hasOwnProperty', true);
             this.isPermission$.next(true);
             return;
           }
           // console.log('hasOwnProperty', false);
           this.isPermission$.next(false);
+        } else {
+          perCodes.some((item) => {
+            if (!!per && per.hasOwnProperty(item)) {
+              // console.log('hasOwnProperty', true);
+              this.isPermission$.next(true);
+              return true;
+            }
+            // console.log('hasOwnProperty', false);
+            this.isPermission$.next(false);
+          });
         }
-      );
+      });
   }
 
   @Input()

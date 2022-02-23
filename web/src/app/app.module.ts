@@ -37,6 +37,7 @@ import {MAT_DATE_LOCALE} from '@angular/material/core';
 import {appComponentService} from './services';
 import {CustomSerializer} from './store/reducers/root/router.reducer';
 import {NotificationSnackBar} from './notification/notification-snack-bar';
+import {DirectiveCustomModule} from './directive/directive-custom.module';
 
 
 const environment = {
@@ -76,7 +77,8 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
     environment.development ? StoreDevtoolsModule.instrument() : [],
 
     // rich text editor
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    DirectiveCustomModule
   ],
   providers: [
     ...appComponentService,

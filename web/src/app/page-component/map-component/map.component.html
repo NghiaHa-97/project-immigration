@@ -12,7 +12,8 @@
             <div class="card-content" style="max-height: 650px">
               <div class="card border-success mb-3" style="width: 400px">
                 <mat-tab-group>
-                  <mat-tab label="Tìm kiếm">
+                  <mat-tab *appHasPermission="PermissionConst.BanDo.TimKiem;"
+                           label="Tìm kiếm">
                     <ng-template matTabContent>
                       <div class="card-header bg-transparent border-success">
                         <form [formGroup]="formSearch" (ngSubmit)="handlerSearch($event)">
@@ -68,6 +69,7 @@
                           <div class="col-auto">
                             <button mat-button
                                     type="button"
+                                    *appHasPermission="PermissionConst.BanDo.Them;"
                                     (click)="onNewLocation()">Tạo mới
                             </button>
                           </div>
@@ -87,14 +89,15 @@
                               <mat-select formControlName="objectTypeID">
                                 <mat-select-trigger>
                                   <div class="d-flex flex-row">
-                                    <div class="p-2"><img src="{{(valueSelector | async)?.image}}" alt="user" class="profile-pic">
+                                    <div class="p-2"><img src="{{(valueSelector | async)?.image}}" alt="user"
+                                                          class="profile-pic">
                                     </div>
                                     <div class="p-2">{{(valueSelector | async)?.name}}</div>
                                   </div>
                                 </mat-select-trigger>
                                 <mat-option>None</mat-option>
                                 <mat-option *ngFor="let val of typeObject"
-                                  [value]="val.id">
+                                            [value]="val.id">
                                   <div class="d-flex flex-row">
                                     <div class="p-2"><img src="{{val?.image}}" alt="user"
                                                           class="profile-pic"></div>
@@ -170,6 +173,7 @@
                         </div>
 
                         <button mat-raised-button
+                                *appHasPermission="[PermissionConst.BanDo.Them, PermissionConst.BanDo.Sua];"
                                 type="submit"
                                 color="primary"
                                 class="float-right">Lưu
@@ -178,6 +182,7 @@
                                 type="button"
                                 color="warn"
                                 class="float-left"
+                                *appHasPermission="PermissionConst.BanDo.Xoa;"
                                 (click)="delete(LOCATION)">Xóa
                         </button>
                         <div class="clearfix"></div>

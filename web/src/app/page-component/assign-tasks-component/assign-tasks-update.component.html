@@ -82,6 +82,7 @@
 
       <button mat-raised-button
               type="submit"
+              *appHasPermission="[PermissionConst.NhiemVu.Them, PermissionConst.NhiemVu.Sua];"
               class="btn btn-danger float-right">Lưu
       </button>
       <button mat-raised-button

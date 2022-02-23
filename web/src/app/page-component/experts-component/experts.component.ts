@@ -23,6 +23,7 @@ import {PatternFormat} from '../../constans/pattern-format-date.const';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {getPrefixID} from '../../constans/prefix-id.const';
+import {PermissionConst} from '../../constans/Permission.const';
 
 @Component({
   selector: 'app-experts',
@@ -31,6 +32,7 @@ import {getPrefixID} from '../../constans/prefix-id.const';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertsComponent implements OnInit, AfterViewInit{
+  PermissionConst = PermissionConst;
   isDialog = false;
   experts$!: Observable<any[]>;
   params: any = {};

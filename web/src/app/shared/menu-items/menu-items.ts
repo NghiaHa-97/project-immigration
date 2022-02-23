@@ -1,6 +1,7 @@
 // import { Injectable } from '@angular/core';
 
 import {Injectable} from '@angular/core';
+import {PermissionConst} from '../../constans/Permission.const';
 
 export interface Menu {
   state: string;
@@ -10,17 +11,17 @@ export interface Menu {
 }
 
 const MENUITEMS = [
-  { state: 'ho-so', name: 'Hồ sơ', type: 'link', icon: 'av_timer' },
-  { state: 'nhiem-vu-cong-viec', name: 'Đề án, dự án', type: 'link', icon: 'av_timer' },
-  { state: 'nhan-vien', name: 'Nhân viên', type: 'link', icon: 'av_timer' },
-  { state: 'chuyen-gia', name: 'Chuyên gia', type: 'link', icon: 'av_timer' },
-  { state: 'quan-ly-nguoi-dung', name: 'Người dùng', type: 'link', icon: 'av_timer' },
-  { state: 'quan-ly-vai-tro', name: 'Vai trò', type: 'link', icon: 'av_timer' },
-  { state: 'nhiem-vu', name: 'Nhiệm vụ', type: 'link', icon: 'av_timer' },
-  { state: 'map', name: 'Map', type: 'link', icon: 'av_timer' },
+  { state: 'ho-so', name: 'Hồ sơ', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.HoSo.Xem},
+  { state: 'nhiem-vu-cong-viec', name: 'Đề án, dự án', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.DuAnDeAn.Xem },
+  { state: 'nhan-vien', name: 'Nhân viên', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.NhanVien.Xem },
+  { state: 'chuyen-gia', name: 'Chuyên gia', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.ChuyenGia.Xem },
+  { state: 'quan-ly-nguoi-dung', name: 'Người dùng', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.NguoiDung.Xem },
+  { state: 'quan-ly-vai-tro', name: 'Vai trò', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.VaiTro.Xem },
+  { state: 'nhiem-vu', name: 'Nhiệm vụ', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.NhiemVu.Xem },
+  { state: 'map', name: 'Map', type: 'link', icon: 'av_timer', permissionCode: PermissionConst.BanDo.Xem },
 
 
-  { state: 'dashboard', name: 'Dashboard', type: 'link', icon: 'av_timer' },
+  // { state: 'dashboard', name: 'Dashboard', type: 'link', icon: 'av_timer' },
   // { state: 'button', type: 'link', name: 'Buttons', icon: 'crop_7_5' },
   // { state: 'grid', type: 'link', name: 'Grid List', icon: 'view_comfy' },
   // { state: 'lists', type: 'link', name: 'Lists', icon: 'view_list' },

@@ -37,6 +37,7 @@ import {DOMAIN_SERVER} from '../../constans/url-api.const';
 import {startsWith} from 'lodash';
 import * as _ from 'lodash';
 import {SelectionModel} from '@angular/cdk/collections';
+import {PermissionConst} from '../../constans/Permission.const';
 
 declare let L: any;
 
@@ -47,6 +48,7 @@ declare let L: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
+  PermissionConst = PermissionConst;
   isDialog = false;
   initLocationID!: number;
   private latLng = new BehaviorSubject<{ id: number, latLng: number[] }>({

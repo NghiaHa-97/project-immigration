@@ -48,6 +48,7 @@
 
       <ng-container right>
         <button mat-raised-button color="primary"
+                *appHasPermission="PermissionConst.HoSo.Them; andCondition:[!isDialog]"
                 (click)="onNewProfile()">
           <mat-icon>add_circle_outline</mat-icon>
           <span>Thêm mới</span>
@@ -59,10 +60,10 @@
     <div id="employees" class=" mat-elevation-z8 " matSort #sort="matSort">
       <app-table #appTable [menuAction]="menu"
                  [hiddenCheckBoxCheckAll]="true"
-                 [stickyEnd]="true"
+                 [stickyEnd]="!isDialog"
                  [stickyStart]="true"
                  [isSelection]="!!selection"
-                 [isAction]="true"
+                 [isAction]="!isDialog"
                  [dataSource]="profiles$ | async"
                  [columnsAndStyles]="columnsAndStyles"
                  [selection]="selection"
@@ -73,19 +74,26 @@
 
   </mat-card-content>
   <mat-menu #menu="matMenu">
-    <button #btnDetail mat-menu-item>
+    <button #btnDetail
+            mat-menu-item>
       <mat-icon>details</mat-icon>
       <span>Chi Tiết</span>
     </button>
-    <button #addComment mat-menu-item>
+    <button #addComment
+            *appHasPermission="PermissionConst.HoSo.ThemNhanXet;"
+            mat-menu-item>
       <mat-icon>update</mat-icon>
       <span>Thêm nhận xét</span>
     </button>
-    <button #viewComment mat-menu-item>
+    <button #viewComment
+            *appHasPermission="PermissionConst.HoSo.XemNhanXet;"
+            mat-menu-item>
       <mat-icon>update</mat-icon>
       <span>Xem nhận xét</span>
     </button>
-    <button #btnDelete mat-menu-item>
+    <button #btnDelete
+            *appHasPermission="PermissionConst.HoSo.Xoa;"
+            mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>Xóa</span>
     </button>
