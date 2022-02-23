@@ -5,6 +5,7 @@ import {ProjectMissionExistDetailActivate} from './project-mission-exist-detail.
 import {ExpertExistDetailActivate} from './expert-exist-detail.activate';
 import {ProfileExistDetailActivate} from './profile-exist-detail.activate';
 import {AssignTasksExistDetailActivate} from './assign-tasks-exist-detail.activate';
+import {HasPermissionActivate} from './has-permission.activate';
 
 
 export * from './employee-exist-detail.activate';
@@ -16,5 +17,6 @@ export const canActivate = [
   ProjectMissionExistDetailActivate,
   ExpertExistDetailActivate,
   ProfileExistDetailActivate,
-  AssignTasksExistDetailActivate
+  AssignTasksExistDetailActivate,
+  HasPermissionActivate
 ];

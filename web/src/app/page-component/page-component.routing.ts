@@ -22,6 +22,8 @@ import {ProfileExistDetailActivate} from './can-activate/profile-exist-detail.ac
 import {AssignTasksComponent} from './assign-tasks-component/assign-tasks.component';
 import {AssignTasksUpdateComponent} from './assign-tasks-component/assign-tasks-update.component';
 import {AssignTasksExistDetailActivate} from './can-activate/assign-tasks-exist-detail.activate';
+import {HasPermissionActivate} from './can-activate/has-permission.activate';
+import {PermissionConst} from '../constans/Permission.const';
 
 
 export const PageRoutes: Routes = [
@@ -31,15 +33,26 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: ProfileComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.HoSo.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: ProfileUpdateComponent,
-        canActivate: [ProfileExistDetailActivate]
+        canActivate: [ProfileExistDetailActivate, HasPermissionActivate],
+        data: {
+          code: PermissionConst.HoSo.Xem
+        }
       },
       {
         path: 'them-moi',
-        component: ProfileUpdateComponent
+        component: ProfileUpdateComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.HoSo.Xem
+        }
       }
     ]
   },
@@ -49,15 +62,26 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: ProjectMissionComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.DuAnDeAn.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: ProjectMissionUpdateComponent,
-        canActivate: [ProjectMissionExistDetailActivate]
+        canActivate: [ProjectMissionExistDetailActivate, HasPermissionActivate],
+        data: {
+          code: PermissionConst.DuAnDeAn.Xem
+        }
       },
       {
         path: 'them-moi',
-        component: ProjectMissionUpdateComponent
+        component: ProjectMissionUpdateComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.DuAnDeAn.Xem
+        }
       }
     ]
   },
@@ -67,15 +91,26 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: EmployeeComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.NhanVien.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: EmployeeUpdateComponent,
-        canActivate: [EmployeeExistDetailActivate]
+        canActivate: [EmployeeExistDetailActivate, HasPermissionActivate],
+        data: {
+          code: PermissionConst.NhanVien.Xem
+        }
       },
       {
         path: 'them-moi',
-        component: EmployeeUpdateComponent
+        component: EmployeeUpdateComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.NhanVien.Xem
+        }
       }
     ]
   },
@@ -85,21 +120,36 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: ExpertsComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.ChuyenGia.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: ExpertsUpdateComponent,
-        canActivate: [ExpertExistDetailActivate]
+        canActivate: [ExpertExistDetailActivate, HasPermissionActivate],
+        data: {
+          code: PermissionConst.ChuyenGia.Xem
+        }
       },
       {
         path: 'them-moi',
-        component: ExpertsUpdateComponent
+        component: ExpertsUpdateComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.ChuyenGia.Xem
+        }
       }
     ]
   },
   {
     path: 'map',
-    component: MapComponent
+    component: MapComponent,
+    canActivate: [HasPermissionActivate],
+    data: {
+      code: PermissionConst.BanDo.Xem
+    }
   },
   {
     path: 'quan-ly-nguoi-dung',
@@ -107,15 +157,26 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: ManageUserComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.NguoiDung.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: ManageUserUpdateComponent,
-        canActivate: [UserCustomerExistDetailActivate]
+        canActivate: [UserCustomerExistDetailActivate, HasPermissionActivate],
+        data: {
+          code: PermissionConst.NguoiDung.Xem
+        }
       },
       {
         path: 'them-moi',
-        component: ManageUserUpdateComponent
+        component: ManageUserUpdateComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.NguoiDung.Xem
+        }
       }
     ]
   },
@@ -125,17 +186,28 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: RoleComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.VaiTro.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: RoleUpdateComponent,
-        canActivate: [RoleExistDetailActivate],
-        canDeactivate: [RoleDeactivate]
+        canActivate: [HasPermissionActivate, RoleExistDetailActivate],
+        canDeactivate: [RoleDeactivate],
+        data: {
+          code: PermissionConst.VaiTro.Xem
+        }
       },
       {
         path: 'them-moi',
         component: RoleUpdateComponent,
-        canDeactivate: [RoleDeactivate]
+        canDeactivate: [RoleDeactivate],
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.VaiTro.Xem
+        }
       }
     ]
   },
@@ -145,15 +217,26 @@ export const PageRoutes: Routes = [
       {
         path: '',
         component: AssignTasksComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.NhiemVu.Xem
+        }
       },
       {
         path: 'chi-tiet/:id',
         component: AssignTasksUpdateComponent,
-        canActivate: [AssignTasksExistDetailActivate]
+        canActivate: [AssignTasksExistDetailActivate, HasPermissionActivate],
+        data: {
+          code: PermissionConst.NhiemVu.Xem
+        }
       },
       {
         path: 'them-moi',
-        component: AssignTasksUpdateComponent
+        component: AssignTasksUpdateComponent,
+        canActivate: [HasPermissionActivate],
+        data: {
+          code: PermissionConst.NhiemVu.Xem
+        }
       }
     ]
   }
